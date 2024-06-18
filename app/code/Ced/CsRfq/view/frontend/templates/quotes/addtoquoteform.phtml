@@ -1,0 +1,68 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsRfq
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+$product_id = $block->getProductId();
+$vendor_id = $block->getVendorId();
+$login = $block->isCustomerLoggedIn();
+$custGroups = $block->getAllowedCustomerGroups();
+$hideGroups = $block->getAddtoCartCustomers();
+if($login) {
+    $groupId =  $block->getCustomer()->getGroupId();
+} else {
+    $groupId =  '0';
+}
+if (in_array($groupId, $custGroups)) {
+    if($hideGroups == 0) {
+        $hideto = "no";
+    } else {
+        $hideto = "yes";
+    }
+} else {
+    $hideto = "no";
+}
+?>
+
+<input type="hidden" id="hidecart" value="<?= $block->escapeHtml($hideto);  ?>" />
+<?php $buttonTitle = __('Add to Quote');
+?>
+<div id="message-content" style="display:none;">
+    <div class="panel-body">
+        <form action="<?= $block->escapeUrl($block->getUrl('requesttoquote/quotes/save')) ?>" method="POST" name="quote-form" id="quoteform" data-mage-init='{"validation":{}}'>
+            <input type="hidden" name="product_id" value="<?= $block->escapeHtml($product_id) ?>">
+            <input type="hidden" name="vendor_id" value="<?= $block->escapeHtml($vendor_id) ?>">
+            <div class="fieldset">
+                <div class="form-group col-12">
+                    <label><?= $block->escapeHtml(__('Required Quantity'));?></label>
+                    <div class="input-box">
+                        <input type="text" id="quote_qty" name="quote_qty"
+                               class="required required-entry validate-number validate-greater-than-zero"/>
+                        <span class="required"></span>
+                    </div>
+                </div>
+                <div class="form-group col-12">
+                    <label><?= $block->escapeHtml(__('Price Per Quantity'));?></label>
+                    <div class="input-box">
+                        <input type="text" id="quote_price" name="quote_price"
+                               class="contact_input_fields required-entry validate-greater-than-zero"/>
+                        <span class="required"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

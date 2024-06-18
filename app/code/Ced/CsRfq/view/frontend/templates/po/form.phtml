@@ -1,0 +1,254 @@
+<?php
+
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsRfq
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+?>
+<?php
+$quoteId = $block->getQuoteId();
+$customer_id = $block->getCustomerId();
+$customer = $block->getCustomer($customer_id);
+$customer_email = $customer->getEmail();
+$customer_name = $customer->getName();
+$address = $block->getCustomerAddress();
+$quotes = $block->getItems();
+$quoteData = $block->getQuoteData();
+?>
+<form method="POST" action="<?= $block->escapeUrl($block->getPOUrl());?>">
+    <div class="page-main-actions">    
+        <div class="page-actions-placeholder" style=""></div>
+            <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+                <div class="page-actions-inner" data-title="#000000021">
+                    <div class="page-actions-buttons">
+                        <button id="back"
+                                title="Back"
+                                type="button"
+                                class="action-default scalable back"
+                                onclick="window.location = '<?= $block->escapeUrl($block->getBackUrl());?>'"
+                        >
+                            <span><?= $block->escapeHtml(__('Back')) ?></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Item(s) Information')) ?></span>
+        </div>
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary edit-order-table" id ="edit-order-table">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?= $block->escapeHtml(__("Product")); ?></span></th>
+                        <th class="col-price"><span><?= $block->escapeHtml(__("Unit Price")); ?></span></th>
+                        <th class="col-ordered-qty"><span><?= $block->escapeHtml(__("Quantity")); ?></span></th>
+                        <th class="col-total last"><span><?= $block->escapeHtml(__("Row Total")); ?></span></th>
+                    </tr>
+                </thead>
+                
+                <tbody class="even ced-rfq-po-row">
+                    <?php
+                        $total = 0;
+foreach ($quotes->getData() as $value) {
+    $product_id = $value['product_id'];
+    $unitprice = $value['unit_price']; ?>
+                        <input id="product[<?= $block->escapeHtml($product_id);  ?>]"
+                               value="<?= $block->escapeHtml($product_id);  ?>"
+                               type="hidden"
+                        />
+                        <tr class="ced-rfq-item-row">
+                            <td class="col-product">
+                                <div id="order_item_2_title" class="product-title"><?= $block->escapeHtml($value['name']);  ?>
+                                </div>
+                                <div class="product-sku-block">
+                                    <span><?= $block->escapeHtml(__("SKU:")); ?></span> <?= $block->escapeHtml($value['sku']);  ?>
+                                </div>
+                                <?php if ($value['product_type'] == 'configurable' && $customOption = $value['custom_option']) { ?>
+                                    <?php $options = json_decode($customOption, true); ?>
+                                    <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+                                        <?php foreach ($options['attributes_info'] as $option): ?>
+                                            <div class="product-sku-block">
+                                                <span><?= $block->escapeHtml(ucfirst($option['label']))?>:</span> <?= $block->escapeHtml($option['value']);  ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php } ?>
+                                <?php } ?>
+                            </td>
+                            <td class="col-price">
+                                <div class="price-excl-tax">
+                                    <span><?= $block->escapeHtml($block->getCurrencyCode());  ?></span>
+                                    <span class="ced-rfq-price-input">
+                                        <?php
+                        $rowUnitPrice = (isset($value['unit_price']) && $value['unit_price'] > 0) ? $value['unit_price'] : $value['price']; ?>
+                                        <?= $block->escapeHtml($rowUnitPrice); ?>
+                                        
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="col-ordered-qty">
+                                <div>
+                                    <?php
+                $quoteUpdatedQty = (isset($value['quote_updated_qty']) && $value['quote_updated_qty'] > 0) ?
+                    $value['quote_updated_qty'] : $value['product_qty'];
+    if($value['remaining_qty']) {
+        $max = $value['remaining_qty'];
+        $poed_qty = $quoteUpdatedQty - $value['remaining_qty'];
+    } elseif($value['remaining_qty'] === '0') {
+        $max = 0;
+        $poed_qty = $quoteUpdatedQty;
+    } else {
+        $max = $quoteUpdatedQty;
+        $poed_qty = 0;
+    }
+    ?>
+                                    <input max="<?= $block->escapeHtml($max);?>"
+                                           id="quantity_to_po[<?= $block->escapeHtml($product_id);  ?>]"
+                                           class="input-text admin__control-text qty-input qty-field-po common numbersOnly"
+                                           name="item[<?= $block->escapeHtml($value['id']);  ?>]"
+                                           value="<?= $block->escapeHtml($max) ?>"
+                                           type="text"
+                                    />
+                                </div>
+                                <div>
+                                    <?= $block->escapeHtml(__("Proposal Created for Qty")); ?>:
+                                    <b><?= $block->escapeHtml($poed_qty);  ?></b>
+                                </div>
+                            </td>
+
+                            <td class="col-subtotal">
+                                <div class="price-excl-tax"> 
+                                <span><?= $block->escapeHtml($block->getCurrencyCode());  ?></span>
+                                    <span class="row-total">
+                                        <?= $block->escapeHtml($rowUnitPrice * $max);  ?>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php
+                        $total += $rowUnitPrice * $max;
+}
+?>             
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__("Proposal Total"));?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-totals">
+                <table class="data-table admin__table-secondary order-subtotal-table">
+                    <tfoot>
+                        <tr class="col-0">
+                            <td class="label">
+                                <strong><?= $block->escapeHtml(__("Grand Total"));?></strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    <span><?= $block->escapeHtml($block->getCurrencyCode());?></span>
+                                    <span id="grandtotalofpo"><?= $block->escapeHtml(number_format(($quoteData->getShippingAmount() + $total), 2, '.', ''));?></span>
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr class="col-3">
+                            <td class="label">
+                                <strong><?= $block->escapeHtml(__("Total Due"));?></strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    <span><?= $block->escapeHtml($block->getCurrencyCode());?></span>
+                                    <span id="totaldue"><?= $block->escapeHtml(number_format(($quoteData->getShippingAmount() + $total), 2, '.', ''));?></span>
+                                </strong>
+                            </td>                            
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr class="col-0">
+                            <td class="label"><?= $block->escapeHtml(__("Subtotal"));?></td>
+                            <td>
+                                <strong>
+                                    <span><?= $block->escapeHtml($block->getCurrencyCode());?></span>
+                                    <span id="subtotalofpo"><?= $block->escapeHtml(number_format($total, 2, '.', ''));?></span>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="actions">
+                    <button title="Submit Order" type="submit" class="action primary pull-right" data-ui-id="widget-button-0">
+                        <span><?= $block->escapeHtml(__("Submit Proposal"));?></span>
+                    </button>
+                </div>
+            </div>
+        </div>    
+    </section>  
+</form>
+
+<script type="text/javascript">
+
+    require(['jquery'], function($) {
+        $("#edit-order-table").on('keyup', '.qty-field-po',function(){
+            var qty = $(this).val();
+            var sum = 0;
+            var row = $(this).closest('.ced-rfq-item-row');
+            var price = parseFloat(row.find('.ced-rfq-price-input').text());
+            row.find('.row-total').text(qty*price);
+            $("#edit-order-table").find('.ced-rfq-po-row').find('tr').each( function(){
+                var qty = $(this).find('.qty-field-po').val();
+                var price = parseFloat($(this).find('.ced-rfq-price-input').text());
+                sum += parseFloat(qty * price);
+            });
+            var total = parseFloat(sum);
+            $('#subtotalofpo').text(sum.toFixed(2));
+            $('#grandtotalofpo').text(total.toFixed(2));
+            $('#totaldue').text(total.toFixed(2));
+        });
+
+        $(".numbersOnly").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                 // Allow: Ctrl+A, Command+A
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+                 // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                     // let it happen, don't do anything
+                     return;
+            }
+        // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+        
+    });
+
+    require([
+    'jquery',
+    'jquery/ui',
+    'jquery/validate',
+    'mage/translate'
+    ], function($){
+        $('.qty-field-po').keyup(function(){
+            if (parseInt($(this).val()) > parseInt($(this).attr('max'))){
+                $(this).val($(this).attr('max'));
+            }
+        });
+    });
+ </script>

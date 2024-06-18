@@ -1,0 +1,124 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsRfq
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+?>
+<?php
+
+$vendorId = $block->getVendorId();
+
+$helper = $this->helper("Ced\RequestToQuote\Helper\Data");
+
+$login = $block->isCustomerLoggedIn();
+$custGroups = $block->getAllowedCustomerGroups();
+$allowedProductTypes = $block->helper->getAllowedProductTypes();
+if($login) {
+    $groupId =  $block->getCustomer()->getGroupId();
+} else {
+    $groupId =  '0';
+}
+
+if (in_array($groupId, $custGroups) && $helper->isEnable()) {
+    ?>
+    <?php $buttonTitle = __('Add to Quote');   ?>
+    <?php if (in_array($groupId, $custGroups)) {
+        $product = $block->getProduct();
+        ?>
+        <?php if(in_array($product->getTypeId(), $allowedProductTypes)) { ?>
+        <div style="clear: both;"></div>
+        <div class="box-tocart cart-to-quote">
+            <div class="fieldset">
+                <div class="actions">
+                    <?php if(empty($login)) { ?>
+                        <a href="<?= $block->escapeUrl($block->getUrl('customer/account/login')) ?>"><?= $block->escapeHtml(__('Try login to request a quote for the product')) ?></a>
+                    <?php } else { ?>
+                        <button class="button btn btn-info uptransform action primary ced-to-quote" title="<?= $block->escapeHtml(__('Get Quote')) ?>" type="button" id="sendquote" name="submit" >
+                            <span><span><?= $block->escapeHtml(__('Get Quote')) ?></span></span>
+                        </button>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    <?php } ?>
+    <script>
+            require([
+                     'jquery',
+                     'mage/mage'
+                 ], function($){
+                     var dataForm = $('#quoteform');
+                     var ignore = null;
+                     dataForm.mage('validation', {
+                             ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+                         }).find('input:text').attr('autocomplete', 'off');
+                 });
+    </script>
+    <script>
+    require([
+        'jquery',
+        'Ced_RequestToQuote/js/jquery.form'
+    ], function($){
+        $("#sendquote").click(function(){
+            var id = $(this).prev().val();
+            var flag =false;
+            var flag2=true;
+            var path = '<?= $block->escapeUrl($block->getUrl('requesttoquote/quotes/save')); ?>';
+            require(['jquery','Magento_Ui/js/modal/modal'], function ($,modal) {
+                 if ($('.ced-request-to-quote-product-price-qty-popup').find('div.mage-error').length){
+                    $('.ced-request-to-quote-product-price-qty-popup').find('div.mage-error').remove();
+                 }
+                 if ($('.ced-request-to-quote-product-price-qty-popup').find('input.mage-error').length){
+                    $('.ced-request-to-quote-product-price-qty-popup').find('input.mage-error').removeClass('mage-error');
+                 }
+                 var options = {
+                        type: 'popup',
+                        responsive: true,
+                        innerScroll: true,
+                        modalClass: "ced-request-to-quote-product-price-qty-popup",
+                        title: 'Enter Quote Details',
+                        buttons: [{
+                            text: $.mage.__('<?= $block->escapeHtml($buttonTitle) ?>'),
+                            id: 'quote_submit',
+                            click: function () {
+                                var self = this;
+                                if ($('#quoteform').valid()) {
+                                    $.ajax({
+                                        url : path,
+                                        type: "POST",
+                                        showLoader: true,
+                                        data : $("#quoteform").serializeArray(),
+                                        success: function(data){
+                                            self.closeModal();
+                                            window.location.reload();
+                                        }
+                                    });
+                                }
+                            }
+                        }]
+                    };
+                    var popup = modal(options, $('#message-content'));
+                    $('#message-content').modal('openModal');
+                });
+        });
+        $('document').ready( function(){
+            var hide = $('#hidecart').val();
+            if(hide == 'yes'){
+               $('#product-addtocart-button').remove();
+            }
+        });
+    });
+    </script>
+<?php } ?>

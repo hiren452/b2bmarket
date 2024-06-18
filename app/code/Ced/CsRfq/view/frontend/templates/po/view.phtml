@@ -1,0 +1,221 @@
+<?php
+
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsRfq
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+?>
+
+<?php
+    $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$currentPo = $block->getPo();
+$poId = $currentPo->getPoIncrementId();
+$created = $currentPo->getCreatedAt();
+$customer_id = $currentPo->getPoCustomerId();
+$poCustomer = $block->getCustomer($customer_id);
+$customer_email = $poCustomer->getEmail();
+$customer_name = $poCustomer->getName();
+$address = $block->getCustomerAddress($currentPo->getQuoteId());
+$po = $block->getItems();
+$poData = $block->getPoData($poId, $currentPo->getQuoteId());
+$vendor_id = $block->getVendorId();
+$subtotal = 0;
+
+?>
+<div class="page-main-actions">
+    <div class="page-actions-placeholder"></div>
+    <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+        <div class="page-actions-inner" data-title="New Invoice">
+            <div class="page-actions-buttons">
+                <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?= $block->escapeUrl($block->getBackUrl()); ?>')">
+                    <span><?= $block->escapeHtml(__("Back to Grid"));?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container" class="main-col">
+    <section class="admin__page-section order-view-account-information">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__("Proposal Information"));?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= $block->escapeHtml('# ' . $poId); ?></span>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-information-table">
+                        <tbody><tr>
+                            <th><?= $block->escapeHtml(__("Proposal Date"));?></th>
+                            <td><?= $block->escapeHtml($created);?></td>
+                        </tr>
+                        <tr>
+                            <th><?= $block->escapeHtml(__("Proposal Status"));?></th>
+                            <td><span id="order_status"><?= $block->escapeHtml($block->getStatus()); ?></span></td>
+                        </tr>
+
+                        </tbody></table>
+                </div>
+            </div>
+
+            <div class="admin__page-section-item order-account-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= $block->escapeHtml(__("Account Information"));?></span>
+                    <div class="actions"></div>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-account-information-table">
+                        <tbody><tr>
+                            <th><?= $block->escapeHtml(__("Customer Name"));?></th>
+                            <td>
+                                <span><?= $block->escapeHtml($customer_name);?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?= $block->escapeHtml(__("Email Id"));?></th>
+                            <td><?= $block->escapeHtml($customer_email);?></td>
+
+                        </tr>
+                        <tr>
+                            <th><?= $block->escapeHtml(__("Customer Group"));?></th>
+                            <td><?= $block->escapeHtml($block->getCustomerGroup($poCustomer));?></td>
+                        </tr>
+                        </tbody></table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section order-addresses">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__("Address Information"));?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-billing-address">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= $block->escapeHtml(__('Shipping Address'));?></span>
+                </div>
+                <address class="admin__page-section-item-content"><?= $block->escapeHtml($customer_name);?><br>
+
+                    <?= $block->escapeHtml($address['street']);?><br>
+                    <?= $block->escapeHtml($address['city']);?>, <?= $block->escapeHtml($address['state']);?>, <?= $block->escapeHtml($address['pincode']);?>
+                    <?= $block->escapeHtml($address['country']);?><br>
+                    <?= $block->escapeHtml(__("Telephone :"));?>
+                    <?= $block->escapeHtml($address['telephone']);?>
+
+                </address>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Item(s) Information'))?></span>
+        </div>
+
+        <div id="invoice_item_container" class="admin__page-section-content">
+            <div class="admin__table-wrapper">
+                <table class="data-table admin__table-primary order-invoice-tables">
+                    <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?= $block->escapeHtml(__("Product "));?></span></th>
+                        <th class="col-price"><span><?= $block->escapeHtml(__("Requested Price "));?></span></th>
+                        <th class="col-qty"><span><?= $block->escapeHtml(__("Requested Qty "));?></span></th>
+                        <th class="col-qty"><span><?= $block->escapeHtml(__("Proposed Qty"));?></span></th>
+                        <th class="col-qty"><span><?= $block->escapeHtml(__("Remaining Qty "));?></span></th>
+                        <th class="col-total last"><span><?= $block->escapeHtml(__("Row Total"));?></span></th>
+                    </tr>
+                    </thead>
+                    <tbody class="even">
+                    <?php foreach ($poData->getData() as $value) {
+                        $remainingQty = $value['remaining_qty'];
+                        if(!$remainingQty) {
+                            $remainingQty = 0;
+                        }
+                        $subtotal += $value['po_price'];
+                        ?>
+                    <tr>
+                        <td class="col-product">
+                            <div id="order_item_1_title" class="product-title"><?= $block->escapeHtml($value['name']);  ?>
+                                    </div>
+
+                            <div class="product-sku-block">
+                                <span><?= $block->escapeHtml(__('SKU'))?>:</span> <?= $block->escapeHtml($value['sku']);  ?>
+                            </div>
+                            <?php if ($value['product_type'] == 'configurable' && $customOption = $value['custom_option']) { ?>
+                                <?php $options = json_decode($customOption, true); ?>
+                                <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+                                    <?php foreach ($options['attributes_info'] as $option): ?>
+                                        <div class="product-sku-block">
+                                            <span><?= $block->escapeHtml(ucfirst($option['label']))?>:</span> <?= $block->escapeHtml($option['value']);  ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php } ?>
+                            <?php } ?>
+                        </td>
+                        <td class="col-price">
+                            <div class="price-excl-tax">
+                                <span class="price"><span><?= $block->escapeHtml($block->getCurrencyCode());  ?></span><span class="price"><?= $block->escapeHtml($value['quoted_price']);  ?></span></span>
+                            </div>
+                        </td>
+                        <td class="col-qty"><?= $block->escapeHtml($value['quoted_qty']);  ?></td>
+                        <td class="col-qty"><?= $block->escapeHtml($value['product_qty']);  ?></td>
+                        <td class="col-qty"><?= $block->escapeHtml($remainingQty);  ?></td>
+                        <td class="col-qty"><?= $block->escapeHtml($priceHelper->currency($value['po_price'], true, false));  ?></td>
+                    </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= $block->escapeHtml(__('Proposal Total')) ?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-totals">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= $block->escapeHtml(__('Proposal Total')) ?></span>
+                </div>
+                <table class="data-table admin__table-secondary order-subtotal-table">
+                <tfoot>
+                    <tr class="col-0">
+                        <td class="label">
+                            <strong><?= $block->escapeHtml(__('Grand Total'));?></strong>
+                        </td>
+                        <td>
+                            <strong><span class="price"><?= $block->escapeHtml($priceHelper->currency($subtotal, true, false));  ?></span></strong>
+                        </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr class="col-0">
+                        <td class="label"><?= $block->escapeHtml(__('Subtotal'));?></td>
+                        <td>
+                            <span><span class="price"><?= $block->escapeHtml($priceHelper->currency($subtotal, true, false));?></span></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</div>
+<script>
+function setLocation(url){
+	window.location.href = url;
+    }
+</script>

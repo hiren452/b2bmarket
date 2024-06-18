@@ -1,0 +1,41 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsRfq
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ */
+?>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading uptransform clearfix">
+				<div class=" panel_product_heading">
+					<?= $block->escapeHtml(__('Rfq Settings')); ?>
+				</div>
+				<div class="buttons-set   buttons_scb">				
+					<button class="button btn btn-success uptransform product-button" title="Save" type="submit" onClick="jQuery('#form-validate').submit();" id="save_butn" style="float:right;">
+						<span><span><?= $block->escapeHtml(__('Save')) ?></span></span>
+					</button>
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<div class="col-md-12">
+					<?= /* @noEscape */ $block->getChildHtml('rfq_settings_fields') ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

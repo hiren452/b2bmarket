@@ -1,0 +1,92 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsRfq
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+?>
+<?php
+$quoteModel = $block->getCollection();
+$pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$rfqHelper = $this->helper('Ced\CsRfq\Helper\Data');
+if(isset($quoteModel) && $quoteModel->count()>0) {?>
+	<form class="form-quote-wrap" action="<?= $block->escapeUrl($block->getUrl('carttoquote/myquotes/massdelete'));?>" method="post">
+		<table class="data-table" id="my-orders-table">
+			<thead>
+				<tr>
+					<th><?= $block->escapeHtml(__('Quote Id '));?></th>
+					<th><?= $block->escapeHtml(__('Quote Date'));?></th>
+					<th><?= $block->escapeHtml(__('Quote Status'));?></th>
+					<th><?= $block->escapeHtml(__('Seller'));?></th>
+					<th><?= $block->escapeHtml(__('Action'));?></th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+        foreach($quoteModel as $value) {
+            ?>
+				<tr>
+						<td><?= $block->escapeHtml($value->getQuoteIncrementId()); ?></td>
+						<td><?= /* @noEscape */ $value->getCreatedAt() ? date('d/m/Y', strtotime($value->getCreatedAt())) : ''; ?></td>
+						<td><?php
+                            $status = $value->getStatus();
+            $title = __('Edit');
+            if(isset($status)) {
+                switch ($status) {
+                    case '0': /* @noEscape */ echo "<span style='color:#001f3f'>" . $block->getStatus($status) . "</span>";
+                        $title = __('Edit');
+                        break;
+                    case '1': /* @noEscape */ echo "<span style='color:#ff851b'>" . $block->getStatus($status) . "</span>";
+                        $title = __('Edit');
+                        break;
+                    case '2': /* @noEscape */ echo "<span style='color:#0074d9'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '3': /* @noEscape */ echo "<span style='color:#ff4136'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '4': /* @noEscape */ echo "<span style='color:#2ecc40'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '5': /* @noEscape */ echo "<span style='color:#01ff70'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '6': /* @noEscape */ echo "<span style='color:blue'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '7': /* @noEscape */ echo "<span style='color:#aaaaaa'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    default:
+                        /* @noEscape */ echo "<span style='color:#001f3f'>" . $block->getStatus(\Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING) . "</span>";
+                        break;
+                }
+            } ?>
+						</td>
+						<td><?= $block->escapeHtml($rfqHelper->getSeller($value->getVendorId())) ?></td>
+						<td>
+							<a class="action action-edit" href="<?= $block->escapeUrl($block->getUrl('requesttoquote/customer/editquote/', ['quoteId'=>$value->getQuoteId()])); ?>" /><span><?= $block->escapeHtml($title); ?> </span>
+						</td>
+			   </tr>
+			<?php }?>
+			</tbody>
+		</table>
+	</form>
+<?php if ($block->getPagerHtml()): ?>
+<div class="order-products-toolbar toolbar bottom"><?= /* @noEscape */ $block->getPagerHtml(); ?></div>
+<?php endif; ?>
+<?php } else {?>
+<h3><?= $block->escapeHtml(__('No quotes available.'));?></h3>
+<?php }?>

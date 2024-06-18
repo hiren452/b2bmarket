@@ -1,0 +1,1 @@
+# m2-vendor-request-to-quote-addon
