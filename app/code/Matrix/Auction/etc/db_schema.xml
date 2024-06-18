@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_auction_private_auctionlist" engine="innodb" resource="default" comment="Private Auctions">
+        <column xsi:type="int" name="id" padding="10" identity="true" comment="Id"/>
+        <column xsi:type="int" name="auction_id" padding="10" comment="Auction Id"/>
+        <column xsi:type="int" name="vendor_id" padding="10" comment="Vendor Id"/>
+        <column xsi:type="longtext" name="customer_ids" comment="Customer Ids"/>
+        <column xsi:type="longtext" name="customer_emails" comment="Customer Emails"/>
+        <column xsi:type="datetime" name="created" nullable="true" comment="Temp Start Date"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="ced_auction_auctionlist">
+        <column xsi:type="varchar" name="is_buy_now" nullable="true" length="40"  comment="Activate Buy Now"/>
+        <column xsi:type="decimal" name="reserve_price" nullable="true" scale="2" precision="12" comment="Reserve Price"/>
+        <column xsi:type="int" name="is_paid" nullable="true" default="0" comment="Is Paid"/>
+        <column xsi:type="int" name="v_product_id" nullable="true" comment="Virtual Product Id"/>
+        <column xsi:type="datetime" name="start_time_utc" nullable="true" comment="Start Time UTC"/>
+        <column xsi:type="datetime" name="end_time_utc" nullable="true" comment="Start Timezone UTC"/>
+        <column xsi:type="text" name="transaction_id" nullable="true" comment="Transaction Id"/>
+        <column xsi:type="int" name="auction_type" nullable="true" default="0" comment="Auction Type"/>
+    </table>
+    <table name="ced_auction_biddetails">
+        <column xsi:type="int" name="replaced_winner" nullable="true" default="0" comment="Replaced Winner"/>
+    </table>
+</schema>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="auction_entry_1" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <group id="standard" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="allow_private_auction" translate="label" type="select" sortOrder="20" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Allow Private Auction</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="allow_public_auction" translate="label" type="select" sortOrder="30" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Allow Public Auction</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="show_commission_chart" translate="label" type="select" sortOrder="40" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Display Commission Chart at Seller Membership</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="email_winner" sortOrder="50"/>
+
+                <field id="email_winner_template" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Auction Winner Mail Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="outbid_mail_template" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Outbid Mail Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="admin_notify_closed_mail" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Closed Auction Mail Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="winner_product_expire" translate="label" type="text" sortOrder="90" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Winner Product Expire</label>
+                    <validate>validate-number</validate>
+                    <comment>After X hour, first winner will loose previlege. Second winner will get this previlege.</comment>
+                </field>
+
+                <field id="email_admin_auctionclosed" sortOrder="100"/>
+                <field id="remove_auction_product" sortOrder="110"/>
+                <field id="remove_purchase_link" sortOrder="120"/>
+                <field id="admin_email" sortOrder="130"/>
+                <field id="increment_enable" sortOrder="140"/>
+                <field id="increment_default_price" sortOrder="150"/>
+                <field id="increment_price" sortOrder="160"/>
+
+                <field id="template" translate="label" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Private Auction Mail Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="request_template" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Request To Join</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

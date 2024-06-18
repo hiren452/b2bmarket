@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Ced_Auction::css/auction.css" />
+    </head>
+    <body>
+        <referenceContainer name="product.info.main">
+        	<container name="auction.bid.container" as="bidContainer" label="Auction Bid Container" htmlTag="div" htmlClass="auction-bid-container" after="product.info.price" />
+        </referenceContainer>
+
+        <referenceContainer name="product.info.type">
+            <block class="Ced\CsAuction\Block\Product\View\Type\SimpleProductAuction" name="product.info.simple.auction" as="product_type_data_auction" template="Matrix_Auction::product/view/type/simpleauction.phtml" cacheable="false"/>
+        </referenceContainer>
+        <move element="product.info.simple.auction" destination="auction.bid.container"  />
+    </body>
+</page>

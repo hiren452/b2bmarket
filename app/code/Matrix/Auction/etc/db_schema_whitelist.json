@@ -1,0 +1,35 @@
+{
+    "ced_auction_private_auctionlist": {
+        "column": {
+            "id": true,
+            "auction_id": true,
+            "vendor_id": true,
+            "customer_ids": true,
+            "customer_emails": true,
+            "created": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "ced_auction_auctionlist": {
+        "column": {
+            "is_buy_now": true,
+            "reserve_price": true,
+            "is_paid": true,
+            "v_product_id": true,
+            "transaction_id": true,
+            "auction_type": true,
+            "customer_ids": true,
+            "start_timezone": true,
+            "end_timezone": true,
+            "start_time_utc": true,
+            "end_time_utc": true
+        }
+    },
+    "ced_auction_biddetails": {
+        "column": {
+            "replaced_winner": true
+        }
+    }
+}

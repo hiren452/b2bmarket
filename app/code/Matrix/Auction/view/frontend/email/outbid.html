@@ -1,0 +1,62 @@
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<!--@subject Email Subject @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td align="left" valign="top" style="padding:20px 0 20px 0">
+            <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650">
+                <tr>
+                    <td>
+                        <h1 style="font-size:22px;font-weight:normal;line-height:22px;margin:0 0 11px 0;">{{trans "Hello"}},{{var customer_name}}</h1>
+                    </td>
+                </tr>
+                <tr><td>
+                    <p>{{trans "Your bid has been outbid by the other bidder.Below are the product and bidding details."}}</p>
+                </td></tr>
+                <table>
+                    <tr>
+                        <td>{{trans "Product Name "}}:</td>
+                        <td>{{var product_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{trans "Your Bidding Price "}}:</td>
+                        <td>{{var customer_bidprice}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{trans "Latest Bidding Price "}}:</td>
+                        <td>{{var out_bidprice}}</td>
+                    </tr>
+                </table>
+                <table>
+                <tr><p>{{trans "Hurry up place the bid by below link"}}</p></tr>
+                <tr>{{var product_link}}</tr>
+                </table>
+            </table>
+        </td>
+    </tr>
+</table>
+{{template config_path="design/email/footer_template"}}
