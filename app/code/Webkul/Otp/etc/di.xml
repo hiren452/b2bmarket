@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- /**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Webkul\Otp\Api\Data\OtpInterface" type="Webkul\Otp\Model\Otp" />
+    <preference for="Webkul\Otp\Api\OtpRepositoryInterface" type="Webkul\Otp\Model\OtpRepository" />
+    <preference for="Magento\Paypal\Block\Express\InContext\SmartButton" type="Webkul\Otp\Block\Paypal\Express\InContext\SmartButton" />
+    <preference for="Magento\Paypal\Block\Express\InContext\Minicart\SmartButton" type="Webkul\Otp\Block\Paypal\Express\InContext\Minicart\SmartButton" />
+    <type name="Magento\Customer\Block\Form\Login">
+        <plugin name="login_form_template" type="Webkul\Otp\Block\Customer\Plugin\LoginFormTemplate" />
+    </type>
+    <type name="Magento\Customer\Block\Form\Edit">
+        <plugin name="edit_form_template" type="Webkul\Otp\Block\Customer\Plugin\EditFormTemplate" />
+    </type>
+    <type name="Magento\Customer\Block\Account\Forgotpassword">
+        <plugin name="forgotpassword_form_template" type="Webkul\Otp\Block\Customer\Plugin\ForgotpasswordFormTemplate" />
+    </type>
+    <type name="Magento\Customer\Controller\Ajax\Login">
+        <plugin name="validate_phonenumber_customer_login_ajax" type="Webkul\Otp\Model\Customer\Plugin\LoginAjax" />
+    </type>
+    <type name="Magento\Customer\Controller\Account\ForgotPasswordPost">
+        <plugin name="validate_phonenumber_customer_forgotpaswordpost" type="Webkul\Otp\Model\Customer\Plugin\ValidatePhonenumberForgotPassword" />
+    </type>
+    <type name="Webkul\Otp\Model\Customer\Plugin\LoginAjax">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\AccountManagementInterface">
+        <plugin name="phone_number_to_email_converter_account_management_interrface" type="Webkul\Otp\Model\Customer\Plugin\PhoneNumberToEmailConverter" />
+    </type>
+    <type name="Webkul\Otp\Observer\ValidatePhonenumberCustomerAccountCreatePostObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Webkul\Otp\Observer\ValidatePhonenumberCustomerAccountEditPostObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Webkul\Otp\Observer\ValidatePhonenumberCustomerAddressFormPostObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Webkul\Otp\Observer\ValidatePhonenumberCustomerAccountLoginPostObserver">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+</config>

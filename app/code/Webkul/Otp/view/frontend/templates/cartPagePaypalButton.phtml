@@ -1,0 +1,25 @@
+<?php
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+?>
+<div class="paypalOtpComponent" 
+    data-mage-init='<?= /* @noEscape */ $block->getPaypalOtpJsInitParams(); ?>'>
+    <div class="cartPaypalOtp paypalOtpBtn"> 
+        <span>Click here to verify otp</span>
+    </div>
+    <div
+        data-mage-init='<?= /* @noEscape */ $block->getJsInitParams(); ?>'
+        class="cartPaypalDiv paypaldiv disablePaypalDiv paypal checkout paypal-logo
+            <?= $escaper->escapeHtml($block->getContainerId()); ?>-container">
+    </div>
+    <div class="otp-loader">
+    </div>
+</div>

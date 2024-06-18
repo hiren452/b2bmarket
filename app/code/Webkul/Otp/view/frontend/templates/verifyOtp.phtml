@@ -1,0 +1,42 @@
+<?php
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+/** @var $viewModel \Webkul\Otp\ViewModel\HelperViewModel */
+$viewModel = $block->getViewModel();
+$jsonHelper = $viewModel->helper(\Magento\Framework\Json\Helper\Data::class);
+$otpHelper = $viewModel->helper(\Webkul\Otp\Helper\Data::class);
+
+$isModuleEnable = $otpHelper->isModuleEnable();
+$enableAtRegistration = $otpHelper->isEnableAtRegistration();
+$otpModalConfig = $otpHelper->getOtpModalConfig();
+//@codingStandardsIgnoreStart
+if ($isModuleEnable && $enableAtRegistration): ?>
+    <div class="otpLoader">
+    </div>
+    <div data-mage-init='{
+            "verifyOtp": <?= /* @noEscape */ $jsonHelper->jsonEncode($otpModalConfig); ?>
+        }' class="otpPopupContainer">
+        <div class= "otp_popup">
+            <div class="otp_expire_message">
+                <?= __('Your OTP will expire in ') . $escaper->escapeHtml($otpModalConfig
+                ['otpTimeToExpireString']);/* @noEscape */ ?>.
+            </div>
+            <div class="otp_response"></div>
+            <div class="otp_action">
+                <input name="otp" type="password" class="user_otp" autocomplete="off">
+                <button class="submit_otp">
+                    <?= $escaper->escapeHtml($otpModalConfig['submitButtonText']); ?>
+                </button>
+            </div>
+            <div class="validate_error"></div>
+        </div>
+    </div>
+<?php endif; //@codingStandardsIgnoreEnd?>

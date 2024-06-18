@@ -1,0 +1,57 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+/** @var \Webkul\Otp\Block\Customer\Widget\DefaultPhoneNumber $block */
+?>
+<div class="field required defaultphonenumber <?= $escaper->escapeHtmlAttr($block->getContainerClassName()) ?>">
+    <label for="<?= $escaper->escapeHtmlAttr($block->getFieldId('phonenumber')) ?>" class="label">
+        <span><?= $escaper->escapeHtml($block->getStoreLabel('default_phone_number')) ?></span>
+    </label>
+    <div class="control">
+        <fieldset class="fieldset fieldset-defaultphonenumber">
+        <div class="fields">
+            <div class="field required<?= $block->isRequired() ? ' required' : ''; ?>">
+                <label for="<?= $escaper->escapeHtmlAttr($block->getFieldId('callingcode')) ?>" class="label">
+                    <span><?= $escaper->escapeHtml(__('Dialing Code')) ?></span>
+                </label>
+                <div class="control">
+                    <select id="<?= $escaper->escapeHtmlAttr($block->getFieldId('callingcode')) ?>"
+                            name="<?= $escaper->escapeHtmlAttr($block->getFieldName('callingcode')) ?>">
+                        <?php $countries = $block->getCountries(); ?>
+                        <?php $guessedCallingCode = $block->guessCallingCode() ?>
+                        <?php foreach ($countries as $country): ?>
+                            <option value="<?= /* @noEscape */ $country['callingCode'] ?>"
+                                <?= $guessedCallingCode == $country['callingCode'] ? ' selected' : '' ?>>
+                                <?= $escaper->escapeHtml(__($country['name']) . ' (+' . $country['callingCode'] . ')') ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="field phonenumber<?= $block->isRequired() ? ' required' : ''; ?>">
+                <label for="<?= $escaper->escapeHtmlAttr($block->getFieldId('phonenumber')) ?>" class="label ">
+                    <span><?= $escaper->escapeHtml($block->getStoreLabel('default_phone_number')) ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" name="<?= $escaper->escapeHtmlAttr($block->getFieldName('phonenumber')) ?>"
+                           id="<?= $escaper->escapeHtmlAttr($block->getFieldId('phonenumber')) ?>" 
+                           value="<?= $escaper->escapeHtmlAttr($block->guessPhonenumber()) ?>"
+                           title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('default_phone_number')) ?>"
+                           class="input-text" data-mage-init='{"mage/trim-input":{}}'
+                            <?= $block->isRequired()
+                                ? ' data-validate="{required:true, \'validate-number\': true}"'
+                                : '' ?>>
+                </div>
+            </div>
+        </div>
+        </fieldset>
+    </div>
+</div>

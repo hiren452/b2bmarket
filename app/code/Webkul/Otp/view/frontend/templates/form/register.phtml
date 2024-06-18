@@ -1,0 +1,89 @@
+<?php
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+/** @var \Magento\Customer\Block\Form\Register $block */
+?>
+<?php /* Extensions placeholder */
+//@codingStandardsIgnoreStart
+/** @var $viewModel \Webkul\Otp\ViewModel\HelperViewModel */
+$viewModel = $block->getViewModel();
+$jsonHelper = $viewModel->helper(\Magento\Framework\Json\Helper\Data::class);
+$otpHelper = $viewModel->helper(\Webkul\Otp\Helper\Data::class);
+
+$countries = $otpHelper->getCountries();
+$isMobileVerificationEnabled = $otpHelper->getOtpEnabledConfigMessage();
+$isMobileOtpEnable = $otpHelper->isModuleEnable();
+
+$enableAtRegistration = $otpHelper->isEnableAtRegistration();
+$otpModalConfig = $otpHelper->getOtpModalConfig();
+
+?>
+<?php
+if ($isMobileVerificationEnabled && $isMobileOtpEnable) {
+    if ($otpHelper->getMarketplacePageLayout() != 1) {
+        ?>
+<div class="field required" id="otp-div">
+    <input type="hidden" name="mobile_enbled" id="config" value="<?=/* @noEscape */$isMobileVerificationEnabled;?>">
+    <label for="country" class="label"><span><?=$escaper->escapeHtml(__('Dialing Code'))?></span></label>
+    <div class="control">
+        <select id="country_codes" name="region">
+            <?php foreach ($countries as $country): ?>
+                <?php $callingCode = '+' . $country['callingCode']?>
+                <option value="<?=$escaper->escapeHtmlAttr($callingCode)?>">
+                    <?=$escaper->escapeHtml(__($country['name']) . ' (' . $callingCode . ')')?>
+                </option>
+            <?php endforeach;?>
+        </select>
+    </div><br>
+    <label for="mobile" type="number" class="label">
+        <?php /* ?><span><?=$block->escapeHtml(__('Default Phone Number'))?></span><?php */ ?>
+        <span><?=$escaper->escapeHtml(__('Mobile Number'))?></span>
+    </label>
+    <div class="control">
+        <input type="text" name="mobile" id="mobile"
+               value="<?=$escaper->escapeHtmlAttr($block->getFormData()->getEmail())?>"
+               title="<?=$escaper->escapeHtmlAttr(__('Mobile'))?>" class="input-text"
+               data-mage-init='{"mage/trim-input":{}}' data-validate="{required:true, 'validate-number': true}">
+    </div>
+</div>
+<p id="demo"></p>
+<?php }
+    }
+if (!$isMobileOtpEnable && $otpHelper->isMarketplaceModuleEnable()): ?>
+    <div class="otpLoader">
+    </div>
+    <div data-mage-init='{
+            "verifyOtp": <?=/* @noEscape */$jsonHelper->jsonEncode($otpModalConfig);?>
+        }' class="otpPopupContainer">
+        <div class= "otp_popup">
+        <div class="otp_expire_message">
+                <?= __('Your OTP will expire in ') . $escaper->escapeHtml($otpModalConfig
+                ['otpTimeToExpireString']);/* @noEscape */ ?>.
+            </div>
+            <div class="otp_response"></div>
+            <div class="otp_action">
+                <input name="otp" type="password" class="user_otp" autocomplete="off">
+                <button class="submit_otp">
+                    <?=$escaper->escapeHtml($otpModalConfig['submitButtonText']);?>
+                </button>
+            </div>
+            <div class="validate_error"></div>
+        </div>
+    </div>
+<?php endif; //@codingStandardsIgnoreEnd?>
+
+<script>
+require(['jquery'], function ($){
+    $(document).ready(function () {
+        $('#email_address').parents('div.field').after($('#otp-div'));
+    });
+});
+</script>

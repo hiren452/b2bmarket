@@ -1,0 +1,25 @@
+<?php
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+/** @var $viewModel \Webkul\Otp\ViewModel\HelperViewModel */
+$viewModel = $block->getViewModel();
+$jsonHelper = $viewModel->helper(\Magento\Framework\Json\Helper\Data::class);
+$checkoutConfig = $viewModel->getConfig();
+?>
+
+<script>
+    require(['jquery'], function($){
+        localStorage.setItem(
+            'wkCheckoutConfig',
+            JSON.stringify(<?=/* @noEscape */ $jsonHelper->jsonEncode($checkoutConfig); ?>)
+        );
+    });
+</script>

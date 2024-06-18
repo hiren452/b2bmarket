@@ -1,0 +1,44 @@
+Legend
+
++ Features
+- Bugs
+
+-------------------------------- Version 5.0.1 --------------------------------------
+
+	+ Compatible with Magento 2.4.5
+	+ Version Upgrade
+	- Minor bugs fixed
+
+
+-------------------------------- Version 5.0.0 --------------------------------------
+
+	+ Compatible to Magento 2.4.x.
+	+ Admin can set the opt medium from admin configuration
+	+ OTP compatible with Marketplace
+
+
+-------------------------------- Version 3.0.0 --------------------------------------
+
+	+ Version updated for Magento 2.3.x.
+
+-------------------------------- Version 2.1.0 --------------------------------------
+
+	+ Compatible for Magento 2.3
+	+ Feature added for Mobile OTP verification at customer registration.
+	+ Feature added for Mobile OTP verification at checkout.
+	+ Admin can Enable/Disable Mobile OTP verification at backend.
+
+-------------------------------- Version 2.0.1 --------------------------------------
+
+	+ Compatible for Magento 2.2.x.
+	+ OTP verification feature on mobile at customer registration.
+	+ OTP verification feature on mobile at checkout.
+	+ Admin can Enable/Disable feature at backend configuration.
+
+-------------------------------- Version 2.0.0 --------------------------------------
+
+	+ Admin can enable/disable OTP module from admin configuration.
+	+ Admin can enable/disable OTP verification of the customers at the time of registration.
+	+ Admin can enable/disable OTP verification of the customers at the time of placing an order.
+	+ Admin can choose payment options, for which the customers has to verify OTP
+ 	+ Admin can select Email templates from the system to be used for OTP verification notifications.

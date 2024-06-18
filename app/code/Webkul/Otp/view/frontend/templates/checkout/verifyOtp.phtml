@@ -1,0 +1,59 @@
+<?php
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+/** @var $viewModel \Webkul\Otp\ViewModel\HelperViewModel */
+$viewModel = $block->getViewModel();
+$jsonHelper = $viewModel->helper(\Magento\Framework\Json\Helper\Data::class);
+$otpHelper = $viewModel->helper(\Webkul\Otp\Helper\Data::class);
+
+$isModuleEnable = $otpHelper->isModuleEnable();
+$enableAtCheckout = $otpHelper->isEnableAtCheckout();
+$isMobileOtpEnable = $otpHelper->getOtpEnabledConfigMessage();
+$activeMethods = $otpHelper->getActivePaymentMethods();
+$otpModalConfig = $otpHelper->getOtpModalConfig();
+
+$defaultPaymentMethodActive = 0;
+if (array_key_exists("paypal_express", $activeMethods)) {
+    $defaultPaymentMethodActive = 1;
+}
+//@codingStandardsIgnoreStart
+if ($isModuleEnable && $enableAtCheckout): ?>
+    <div class="wk-otp-loading-mask wk-otp-display-none">
+        <div class="wk-otp-loader"></div>
+    </div>
+    <div id="otp_modal" class="hide">
+        <div class="otp_popup">
+            <p class="otp_expire_message">
+                <?=__('Your OTP will expire in') . $escaper->escapeHtmlAttr($otpModalConfig
+                ['otpTimeToExpireString']);/* @noEscape */?>.
+            </p>
+            <div class="otp_response"></div>
+            <div class="otp_action">
+                <input name="otp" type="password" class="user_otp_checkout" id="user_otp_checkout" autocomplete="off">
+                <button class="submit_otp">
+                    <?=$escaper->escapeHtmlAttr($otpModalConfig['submitButtonText']);?>
+                </button>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="mobile_enbled" id="config" value="<?=/* @noEscape */$isMobileOtpEnable;?>">
+    <input type="hidden" name="paymet_enbled" id="paymet_enbled"
+        value="<?=/* @noEscape */$defaultPaymentMethodActive;?>">
+    <script type="text/x-magento-init">
+        {
+            "*":{
+                    "verifyCheckoutOtp": <?=/* @noEscape */$jsonHelper->jsonEncode($otpModalConfig);?>
+                }
+        }
+    </script>
+<?php endif;?>
+<?php //@codingStandardsIgnoreEnd?>
+

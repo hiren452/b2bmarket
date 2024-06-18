@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <otp>
+            <enable>
+                <otp_enable>1</otp_enable>
+                <otp_enable_registration>1</otp_enable_registration>
+                <otp_enable_checkout>1</otp_enable_checkout>
+                <forgot_password>1</forgot_password>
+                <allowed_payment_methods>free</allowed_payment_methods>
+                <expiry>60</expiry>
+            </enable>
+            <emailsettings>
+                <otp_notification>otp_emailsettings_otp_notification</otp_notification>
+            </emailsettings>
+            <twiliosettings>
+                <message>Your One Time Password is {otp}.</message>
+                <send_otp_via>mobile</send_otp_via>
+            </twiliosettings>
+        </otp>
+    </default>
+</config>

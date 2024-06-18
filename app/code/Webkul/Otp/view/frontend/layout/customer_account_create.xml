@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="email_verfication" template="Webkul_Otp::verifyOtp.phtml" ifconfig="otp/enable/otp_enable" >
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Webkul\Otp\ViewModel\HelperViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Customer\Block\Form\Register" name="otp_registration_field" after="customer_form_register" template="Webkul_Otp::form/register.phtml">
+                <arguments>
+                    <argument name="attribute_data" xsi:type="object">Magento\Customer\Block\DataProviders\AddressAttributeData</argument>
+                    <argument name="view_model" xsi:type="object">Webkul\Otp\ViewModel\HelperViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

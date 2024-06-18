@@ -1,0 +1,20 @@
+{
+    "name": "webkul/otp",
+    "description": "Otp Module For Magento2",
+    "require": {
+        "twilio/sdk": "^6.3"
+    },
+    "type": "magento2-module",
+    "version": "5.0.1",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Webkul\\Otp\\": ""
+        }
+    }
+}

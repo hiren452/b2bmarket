@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul Software
+ *
+ * @category  Webkul
+ * @package   Webkul_Otp
+ * @author    Webkul
+ * @copyright Copyright (c) Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+   <event name="controller_action_predispatch_customer_account_forgotpasswordpost">
+        <observer name="convert_phonenumber_to_email_customer_account_forgotpasswordpost_observer" instance="Webkul\Otp\Observer\ConvertPhonenumberToEmailCustomerAccountForgotpasswordPostObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_createpost">
+        <observer name="validate_phonenumber_customer_account_createpost_observer" instance="Webkul\Otp\Observer\ValidatePhonenumberCustomerAccountCreatePostObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_editpost">
+        <observer name="validate_phonenumber_customer_account_editpost_observer" instance="Webkul\Otp\Observer\ValidatePhonenumberCustomerAccountEditPostObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_loginpost">
+        <observer name="validate_phonenumber_customer_account_loginpost_observer" instance="Webkul\Otp\Observer\ValidatePhonenumberCustomerAccountLoginPostObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_address_formpost">
+        <observer name="validate_phonenumber_customer_address_formpost_observer" instance="Webkul\Otp\Observer\ValidatePhonenumberCustomerAddressFormPostObserver" />
+    </event>
+    <event name="customer_address_save_before">
+        <observer name="before_address_save_observer" instance="Webkul\Otp\Observer\BeforeAddressSaveObserver" />
+    </event>
+    <event name="customer_save_before">
+        <observer name="before_customer_save_observer" instance="Webkul\Otp\Observer\BeforeCustomerSaveObserver" />
+    </event> 
+</config>
