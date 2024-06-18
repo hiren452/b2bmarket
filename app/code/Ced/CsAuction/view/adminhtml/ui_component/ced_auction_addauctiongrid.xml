@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">ced_auction_addauctiongrid.ced_csauction_addauctiongrid_data_source</item>
+            <item name="deps" xsi:type="string">ced_auction_addauctiongrid.ced_csauction_addauctiongrid_data_source</item>
+        </item>
+    </argument>
+    <dataSource name="ced_csauction_addauctiongrid_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">ced_csauction_addauctiongrid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>    
+    <columns name="ced_auction_addauctiongrid_columns">
+         <column name="vendor_name" class="Ced\CsAuction\Ui\Component\Listing\Column\VendorName">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Vendor Name</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
+                </item>
+            </argument>
+        </column>
+        <!-- add code 21 May -->
+        <column name="customer_emails" class="Ced\CsAuction\Ui\Component\Listing\Column\InvitedBuyer">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="filter" xsi:type="string">text</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                <item name="dataType" xsi:type="string">text</item>
+                <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                <item name="label" xsi:type="string" translate="true">Invited Buyer</item>
+                <item name="sortOrder" xsi:type="number">90</item>
+            </item>
+        </argument>
+    </column>
+        <!-- end code -->
+    </columns>
+</listing>

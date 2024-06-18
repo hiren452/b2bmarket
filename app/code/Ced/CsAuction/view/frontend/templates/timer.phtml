@@ -1,0 +1,14 @@
+<?php $timezone = $block->getTimeZone();?>
+<script>
+    require([
+        'jquery',
+        'moment',
+        'jquery/ui',
+    ], function ($) {
+            let timezone = '<?= $block->escapeJs($timezone) ?>';
+        $('.ui-datepicker-current').live('click', function(id) {
+
+            $.datepicker._curInst.input.datepicker('setDate', timezone);
+        });
+    });
+</script>

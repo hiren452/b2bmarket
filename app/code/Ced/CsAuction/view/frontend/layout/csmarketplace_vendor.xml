@@ -1,0 +1,61 @@
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsAuction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="vendorpanel"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="csmarketplace_vendor_navigation">
+            <block class="Ced\CsMarketplace\Block\Link\Current" name="vendor_auction" after="vendor_settings">
+                <arguments>
+                    <argument name="name" xsi:type="string">vendor_auction</argument>
+                    <argument name="label" xsi:type="string" translate="true">Auction</argument>
+                    <argument name="path" xsi:type="string">#</argument>
+                    <argument name="font_awesome" xsi:type="string">fa fa-gavel fa-fw</argument>
+                    <argument name="sort_order" xsi:type="string">90</argument>
+                    <argument name="level" xsi:type="string">1</argument>
+                </arguments>
+                <block class="Ced\CsMarketplace\Block\Links" name="vendor_auction_container"
+                       as="vendor_auction_container">
+                    <arguments>
+                        <argument name="css_class" xsi:type="string">nav nav-second-level collapse</argument>
+                    </arguments>
+                    <block class="Ced\CsMarketplace\Block\Link\Current" name="auction_list">
+                        <arguments>
+                            <argument name="name" xsi:type="string">auction_list</argument>
+                            <argument name="label" xsi:type="string" translate="true">Manage Auction</argument>
+                            <argument name="path" xsi:type="string">csauction/auctionlist/index</argument>
+                            <argument name="font_awesome" xsi:type="string">fa fa-angle-double-right</argument>
+                            <argument name="sort_order" xsi:type="string">20</argument>
+                            <argument name="level" xsi:type="string">2</argument>
+                        </arguments>
+                    </block>
+                    <block class="Ced\CsMarketplace\Block\Link\Current" name="add_auction">
+                        <arguments>
+                            <argument name="name" xsi:type="string">add_auction</argument>
+                            <argument name="label" xsi:type="string" translate="true">Auction Winners</argument>
+                            <argument name="path" xsi:type="string">csauction/winner/index</argument>
+                            <argument name="font_awesome" xsi:type="string">fa fa-angle-double-right</argument>
+                            <argument name="sort_order" xsi:type="string">30</argument>
+                            <argument name="level" xsi:type="string">2</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

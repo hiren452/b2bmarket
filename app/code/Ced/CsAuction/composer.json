@@ -1,0 +1,19 @@
+{
+  "name": "ced/module-csauction",
+  "description": "Extension which will provide auction for your magento 2 website",
+  "require": {
+    "php": "~5.5.0|~5.6.0|~7.0.0"
+  },
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "license": [
+    "EULA"
+  ],
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Ced\\CsAuction\\": ""
+    }
+  }
+}
+
