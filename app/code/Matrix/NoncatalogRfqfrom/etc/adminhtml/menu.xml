@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Matrix_NoncatalogRfqfrom::grid" title="Manage RFQ Form Fields" module="Matrix_NoncatalogRfqfrom" sortOrder="100" parent="Matrix_NoncatalogueRfq::noncatalogrfq" resource="Matrix_NoncatalogRfqfrom::grid"  />
+    	<add id="Matrix_NoncatalogRfqfrom::manage_grid" title="Manage RFQ Fields" module="Matrix_NoncatalogRfqfrom" sortOrder="10" parent="Matrix_NoncatalogRfqfrom::grid" resource="Matrix_NoncatalogRfqfrom::manage_gird"  action="noncatrfqformfields/index/attribute" />
+    	<add id="Matrix_NoncatalogRfqfrom::view_grid" title="Add Attributes" module="Matrix_NoncatalogRfqfrom" sortOrder="20" parent="Matrix_NoncatalogRfqfrom::manage_grid" action="noncatrfqformfields/index/edit"  resource="Matrix_NoncatalogRfqfrom::view_gird"/>
+    </menu>
+</config>

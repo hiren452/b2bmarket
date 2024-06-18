@@ -1,0 +1,32 @@
+<?php
+//@codingStandardsIgnoreStart
+$mediaUrl =  $block->getMediaUrl();
+$rfqEntity = $block->getRfqEntity();
+$attrCollection  = $block->attrCollection();
+if(count($attrCollection) && $rfqEntity && $rfqEntity->getId()) {
+    echo '<table class="data-table table table-striped table-cus">';
+    echo '<tbody>';
+    foreach ($attrCollection as $k=>$v) {
+
+        echo '<tr>';
+        $attribute_code = $v->getData('attribute_code');
+        $attribute_label = $v->getData('frontend_label');
+        $frontend_input = $v->getData('frontend_input');
+        if($frontend_input == "select") {
+            $optionValue =  $rfqEntity->getResource()->getAttribute($attribute_code)->getFrontend()->getValue($rfqEntity);
+            echo '<td><strong>' . $attribute_label . '</strong></td><td>: ' . $optionValue . '</td>';
+        } elseif($frontend_input == "image") {
+            echo '<td><strong>' . $attribute_label . '</strong></td><td style="text-align:left;"> <a target="_blank" href="' . $mediaUrl . $rfqEntity->getData($attribute_code) . '"><img style="border:1px solid #e5e9f0;padding:5px;width:180px;"  src="' . $mediaUrl . $rfqEntity->getData($attribute_code) . '" alt="' . $attribute_label . '" title="' . $attribute_label . '" /></a></td>';
+        } elseif($frontend_input == "file") {
+            echo '<td><strong>' . $attribute_label . '</strong></td> <td style="text-align:left;">: <a target="_blank" href="' . $mediaUrl . $rfqEntity->getData($attribute_code) . '">' . $attribute_label . '</a></td>';
+        } else {
+            echo '<td><strong>' . $attribute_label . '</strong></td><td>: ' . $rfqEntity->getData($attribute_code) . '</td>';
+        }
+        echo '</tr>';
+
+    }
+    echo '<tbody>';
+    echo  '</table>';
+
+}
+//@codingStandardsIgnoreEnd

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="noncatalogrequesttoquote_submit_success">
+        <observer name="customer_register_success_observer" instance="Matrix\NoncatalogRfqfrom\Observer\FrontendRfqObserver" />
+    </event>
+    <!--<event name="controller_action_predispatch">
+        <observer name="customer_register_success_observer" instance="Matrix\NoncatalogRfqfrom\Observer\FrontendRfqObserver" />
+    </event>-->    
+</config>

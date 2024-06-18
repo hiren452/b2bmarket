@@ -1,0 +1,388 @@
+<?php
+//@codingStandardsIgnoreStart
+$modelHelper = $this->helper('Matrix\NoncatalogRfqfrom\Helper');
+$_collection = $block->attrCollection();
+$coll = ($_collection->getData());
+if(count($coll)>0) {
+    ?>
+<h3><?= $block->escapeHtml(__('Additional Fields')) ?></h3>
+<?php }?>
+<div class="row" >
+  <div class="col-sm-6">
+<?php
+    /*if(count($coll)>0)
+{
+    ?><legend class="legend"><span><?php echo __('Additional Fields') ?></span></legend><br><?php
+}*/
+
+    $attributeCollection =[];
+foreach ($coll as $k=>$v) {
+
+    $models = $modelHelper->getAttributeById()->load($v['attribute_code'], 'attribute_code')->getData();
+    $v['sortorder'] = $models['sortorder'];
+    $v['dependable_attribute'] = $models['dependable_attribute'];
+    $attributeCollection[]  = $v;
+
+}
+
+function cmp($a, $b)
+{
+
+    if ($a['sortorder'] == $b['sortorder']) {
+        return 0;
+    }
+    return ($a['sortorder'] < $b['sortorder']) ? -1 : 1;
+}
+usort($attributeCollection, "cmp");
+
+$dependable = [];
+foreach ($attributeCollection as $value) {
+    if($value['dependable_attribute'] !="") {
+        $dependable[] = $value['dependable_attribute'];
+    }
+}
+
+foreach($attributeCollection as $Data) {
+
+    $table = $modelHelper->getAttributeById()->load($Data['attribute_id'], 'attribute_id')->getData();
+
+    if($table['is_dependent'] == 1) {
+        continue;
+    }
+    if(in_array($Data['attribute_code'], $dependable)) {
+        continue;
+    }
+
+    if($Data['is_required'] == 1) { ?>
+        <div class="field confirmation required">
+            <label class="label" for="password-confirmation">
+                <span><?php echo $Data['frontend_label']?></span></label>
+            <div class="control">
+                <?php if($Data['frontend_input'] == "textarea") {?>
+                    <textarea rows="" cols="" class ="required-entry textarea" name="<?php echo $Data['attribute_code'] ?>"></textarea>
+                <?php }
+                if($Data['frontend_input'] == "date") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class="date_type required-entry">
+                <?php }
+
+                if($Data['frontend_input'] == "text" && $table['is_time']==1) {?>
+                    <input type="text" id="timepicker" class="timepicker"  name="<?php echo $Data['attribute_code'] ?>" class="required-entry input-text">
+                    <?php
+                } elseif($Data['frontend_input'] == "text") {?>
+                    <input type="text" name="<?php echo $Data['attribute_code'] ?>" class="required-entry input-text">
+                    <?php
+                }
+        /*if($Data['frontend_input'] == "select")
+        {?>
+            <select class="required-entry input-select" name="<?php echo $Data['attribute_code'] ?>">
+                <?php
+                $attribute = $model->create('\Magento\Eav\Model\Config')->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+
+                $options = $attribute->getSource()->getAllOptions();?>
+                <?php foreach ($options as $instance) { ?>
+                    <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                <?php } ?>
+            </select>
+        <?php }
+        if($Data['frontend_input'] == "multiselect")
+        {?>
+            <select width ="100" height="100"  class="required-entry input-select" name="<?php echo $Data['attribute_code'] ?>[]"  multiple style=" height: 101px;">
+                <?php $attribute = $model->create('\Magento\Eav\Model\Config')->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+                $options = $attribute->getSource()->getAllOptions();?>
+                <?php foreach ($options as $instance) { ?>
+                    <?php if(!empty($instance['value'])){?>
+                        <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                    <?php }?>
+                <?php } ?>
+            </select>
+        <?php }*/
+        if($Data['frontend_input'] == "file") {?>
+                    <input type="file"  name="<?php echo $Data['attribute_code']; ?>"/>
+                    <strong><note><?php echo __('Note: Allowed file types are txt,excel,csv,PDF,Doc,Docx');?></note></strong>
+                <?php }
+        if($Data['frontend_input'] == "image") {?>
+                    <input type="file"  name="<?php echo $Data['attribute_code']; ?>" accept="image/x-png,image/gif,image/jpeg" />
+                    <strong><note><?php echo __('Note: Allowed image types are png,jpg,jpeg,gif,bmp.');?></note></strong>
+                <?php }
+        ?>
+            </div>
+        </div>
+    <?php } else {  ?>
+        <div class="field ">
+            <label class="label" for="password">
+                <span><?php echo $Data['frontend_label'] ?></span></label>
+            <div class="control">
+                <?php if($Data['frontend_input'] == "textarea") {?>
+                    <textarea class ="textarea" rows="" cols="" name="<?php echo $Data['attribute_code'] ?>"></textarea>
+                <?php }
+                if($Data['frontend_input'] == "date") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class="date_type" />
+                <?php }
+                if($Data['frontend_input'] == "text" && $table['is_time']==1) {?>
+                    <input type="text" class="timepicker" id="timepicker2" name="<?php echo $Data['attribute_code'] ?>" class="input-text"/>
+                    <?php
+                } elseif($Data['frontend_input'] == "text") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class="input-text"/>
+                    <?php
+                }
+        if($Data['frontend_input'] == "select") {?>
+                    <select name="<?php echo $Data['attribute_code'] ?>" >
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+            $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php } ?>
+                    </select>
+                <?php }
+        if($Data['frontend_input'] == "multiselect") {?>
+                    <select name="<?php echo $Data['attribute_code'] ?>[]"  multiple style=" height: 101px;">
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+            $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                        <?php if(!empty($instance['value'])) {?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php }?>
+                    <?php } ?>
+                    </select>
+                <?php }
+        if($Data['frontend_input'] == "file") {?>
+                    <input type="file" id = "<?php echo $Data['attribute_code'] ?>" name="<?php echo $Data['attribute_code'] ?>" />
+                    <strong><note><?php echo __('Note: Allowed file types are txt,excel,csv.');?></note></strong>
+                <?php }
+        if($Data['frontend_input'] == "image") {?>
+                    <input type="file" id = "<?php echo $Data['attribute_code'] ?>" name="<?php echo $Data['attribute_code'] ?>" onchange="ValidateFileUpload(this.id)" accept="image/x-png,image/gif,image/jpeg"/>
+                    <strong><note><?php echo __('Note: Allowed image types are png,jpg,jpeg,gif,bmp.');?></note></strong>
+                <?php }
+        ?>
+            </div>
+        </div>
+    <?php }
+    }
+$flag1 = false;
+$flag2 = false;
+foreach($attributeCollection as $Data) {
+    $table = $modelHelper->getAttributeById()->load($Data['attribute_id'], 'attribute_id')->getData();
+    if(in_array($Data['attribute_code'], $dependable) && $table['is_dependent'] == 1) {
+        $flag1 = true;
+        ?>
+        <div  class="field<?php if($Data['is_required'] == 1) {
+            echo " confirmation required";
+        }?> ">
+            <label class="label" for="password-confirmation" >
+                <span><?php echo $Data['frontend_label']?></span></label>
+            <div class="control">
+                <?php
+                if($Data['frontend_input'] == "select") { ?>
+                    <select class="required-entry input-select <?php echo 'dependable_field_' . $Data['attribute_code']; ?>" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo $Data['attribute_code'] ?>">
+
+
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+                    $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php } ?>
+                    </select>
+                    <?php
+                }
+        ?>
+            </div>
+        </div>
+        <?php
+    }
+    if($table['is_dependent'] == 1 && $flag1 == true) {
+        $models = $modelHelper->getAttributeById()->load($Data['attribute_code'], 'attribute_code')->getData();
+        ?>
+        <div class="field" >
+            <span class ="<?php echo 'dependable' . $models['dependable_attribute'] ?>"><B><?php echo $Data['frontend_label']?></B></span></label>
+            <div class="control">
+                <?php if($Data['frontend_input'] == "textarea") {?>
+                    <textarea class ="textarea" rows="" cols="" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" ></textarea>
+                <?php }
+                if($Data['frontend_input'] == "date") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class="date_type" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" >
+                <?php }
+                if($Data['frontend_input'] == "text" && $table['is_time']==1) {?>
+                    <input type="text" class="timepicker" name="<?php echo $Data['attribute_code'] ?>" class="input-text">
+                    <?php
+                } elseif($Data['frontend_input'] == "text") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class="input-text">
+                    <?php
+                }
+        if($Data['frontend_input'] == "select") {?>
+                <select class="input-select" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" >
+                    <select class="input-select <?php echo 'dependable_field_' . $Data['attribute_code']; ?>" name="<?php echo $Data['attribute_code'] ?>" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo $Data['attribute_code'] ?>" onchange="myFunction(this.id)">
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+            $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php } ?>
+                    </select>
+                    <?php }
+        if($Data['frontend_input'] == "multiselect") {?>
+                        <select width ="100" height="100"  class="input-select" name="<?php echo $Data['attribute_code'] ?>[]"  multiple style=" height: 101px;" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" >
+                            <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+            $options = $attribute->getSource()->getAllOptions();?>
+                            <?php foreach ($options as $instance) { ?>
+                                <?php if(!empty($instance['value'])) {?>
+                                    <?php if(!empty($instance['value'])) {?>
+                                        <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                                    <?php }?>
+                                <?php }?>
+                            <?php } ?>
+                        </select>
+                    <?php }
+        if($Data['frontend_input'] == "file") {?>
+                        <input type="file"  name="<?php echo $Data['attribute_code']; ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>"  />
+                        <strong><note><?php echo __('Note: Allowed file types are txt,excel,csv.');?></note></strong>
+                    <?php }
+        if($Data['frontend_input'] == "image") {?>
+                        <input type="file"  name="<?php echo $Data['attribute_code']; ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>"  accept= "image/x-png,image/gif,image/jpeg"/>
+                        <strong><note><?php echo __('Note: Allowed image types are png,jpg,jpeg,gif,bmp.');?></note></strong>
+                    <?php }
+        ?>
+            </div>
+        </div>
+    <?php }
+
+    if(in_array($Data['attribute_code'], $dependable) && $table['is_dependent'] != 1) {
+        $flag2 = true;
+        ?>
+        <div class="field<?php if($Data['is_required'] == 1) {
+            echo " confirmation required";
+        }?> ">
+            <label class="label" for="password-confirmation">
+                <span><?php echo $Data['frontend_label']?></span></label>
+            <div class="control">
+                <?php
+                if($Data['frontend_input'] == "select") {?>
+                    <select class="required-entry input-select <?php echo 'dependable_field_' . $Data['attribute_code']; ?>" name="<?php echo $Data['attribute_code'] ?>" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo $Data['attribute_code'] ?>" onchange="myFunction(this.id)">
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+                    $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php } ?>
+                    </select>
+                <?php }
+                ?>
+            </div>
+        </div>
+    <?php }
+    if($table['is_dependent'] == 1 && $flag2 == true) {
+        $models = $modelHelper->getAttributeById()->load($Data['attribute_code'], 'attribute_code')->getData();
+        ?>
+        <div>
+            <span class ="<?php echo 'dependable' . $models['dependable_attribute'] ?>"><B><?php echo $Data['frontend_label']?></B></span></label>
+            <div class="control">
+                <?php if($Data['frontend_input'] == "textarea") {?>
+                    <textarea class =" textarea" rows="3" cols="40" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" ></textarea>
+                <?php }
+                if($Data['frontend_input'] == "date") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class="date_type " id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" >
+                <?php }
+                if($Data['frontend_input'] == "text") {?>
+                    <input type="text"  name="<?php echo $Data['attribute_code'] ?>" class=" input-text " id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" >
+                <?php }
+                if($Data['frontend_input'] == "select") {?>
+                    <select class="input-select <?php echo 'dependable_field_' . $Data['attribute_code']; ?>" name="<?php echo $Data['attribute_code'] ?>" name="<?php echo $Data['attribute_code'] ?>" id="<?php echo $Data['attribute_code'] ?>" onchange="myFunction(this.id)">
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+                    $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php } ?>
+
+                    </select>
+                <?php }
+                if($Data['frontend_input'] == "multiselect") {?>
+                    <select width ="100" height="100"  class=" input-select" name="<?php echo $Data['attribute_code'] ?>[]"  multiple style=" height: 101px;" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" >
+                        <?php $attribute = $modelHelper->getConfig()->getAttribute('mx_rfqentity_rfqentity', $Data['attribute_code']);
+                    $options = $attribute->getSource()->getAllOptions();?>
+                        <?php foreach ($options as $instance) { ?>
+                        <?php if(!empty($instance['value'])) {?>
+                            <option value="<?php echo $instance['value'] ?>"> <?php echo $instance['label'] ?></option>
+                        <?php }?>
+                        <?php } ?>
+                    </select>
+                <?php }
+                if($Data['frontend_input'] == "file") {?>
+                    <input type="file"  name="<?php echo $Data['attribute_code']; ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>"  />
+                    <strong><note><?php echo __('Note: Allowed file types are txt,excel,csv.');?></note></strong>
+                <?php }
+                if($Data['frontend_input'] == "image") {?>
+                    <input type="file"  name="<?php echo $Data['attribute_code']; ?>" id="<?php echo 'dependable' . $models['dependable_attribute'] ?>" accept="image/x-png,image/gif,image/jpeg" />
+                    <strong><note><?php echo __('Note: Allowed image types are png,jpg,jpeg,gif,bmp.');?></note></strong>
+                <?php }
+                ?>
+            </div>
+        </div>
+    <?php }
+    }
+
+//	} //@codingStandardsIgnoreEnd?>
+ </fieldset>
+ </div>
+</div>
+<script>
+    require([
+        "jquery",
+        "mage/calendar",
+    ], function ($){
+        $.each($('.date_type'),function(i,v){
+            $(this).calendar({showsTime: false,dateFormat: "M/d/yy"});
+        });
+    });
+    require([
+        "jquery",
+        "jquery/jquery-ui-timepicker-addon",
+    ], function ($){
+        $.each($('.timepicker'),function(i,v){
+            $(this).timepicker({showsTime: true});
+        });
+    });
+
+
+    function myFunction(x) {
+        require(["jquery"], function ($) {
+            var depend = 'dependable'+x;
+
+            var field  = document.getElementById(x).value;
+
+            if(field !=1)
+            {
+                $("#"+depend).css('display','none');
+                $("."+depend).css('display','none');
+            }
+            else{
+                $("#"+depend).css('display','');
+                $("."+depend).css('display','');
+            }
+        }); }
+
+    function ValidateFileUpload(id) {
+        require(["jquery"], function ($) {
+            var fuData = document.getElementById(id);
+            var FileUploadPath = fuData.value;
+
+            //To check if user upload any file
+            if (FileUploadPath == '') {
+                // alert("Please upload an image");
+
+            } else {
+                var Extension = FileUploadPath.substring(
+                    FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+
+
+
+                if (Extension == "gif" || Extension == "png" || Extension == "bmp"
+                    || Extension == "jpeg" || Extension == "jpg") {
+
+                }
+                else {
+                    alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");
+
+                }
+            }
+        });
+    }
+
+
+</script>

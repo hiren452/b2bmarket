@@ -1,0 +1,22 @@
+<!-- File: app/code/Matrix/NoncatalogRfqfrom/etc/db_schema.xml -->
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="matrix_noncatalogrfqattrib" resource="default" engine="innodb" comment="Non-catalog RFQ Registration Attribute Table">
+        <column xsi:type="int" name="entity_id" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="text" name="attribute_code" nullable="false" default="" comment="Attribute Code"/>
+        <column xsi:type="int" name="attribute_id" nullable="false" default="0" comment="Attribute ID"/>
+        <column xsi:type="text" name="attribute_label" nullable="false" default="" comment="Attribute Label"/>
+        <column xsi:type="text" name="values" nullable="false" default="" comment="Values"/>
+        <column xsi:type="int" name="show_in_order" nullable="false" default="0" comment="Show in order"/>
+        <column xsi:type="int" name="is_dependent" nullable="false" default="0" comment="Is Dependent"/>
+        <column xsi:type="text" name="dependable_attribute" nullable="false" default="" comment="Dependable Attribute"/>
+        <column xsi:type="int" name="sortorder" nullable="false" default="0" comment="Sort Order"/>
+        <column xsi:type="int" name="is_time" nullable="false" default="0" comment="Is Time"/>
+        <column xsi:type="int" name="status" nullable="false" default="0" comment="Status"/>
+        <column xsi:type="int" name="has_parent" nullable="false" default="0" comment="Parent Check"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+</schema>

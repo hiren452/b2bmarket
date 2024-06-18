@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Matrix\NoncatalogRfqfrom\Block\Adminhtml\Attribute\Edit" name="store_post_edit" cacheable="false" />
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Matrix\NoncatalogRfqfrom\Block\Adminhtml\Attribute\Edit\Tabs" name="store_post_edit_tabs" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>
