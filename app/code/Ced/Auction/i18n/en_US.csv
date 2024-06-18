@@ -1,0 +1,101 @@
+"Please select a product for auction","Please select a product for auction"
+Back,Back
+"Delete Contact","Delete Contact"
+"Are you sure you want to delete this contact ?","Are you sure you want to delete this contact ?"
+Reset,Reset
+Save,Save
+"Bid from","Bid from"
+"Bid to","Bid to"
+"Bid increment","Bid increment"
+"Add Price","Add Price"
+"Create  New Auction","Create  New Auction"
+"A total of %1 element(s) have been deleted.","A total of %1 element(s) have been deleted."
+CMS,CMS
+Add,Add
+"New Auction","New Auction"
+"Add New Auction","Add New Auction"
+Auction,Auction
+"Create New Auction","Create New Auction"
+"You saved this Post.","You saved this Post."
+"Something went wrong while saving the post.","Something went wrong while saving the post."
+"A total of %1 record(s) were updated.","A total of %1 record(s) were updated."
+All,All
+Winners,Winners
+"You Successfully Placed The Bid","You Successfully Placed The Bid"
+"You Won This Bid","You Won This Bid"
+"Starting Bid Amount: ","Starting Bid Amount: "
+"Start Bidding","Start Bidding"
+"View Details","View Details"
+"Winner Details","Winner Details"
+"Customer Information","Customer Information"
+"Customer Name","Customer Name"
+Status,Status
+"Auction Price","Auction Price"
+"Winning Price","Winning Price"
+"Bidding Information","Bidding Information"
+"Product Name","Product Name"
+"Starting Price","Starting Price"
+"Starting Date","Starting Date"
+"Number Of Bidding made","Number Of Bidding made"
+"Bid Price","Bid Price"
+Action,Action
+"Add To Cart","Add To Cart"
+"grid records not available.","grid records not available."
+"Auction List","Auction List"
+"Starting bid:","Starting bid:"
+"Starts at:","Starts at:"
+"Starts soon","Starts soon"
+"Time left:","Time left:"
+"Start bidding","Start bidding"
+"Bidding closed","Bidding closed"
+"Bidding cancelled","Bidding cancelled"
+"My Auctions","My Auctions"
+"Starting bid","Starting bid"
+"Current bid price","Current bid price"
+"Place bid","Place bid"
+"Next Bid Amount Will be","Next Bid Amount Will be"
+"Enter next bid or more","Enter next bid equal or more"
+Hello,Hello
+"Congratulations, You have successfully purchase the Auction. Below are the details of Auction.","Congratulations, You have successfully purchase the Auction. Below are the details of Auction."
+"Product Name ","Product Name "
+"Winning Price ","Winning Price "
+"Customer has purchase the Auction. Below are the details of customer and Auction.","Customer has purchase the Auction. Below are the details of customer and Auction."
+"Customer Name ","Customer Name "
+"Auction Price ","Auction Price "
+"Customer has won the Auction. Below are the details of customer and Auction.","Customer has won the Auction. Below are the details of customer and Auction."
+"Winning Date ","Winning Date "
+"Your auction product purchase time has expired. So, it has been deleted from your cart. Below are the details of the auction product deleted.","Your auction product purchase time has expired. So, it has been deleted from your cart. Below are the details of the auction product deleted."
+"For further queries Please call our customer care.","For further queries Please call our customer care."
+"Congratulations, You have won the Auction. Below are the details of Auction.","Congratulations, You have won the Auction. Below are the details of Auction."
+"Hurry up purchase it by clicking on the below link","Hurry up purchase it by clicking on the below link"
+Configuration,Configuration
+"Auction Configuration","Auction Configuration"
+"Enable Module","Enable Module"
+"Send email to auction winner","Send email to auction winner"
+"Days to list product after bidding is closed","Days to list product after bidding is closed"
+"Purchase link validity period","Purchase link validity period"
+"Admin Email","Admin Email"
+"Enable bid increment","Enable bid increment"
+"Default  bid increment","Default  bid increment"
+ID,ID
+SKU,SKU
+Price,Price
+Website,Website
+"All Store Views","All Store Views"
+"Store View","Store View"
+"Change status","Change status"
+Cancelled,Cancelled
+Closed,Closed
+Delete,Delete
+"Delete Post","Delete Post"
+"Are you sure you wan't to delete selected items?","Are you sure you wan't to delete selected items?"
+"Start Price","Start Price"
+"Max Price","Max Price"
+"Start DateTime","Start DateTime"
+"End DateTime","End DateTime"
+"Sell Product","Sell Product"
+"Auction Details Form","Auction Details Form"
+"Please provide auction details","Please provide auction details"
+"Customer Email","Customer Email"
+"Bidding Date","Bidding Date"
+"Bidding Price must be greater than Next Bidding Amount","Bidding Price must be equal or greater than Next Bidding Amount"

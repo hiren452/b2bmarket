@@ -1,0 +1,108 @@
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<main class="page-content">
+    <?php
+    //@codingStandardsIgnoreStart
+    $winnerData = $block->getWinnerDetails();
+    if ($winnerData) {
+        ?>
+    <div class="page-columns">
+        <div class="main-col">
+            <div class="admin__old">
+                <section class="admin__page-section order-view-account-information">
+                    <div class="admin__page-section-title">
+                        <span class="title"><?= __('Winner Details') ?></span>
+                    </div>
+                    <div class="admin__page-section-content">
+                        <div class="admin__page-section-item order-information">
+                            <div class="admin__page-section-item-title">
+                                <span class="title"><?= __('Customer Information') ?></span>
+                            </div>
+                            <div class="admin__page-section-item-content">
+                                <table class="admin__table-secondary order-information-table">
+                                    <tbody>
+                                    <?php foreach ($winnerData as $winner): ?>
+                                        <tr>
+                                            <th><?= __('Customer Name') ?></th>
+                                            <td><?= $winner['customer_name'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th><?= __('Status') ?></th>
+                                            <td><span id="order_status"><?= $winner['status'] ?></span></td>
+                                        </tr>
+                                        <tr>
+                                            <th><?= __('Auction Price') ?></th>
+                                            <td><?= $winner['auction_price'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th><?= __('Winning Price') ?></th>
+                                            <td><?= $winner['winning_price'] ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <?php } ?>
+
+                <?php $winnerAuctionData = $block->getWinnerAuctionDetails();
+    if ($winnerAuctionData) { ?>
+                    <section class="admin__page-section order-addresses">
+                    <div class="admin__page-section-title">
+                        <span class="title"><?= __('Bidding Information') ?></span>
+                    </div>
+                    <div class="admin__page-section-content">
+                        <table class="admin__table-secondary order-account-information-table">
+                            <tbody>
+                            <?php foreach ($winnerAuctionData as $auctionData): ?>
+                                <tr>
+                                    <th><?= __('Product Name') ?></th>
+                                    <td>
+                                        <span><?= $auctionData['product_name'] ?></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><?= __('Starting Price') ?></th>
+                                    <td><?= $auctionData['starting_price'] ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?= __('Starting Date') ?></th>
+                                    <td><?= $auctionData['start_datetime'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php $winnerBidDetails = $block->getWinnerBidDetails();
+        foreach ($winnerBidDetails as $bidDetail):?>
+                                <tr>
+                                    <th><?= __('Number Of Bidding made') ?></th>
+                                    <td><?= $bidDetail['winner'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </section><?php }
+    //@codingStandardsIgnoreEnd
+    ?>
+            </div>
+        </div>
+    </div>
+</main>
+

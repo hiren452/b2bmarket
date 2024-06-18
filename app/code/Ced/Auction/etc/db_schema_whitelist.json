@@ -1,0 +1,21 @@
+{
+    "ced_auction_biddetails": {
+        "column": {
+            "id": true,
+            "product_id": true,
+            "customer_id": true,
+            "customer_name": true,
+            "bid_price": true,
+            "bid_date": true,
+            "bid_time": true,
+            "winner": true,
+            "status": true,
+            "currency": true,
+            "vendor_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CED_AUCTION_BIDDETAILS_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    }
+}

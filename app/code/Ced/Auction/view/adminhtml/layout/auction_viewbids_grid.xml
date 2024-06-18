@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="bids.grid.container">
+            <block class="Ced\Auction\Block\Adminhtml\ViewBid\Grid" name="adminhtml.viewbid.grid.container" as="grid">
+                <arguments>
+                    <argument name="data" xsi:type="array">
+                        <!--<item name="buttons" xsi:type="array">
+                            <item name="back" xsi:type="string">Ced\Auction\Block\Adminhtml\Edit\BackButton</item>
+                        </item>-->
+                    </argument>
+                    <argument name="id" xsi:type="string">auction_viewbid_grid</argument>
+                    <argument name="default_sort" xsi:type="string">entity_id</argument>
+                    <argument name="dataSource" xsi:type="object">Ced\Auction\Model\ResourceModel\BidDetails\Collection</argument>
+                    <argument name="pager_visibility" xsi:type="string">1</argument>
+                </arguments>
+
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.product.grid.columnSet" as="grid.columnSet">
+                    <!--<arguments>
+                        <argument name="id" xsi:type="string">auction_viewbid_grid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/add</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getEntityId</item>
+                            </item>
+                        </argument>
+                    </arguments>-->
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.product.grid.columnSet.customer_name" as="customer_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Customer Name</argument>
+                            <argument name="index" xsi:type="string">customer_name</argument>
+                            <argument name="align" xsi:type="string">right</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.product.grid.columnSet.bid_price" as="bid_price">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Bidding Price</argument>
+                            <argument name="index" xsi:type="string">bid_price</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.product.grid.columnSet.bid_date" as="bid_date">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Bidding Datetime</argument>
+                            <argument name="index" xsi:type="string">bid_date</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.product.grid.columnSet.winner" as="winner">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Bids Placed</argument>
+                            <argument name="index" xsi:type="string">winner</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.product.grid.columnSet.status" as="status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="index" xsi:type="string">status</argument>
+                        </arguments>
+                    </block>
+                </block>
+
+            </block>
+        </referenceBlock>
+    </body>
+</page>

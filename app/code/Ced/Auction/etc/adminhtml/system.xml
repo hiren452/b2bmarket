@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="ced_auction_auction" translate="label" sortOrder="100">
+            <label>Auction</label>
+        </tab>
+        <section id="auction_entry_1" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <class>separator-top</class>
+            <label>Configuration</label>
+            <tab>ced_auction_auction</tab>
+            <resource>Ced_Auction::config</resource>
+            <group id="standard" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Auction Configuration</label>
+                <field id="standard_enable" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!--<field id="increment_enable" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Enable bid increment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="increment_default_price" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Default  bid increment</label>
+                    <depends>
+                        <field id="increment_enable">1</field>
+                    </depends>
+                </field>
+                <field id="increment_price" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom bid increment</label>
+                    <frontend_model>Ced\Auction\Block\Adminhtml\System\Config\IncrementPrice</frontend_model>
+                    <depends>
+                        <field id="increment_enable">1</field>
+                    </depends>
+                    <backend_model>Ced\Auction\Block\Adminhtml\Config\Backend\IncrementPrice</backend_model>
+                </field>-->
+                <field id="email_winner" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Send email to auction winner</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="email_admin_auctionclosed" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Send auction close email to admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="remove_auction_product" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Days to list product after bidding is closed</label>
+                    <validate>validate-number</validate>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="remove_purchase_link" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Purchase link validity period</label>
+                    <validate>validate-number</validate>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="admin_email" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Admin Email</label>
+                    <validate>validate-email</validate>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="increment_enable" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Enable bid increment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="increment_default_price" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Default  bid increment</label>
+                    <depends>
+                        <field id="increment_enable">1</field>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                </field>
+                <field id="increment_price" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Custom bid increment</label>
+                    <frontend_model>Ced\Auction\Block\Adminhtml\System\Config\IncrementPrice</frontend_model>
+                    <depends>
+                        <field id="increment_enable">1</field>
+                        <field id="standard_enable">1</field>
+                    </depends>
+                    <backend_model>Ced\Auction\Block\Adminhtml\Config\Backend\IncrementPrice</backend_model>
+                </field>
+            </group>
+            <!--<group id="increment" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Increment Auction</label>
+                <field id="increment_enable" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Enable bid increment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="increment_default_price" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Default  bid increment</label>
+                    <depends>
+                        <field id="increment_enable">1</field>
+                    </depends>
+                </field>
+                <field id="increment_price" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom bid increment</label>
+                    <frontend_model>Ced\Auction\Block\Adminhtml\System\Config\IncrementPrice</frontend_model>
+                    <depends>
+                        <field id="increment_enable">1</field>
+                    </depends>
+                    <backend_model>Ced\Auction\Block\Adminhtml\Config\Backend\IncrementPrice</backend_model>
+                </field>
+            </group>
+            <group id="email" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Email Notification</label>
+                &lt;!&ndash;<field id="email_admin" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Email to notify admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>&ndash;&gt;
+                <field id="email_winner" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Send email to auction winner</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="product_filter" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0"
+                   showInStore="0">
+                <label>Setting Days</label>
+                <field id="remove_auction_product" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Days to list product after bidding is closed</label>
+                    <validate>validate-number</validate>
+                </field>
+                <field id="remove_purchase_link" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Purchase link validity period</label>
+                    <validate>validate-number</validate>
+                </field>
+            </group>-->
+        </section>
+    </system>
+</config>

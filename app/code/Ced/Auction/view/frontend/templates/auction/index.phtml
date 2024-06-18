@@ -1,0 +1,93 @@
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<?php $winnerData = $block->getWinningAuction();
+
+$url = $block->getUrlInterface();?>
+<div class="table-wrapper orders-history">
+    <table class="data table table-order-items history" id="my-orders-table">
+        <caption class="table-caption">Auctions</caption>
+        <thead>
+        <tr>
+            <th scope="col" class="col id"><?= /* @noEscape */ __('Product Name') ?></th>
+            <!--<th scope="col" class="col total"><?php /*echo __('Bid Price') */?></th>-->
+            <th scope="col" class="col total"><?= /* @noEscape */ __('Winning Price') ?></th>
+            <th scope="col" class="col actions"><?= /* @noEscape */ __('Action') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($winnerData && $url) {
+
+            foreach ($winnerData as $key => $data) {
+                if($block->getProductName($data['product_id'])) {
+                    ?>
+            <tr>
+                <td data-th="Product" class="col id"><?= /* @noEscape */ $block->getProductName($data['product_id']); ?></td>
+                <!--<td data-th="Bid Price" class="col total"><span class="price">$<?/*= $data['auction_price']; */?></span>
+                </td>-->
+                <td data-th="Winning Price" class="col total"><span class="price"><?= /* @noEscape */ $data['currency'] . ' ' . $data['winning_price']; ?></span>
+                </td>
+                <td data-th="Action" class="col actions">
+                    <?php if($block->checkProductAvailability($data['product_id'])) { ?>
+                    <span><?= /* @noEscape */ __('Unavailable') ?></span><?php } else { ?>
+                    <?php if ($data['status'] == 'order placed') { ?>
+                        <span><?= /* @noEscape */ $data['status']; ?></span>
+                    <?php } elseif ($data['status'] == 'purchase link expired') { ?>
+                        <span><?= /* @noEscape */ $data['status']; ?></span>
+                    <?php } else { ?>
+                        <form>
+                            <input type="hidden" name="id" id="prodId" value="<?= /* @noEscape */ $data['product_id']; ?>">
+                            <input type="hidden" name="price" id="auctionprice" value="<?= /* @noEscape */ $data['winning_price']; ?>">
+                            <input name="submit" type="submit" class="action primary tocart" value="<?= /* @noEscape */ __('Add To Cart') ?>">
+                        </form>
+                    <?php }
+                    } ?>
+                </td>
+            </tr>
+        <?php }
+                }
+        }?>
+        </tbody>
+    </table>
+</div>
+
+<?php if ($block->getPagerHtml()) {?>
+        <div class="order-products-toolbar toolbar bottom"><?= /* @noEscape */ $block->getPagerHtml(); ?></div>
+    <?php } else { ?>
+    <div class="message info empty"><span><?= /* @noEscape */ __('grid records not available.'); ?></span></div>
+<?php }?>
+
+<script>
+    require([
+        'jquery',
+        'domReady!'
+    ], function ($) {
+            $('form').on('submit', function (e) {
+                $('body').trigger('processStop');
+                e.preventDefault();
+                $.ajax({
+                    type: 'post',
+                    url: '<?= /* @noEscape */ $block->getUrl('auction/cart/add');?>',
+                    data: $(this).serialize(),
+                    showLoader: true,
+                    success: function (res) {
+                    }
+                });
+            });
+    })
+</script>

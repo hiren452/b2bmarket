@@ -1,0 +1,416 @@
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<div class="page-title-wrapper">
+    <h1 class="page-title">
+        <span data-ui-id="page-title-wrapper" class="base"><?= ('Product List') ?></span>
+    </h1>
+</div>
+<div class="products wrapper grid products-grid">
+    <ol class="products list items product-items auction-list">
+        
+        <?php
+        //@codingStandardsIgnoreStart
+        $auctionDetails = $block->getAuctionProduct();
+
+        $block->updateClosedAuction();
+        $enableAuction = json_decode($this->helper('Ced\Auction\Helper\ConfigData')->getConfigData('auction_entry_1/standard/standard_enable'), true);
+        if ($enableAuction) {
+            if ($auctionDetails) {
+                foreach ($auctionDetails as $detail) {
+                    $block->changeStatus();
+                    $url = $block->getAuctionProductUrl($detail->getProductId());
+                    if ($detail->getStatus() == 'not started') { ?>
+                    <li class="item product product-item">
+                        <div class="product-item-info" data-container="product-grid">
+
+                            <a href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                echo $block->getAuctionProductUrl($detail->getProductId());
+                            } ?>"
+                                    class="product photo product-item-photo" tabindex="-1">
+                                <?php $image = $block->getImage($block->getProduct($detail->getProductId()), 'category_page_list'); ?>
+                                <?php if($image) {
+                                    echo $image->toHtml();
+                                }?>
+                            </a>
+                            <div class="product details product-item-details">
+                                <input type="hidden" value="1">
+                                <strong class="product name product-item-name">
+
+
+                                    <a class="ced_product-item-link"
+                                       href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                           echo $block->getAuctionProductUrl($detail->getProductId());
+                                       } ?>">
+                                        <?php if($detail->getProductName()) {
+                                            echo $detail->getProductName();
+                                        } ?>
+                                    </a>
+                                </strong>
+
+                                    <div class="price-box price-final_price" id="price_box<?= $detail->getProductId(); ?>">
+                                        <span>
+                                            <span class="price-container price-final_price tax weee">
+                                                <span class="price-wrapper ">
+                                                    <span class="price"><?= __('Starting bid:') ?></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <?php $startingPrice = $this->helper('Magento\Framework\Pricing\Helper\Data')
+                                            ->currency($detail->getStartingPrice(), true, false);
+                        if($startingPrice) {
+                            echo $startingPrice;
+                        }?>
+
+                                        <span class="price-wrapper ">
+                                                    <span class="price"><?= __('Starts at:') ?></span>
+                                        </span>
+
+                                        <div id="countdown_timer" class="auction_timer">
+                                            <div class="auction_timer_days"
+                                                 id="auction_days_<?php if($detail->getProductId()) {
+                                                     echo $detail->getProductId();
+                                                 } ?>"></div>
+                                            <div class="auction_timer_hours"
+                                                 id="auction_hours_<?php if($detail->getProductId()) {
+                                                     echo $detail->getProductId();
+                                                 } ?>"></div>
+                                            <div class="auction_timer_minutes"
+                                                 id="auction_minutes_<?php if($detail->getProductId()) {
+                                                     echo $detail->getProductId();
+                                                 } ?>"></div>
+                                            <div class="auction_timer_seconds"
+                                                 id="auction_seconds_<?php if($detail->getProductId()) {
+                                                     echo $detail->getProductId();
+                                                 } ?>"></div>
+                                        </div>
+                                    </div>
+
+                                    <button class="action tocart primary" id="starts<?php echo $detail->getProductId()?>"><?= __('Starts soon') ?>
+                                    </button>
+                            </div>
+                        </div>
+
+
+                        <script>
+                            require(['jquery', 'jquery/ui'], function ($) {
+                                $(document).ready(function () {
+                                    let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                                    var countDownDate = new Date("<?php echo str_replace('-', '/', $detail->getData('start_time_utc')); ?>").getTime();
+                                    var timeUtc  = countDownDate;
+                                    var utcTime = new Date(timeUtc);
+                                    // Get the customer's timezone offset in minutes
+                                    var offsetMinutes = new Date().getTimezoneOffset();
+                                    // Convert the UTC time to the customer's local time
+                                    utcTime.setMinutes(utcTime.getMinutes() - offsetMinutes);
+                                    let countDownDateStarting = new Date(utcTime).getTime();
+                                    var x = setInterval(function () {
+                                        let currLocalTime = new Date().toLocaleString("en-US", {timeZone: timezone});
+                                        currentLocalTime = new Date(currLocalTime);
+                                        var now = currentLocalTime.getTime();
+                                        var distance = countDownDateStarting - now;
+                                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                                        var productid = '<?php echo $detail->getProductId()?>';
+
+                                        document.getElementById("auction_days_" + productid).innerHTML = days + "d: ";
+                                        document.getElementById("auction_hours_" + productid).innerHTML = hours + "h: ";
+                                        document.getElementById("auction_minutes_" + productid).innerHTML = minutes + "m: ";
+                                        document.getElementById("auction_seconds_" + productid).innerHTML = seconds + "s ";
+
+                                        if (distance < 0) {
+                                            clearInterval(x);
+                                            document.getElementById("auction_days_" + productid).innerHTML = 0 + "d: ";
+                                            document.getElementById("auction_hours_" + productid).innerHTML = 0 + "h: ";
+                                            document.getElementById("auction_minutes_" + productid).innerHTML = 0 + "m: ";
+                                            document.getElementById("auction_seconds_" + productid).innerHTML = 0 + "s ";
+
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: "<?php echo $this->getUrl('auction/startbid/start');?>",
+                                                data: {remove: true},
+                                                dataType: "json",
+                                                success: function (res) {
+                                                    var productid = '<?php echo $detail->getProductId()?>';
+                                                    document.getElementById("starts"+productid).innerHTML = "<?= __('Start Bidding') ?>";
+                                                    document.getElementById("starts"+productid).setAttribute("onclick", "window.location.href='<?= $url ?>'");
+                                                    var countDownDate = new Date("<?php echo str_replace('-', '/', $detail->getdata('end_time_utc')); ?>").getTime();
+                                                    var endtimeUtc  = countDownDate;
+                                                    var endutcTime = new Date(endtimeUtc);
+                                                    // Get the customer's timezone offset in minutes
+                                                    var endoffsetMinutes = new Date().getTimezoneOffset();
+                                                    // Convert the UTC time to the customer's local time
+                                                    endutcTime.setMinutes(endutcTime.getMinutes() - endoffsetMinutes);
+                                                    let countDownDateending = new Date(endutcTime).getTime();
+
+                                                    var x = setInterval(function () {
+                                                        let currLocalTime = new Date().toLocaleString("en-US", {timeZone: timezone});
+                                                        currentLocalTime = new Date(currLocalTime);
+
+                                                        var now = currentLocalTime.getTime();
+
+                                                        var distance = countDownDateending - now;
+
+                                                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                                                        var productid = '<?php echo $detail->getProductId()?>';
+
+                                                        document.getElementById("auction_days_" + productid).innerHTML = days + "d: ";
+                                                        document.getElementById("auction_hours_" + productid).innerHTML = hours + "h: ";
+                                                        document.getElementById("auction_minutes_" + productid).innerHTML = minutes + "m: ";
+                                                        document.getElementById("auction_seconds_" + productid).innerHTML = seconds + "s ";
+
+                                                        if (distance < 0) {
+                                                            clearInterval(x);
+                                                            document.getElementById("auction_days_" + productid).innerHTML = 0 + "d: ";
+                                                            document.getElementById("auction_hours_" + productid).innerHTML = 0 + "h: ";
+                                                            document.getElementById("auction_minutes_" + productid).innerHTML = 0 + "m: ";
+                                                            document.getElementById("auction_seconds_" + productid).innerHTML = 0 + "s ";
+
+                                                            $.ajax({
+                                                                type: 'POST',
+                                                                url: "<?php echo $this->getUrl('auction/startbid/start');?>",
+                                                                data: {remove: true, product: '<?php echo $detail->getProductId()?>'},
+                                                                dataType: "json",
+                                                                success: function (res) {
+                                                                    document.getElementById("price_box"+productid).style.display = "none";
+                                                                    document.getElementById("starts"+productid).innerHTML = "<?= __('Bidding closed') ?>";
+                                                                }
+                                                            });
+                                                        }
+                                                    }, 1000);
+                                                }
+                                            });
+                                        }
+                                    }, 1000);
+
+                                });
+                            });
+                        </script>
+                    </li><?php }?>
+                <?php if($detail->getStatus() == 'processing') {?>
+                    <li class="item product product-item">
+                        <div class="product-item-info" data-container="product-grid">
+
+                            <a
+                                    href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                        echo  $block->getAuctionProductUrl($detail->getProductId());
+                                    } ?>"
+                                    class="product photo product-item-photo" tabindex="-1">
+                                <?php $image = $block->getImage($block->getProduct($detail->getProductId()), 'category_page_list'); ?>
+                                <?php if($image) {
+                                    echo $image->toHtml();
+                                } ?>
+                            </a>
+                            <div class="product details product-item-details">
+                                <input type="hidden" value="1">
+                                <strong class="product name product-item-name">
+
+
+                                    <a class="ced_product-item-link"
+                                       href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                           echo $block->getAuctionProductUrl($detail->getProductId());
+                                       } ?>">
+                                        <?php if($detail->getProductName()) {
+                                            echo $detail->getProductName();
+                                        } ?></a>
+                                </strong>
+
+                                <div class="price-box price-final_price" id="price_box<?php if($detail->getProductId()) {
+                                    echo $detail->getProductId();
+                                } ?>">
+                                        <span>
+                                            <span class="price-container price-final_price tax weee">
+                                                <span class="price-wrapper ">
+                                                    <span class="price"><?= __('Starting bid:') ?></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    <?php $startingPrice = $this->helper('Magento\Framework\Pricing\Helper\Data')
+                                        ->currency($detail->getStartingPrice(), true, false);
+                    if($startingPrice) {
+                        echo $startingPrice;
+                    } ?>
+
+                                    <span class="price-wrapper ">
+                                                    <span class="price"><?= __('Time left:') ?></span>
+                                    </span>
+
+                                    <div id="countdown_timer" class="auction_timer">
+                                        <div class="auction_timer_days"
+                                             id="auction_days_<?php if($detail->getProductId()) {
+                                                 echo $detail->getProductId();
+                                             } ?>"></div>
+                                        <div class="auction_timer_hours"
+                                             id="auction_hours_<?php if($detail->getProductId()) {
+                                                 echo $detail->getProductId();
+                                             } ?>"></div>
+                                        <div class="auction_timer_minutes"
+                                             id="auction_minutes_<?php if($detail->getProductId()) {
+                                                 echo $detail->getProductId();
+                                             } ?>"></div>
+                                        <div class="auction_timer_seconds"
+                                             id="auction_seconds_<?php if($detail->getProductId()) {
+                                                 echo $detail->getProductId();
+                                             } ?>"></div>
+                                    </div>
+                                </div>
+
+                                <button class="action tocart primary" id="starts<?php if($detail->getProductId()) {
+                                    echo $detail->getProductId();
+                                } ?>"
+                                        onclick="window.location.href='<?= $url ?>'"><?= __('Start bidding') ?>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <script>
+                            require(['jquery', 'jquery/ui'], function ($) {
+                                $(document).ready(function () {
+
+                                    var countDownDate = new Date("<?php echo str_replace('-', '/', $detail->getEndDatetime()); ?>").getTime();
+
+                                    var x = setInterval(function () {
+
+                                        var now = new Date().getTime();
+
+                                        var distance = countDownDate - now;
+
+                                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                                        var productid = '<?php echo $detail->getProductId()?>';
+
+                                        if (distance < 0) {
+                                            // 
+                                            document.getElementById("price_box"+productid).style.display = "none";
+                                            document.getElementById("starts"+productid).innerHTML = "<?= __('Bidding closed') ?>";
+                                            clearInterval(x);
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: "<?php echo $this->getUrl('auction/startbid/start');?>",
+                                                data: {remove: true},
+                                                dataType: "json",
+                                                success: function (res) {
+                                                    document.getElementById("price_box"+productid).style.display = "none";
+                                                    document.getElementById("starts"+productid).innerHTML = "<?= __('Bidding closed') ?>"; 
+                                                }
+                                            });
+                                        } else {
+                                            document.getElementById("auction_days_" + productid).innerHTML = days + "d: ";
+                                            document.getElementById("auction_hours_" + productid).innerHTML = hours + "h: ";
+                                            document.getElementById("auction_minutes_" + productid).innerHTML = minutes + "m: ";
+                                            document.getElementById("auction_seconds_" + productid).innerHTML = seconds + "s ";
+                                        }
+                                    }, 1000);
+
+                                });
+                            });
+                        </script>
+                    </li>
+                    <?php } ?>
+
+                <?php if($detail->getStatus() == 'closed') {?>
+                    <li class="item product product-item" id="starts">
+                        <div class="product-item-info" data-container="product-grid">
+
+                            <a href="<?= $block->getAuctionProductUrl($detail->getProductId()) ?>"
+                                    class="product photo product-item-photo" tabindex="-1">
+                                <?php $image = $block->getImage($block->getProduct($detail->getProductId()), 'category_page_list'); ?>
+                                <?php if($image) {
+                                    echo $image->toHtml();
+                                } ?>
+                            </a>
+                            <div class="product details product-item-details">
+                                <input type="hidden" value="1">
+                                <strong class="product name product-item-name">
+
+
+                                    <a class="ced_product-item-link"
+                                       href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                           echo $block->getAuctionProductUrl($detail->getProductId());
+                                       } ?>">
+                                        <?php if($detail->getProductName()) {
+                                            echo $detail->getProductName();
+                                        } ?></a>
+                                </strong>
+
+                                <button class="action tocart primary"><?= __('Bidding closed') ?>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                <?php } ?>
+
+                <?php if($detail->getStatus() == 'cancelled') {?>
+                    <li class="item product product-item">
+                        <div class="product-item-info" data-container="product-grid">
+
+                            <a href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                echo $block->getAuctionProductUrl($detail->getProductId());
+                            } ?>"
+                               class="product photo product-item-photo" tabindex="-1">
+                                <?php $image = $block->getImage($block->getProduct($detail->getProductId()), 'category_page_list'); ?>
+                                <?php if($image) {
+                                    echo $image->toHtml();
+                                } ?>
+                            </a>
+                            <div class="product details product-item-details">
+                                <input type="hidden" value="1">
+                                <strong class="product name product-item-name">
+
+
+                                    <a class="ced_product-item-link"
+                                       href="<?php if($block->getAuctionProductUrl($detail->getProductId())) {
+                                           echo $block->getAuctionProductUrl($detail->getProductId());
+                                       } ?>">
+                                        <?php if($detail->getProductName()) {
+                                            echo $detail->getProductName();
+                                        } ?></a>
+                                </strong>
+
+                                <button class="action tocart primary"><?= __('Bidding cancelled') ?>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                <?php } ?>
+
+                <?php
+                }
+            }
+            //@codingStandardsIgnoreEnd
+            ?>
+    </ol>
+    <?php if (count($auctionDetails->getData()) == 0) { ?>
+        <div><p><?= ('Sorry, no auction products are available.') ?></p></div>
+    <?php } ?>
+</div>
+
+
+<?php if ($block->getPagerHtml()) { ?>
+    <div class="order-products-toolbar toolbar bottom"><?= /* @noEscape*/ $block->getPagerHtml(); ?></div>
+<?php } ?>
+<?php
+        } ?>

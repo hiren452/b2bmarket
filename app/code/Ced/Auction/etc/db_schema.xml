@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_auction_auctionlist" resource="default" engine="innodb" comment="Auction List">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product Id"/>
+        <column xsi:type="text" name="product_name" nullable="false" length="255" comment="Product Name"/>
+        <column xsi:type="decimal" name="starting_price" scale="2" precision="12" nullable="false" comment="Starting Price"/>
+        <column xsi:type="decimal" name="max_price" scale="2" precision="12" nullable="false" comment="Max Price"/>
+        <column xsi:type="int" name="min_qty" padding="10" unsigned="true" nullable="false" comment="Min Qty"/>
+        <column xsi:type="int" name="max_qty" padding="10" unsigned="true" nullable="false" comment="Max Qty"/>
+        <column xsi:type="timestamp" name="product_sold" nullable="false" comment="Product Sold"/>
+        <column xsi:type="timestamp" name="start_datetime" nullable="true" comment="Start Date"/>
+        <column xsi:type="timestamp" name="end_datetime" nullable="false" comment="End Date"/>
+        <column xsi:type="text" name="visibility" nullable="false" length="20" comment="Extended Time"/>
+        <column xsi:type="text" name="status" nullable="false" length="40" comment="Status"/>
+        <column xsi:type="text" name="sellproduct" nullable="false" length="40" comment="Sell Product"/>
+        <column xsi:type="int" name="vendor_id" padding="10" unsigned="true" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="timestamp" name="temp_startdate" nullable="true" comment="Temp Start Date"/>
+        <column xsi:type="timestamp" name="temp_enddate" nullable="false" comment="Temp End Date"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CED_AUCTION_BIDDETAILS_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID" table="ced_auction_biddetails" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="ced_auction_biddetails" resource="default" engine="innodb" comment="Bid Details">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product Id"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" comment="Customer Id"/>
+        <column xsi:type="text" name="customer_name" nullable="true" length="40" comment="Customer Name"/>
+        <column xsi:type="decimal" name="bid_price" scale="2" precision="12" nullable="false" comment="Bid Price"/>
+        <column xsi:type="timestamp" name="bid_date" nullable="false" comment="Bid Date"/>
+        <column xsi:type="text" name="bid_time" nullable="false" length="20" comment="Bid Time"/>
+        <column xsi:type="text" name="winner" nullable="false" length="10" comment="Winner"/>
+        <column xsi:type="text" name="status" nullable="false" length="40" comment="Status"/>
+        <column xsi:type="int" name="vendor_id" padding="10" unsigned="true" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="text" name="currency" nullable="true" length="255" comment="Currency"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+
+    <table name="ced_auction_winnerlist" resource="default" engine="innodb" comment="Winner List">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product Id"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" comment="Customer Id"/>
+        <column xsi:type="text" name="customer_name" nullable="true" length="40" comment="Customer Name"/>
+        <column xsi:type="decimal" name="auction_price" scale="2" precision="12" nullable="false" comment="Auction Price"/>
+        <column xsi:type="timestamp" name="bid_date" nullable="false" comment="Bid Date"/>
+        <column xsi:type="decimal" name="winning_price" scale="2" precision="12" nullable="false" comment="Winning Price"/>
+        <column xsi:type="text" name="status" nullable="false" length="255" comment="Status"/>
+        <column xsi:type="int" name="add_to_cart" padding="11" unsigned="true" nullable="false" comment="Add To Cart"/>
+        <column xsi:type="int" name="vendor_id" padding="10" unsigned="true" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="text" name="currency" nullable="true" length="255" comment="Currency"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>

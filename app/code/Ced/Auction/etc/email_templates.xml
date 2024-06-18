@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="winning_mail" label="Notify Auction Winner" file="winner.html" type="html" module="Ced_Auction" area="frontend"/>
+    <template id="outbid_mail" label="Outbid" file="outbid.html" type="html" module="Ced_Auction" area="frontend"/>
+    <template id="admin_notify_closed_mail" label="Closed Auction Notificaton" file="closed_auction_mail.html" type="html" module="Ced_Auction" area="frontend"/>
+    <!--<template id="purchase_mail" label="Email" file="customer_purchase.html" type="html" module="Ced_Auction" area="frontend"/>
+    <template id="admin_notify_purchase_mail" label="Email" file="notify_admin_purchase.html" type="html" module="Ced_Auction" area="frontend"/>
+    <template id="product_delete" label="Email" file="product_delete.html" type="html" module="Ced_Auction" area="frontend"/>-->
+</config>

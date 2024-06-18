@@ -1,0 +1,50 @@
+<script>
+    require(['jquery', 'jquery/ui'], function ($) {
+        $(document).ready(function () {
+            let timezone = '<?= /* @noEscape */ $block->getTimeZone()->getConfigTimezone() ?>';
+
+            let endTime = '<?= /* @noEscape */ $block->getEndTime();?>';
+            var countDownDate = new Date(endTime).getTime();
+            var id = '<?= /* @noEscape */ $block->getId(); ?>';
+
+            var x = setInterval(function () {
+                let currLocalTime = new Date().toLocaleString("en-US", {timeZone: timezone});
+                currLocalTime = new Date(currLocalTime);
+
+                let now = currLocalTime.getTime();
+
+                var distance = countDownDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+                document.getElementById("auction_days"+id).innerHTML = days + "d: ";
+                document.getElementById("auction_hours"+id).innerHTML = hours + "h: ";
+                document.getElementById("auction_minutes"+id).innerHTML = minutes + "m: ";
+                document.getElementById("auction_seconds"+id).innerHTML = seconds + "s ";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("auction_days"+id).innerHTML = 0 + "d: ";
+                    document.getElementById("auction_hours"+id).innerHTML = 0 + "h: ";
+                    document.getElementById("auction_minutes"+id).innerHTML = 0 + "m: ";
+                    document.getElementById("auction_seconds"+id).innerHTML = 0 + "s ";
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "<?= /* @noEscape */ $block->getUrl('auction/startbid/start');?>",
+                        data: {remove: true},
+                        dataType: "json",
+                        success: function (res) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }, 1000);
+
+        });
+    });
+</script>

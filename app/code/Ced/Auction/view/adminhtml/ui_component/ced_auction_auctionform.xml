@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author 		CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">ced_auction_auctionform.ced_auction_auctionform_data_source</item>
+            <item name="deps" xsi:type="string">ced_auction_auctionform.ced_auction_auctionform_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Auction Details Form</item>
+
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Ced\Auction\Block\Adminhtml\Edit\BackButton</item>
+            <item name="delete" xsi:type="string">Ced\Auction\Block\Adminhtml\Edit\DeleteButton</item>
+            <item name="reset" xsi:type="string">Ced\Auction\Block\Adminhtml\Edit\ResetButton</item>
+            <item name="save" xsi:type="string">Ced\Auction\Block\Adminhtml\Edit\SaveButton</item>
+        </item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">ced_auction_auctionform</item>
+        </item>
+         <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <dataSource name="ced_auction_auctionform_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Ced\Auction\Ui\DataProvider\FormDataProvider</argument>
+            <argument name="name" xsi:type="string">ced_auction_auctionform_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="auction/addAuction/save"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+    <fieldset name="auction">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Please provide auction details</item>
+            </item>
+        </argument>
+
+        <field name="product_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Product Id</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="disabled" xsi:type="string">disabled</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="product_name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Product Name</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <!--<item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">This is the product title.</item>
+                    </item>-->
+                </item>
+            </argument>
+        </field>
+        <field name="product_price">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Original Product Price</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <!--<item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">This is the original product price.</item>
+                    </item>-->
+                </item>
+            </argument>
+        </field>
+        <field name="starting_price">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Starting Bid</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-zero-greater-than-zero" xsi:type="boolean">true</item>
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <!--<item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">Enter the starting bid price of product.</item>
+                    </item>-->
+                </item>
+            </argument>
+        </field>
+
+        <field name="max_price">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Maximum Bid</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <!--<item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">Enter the maximum value  bid price of product.</item>
+                    </item>-->
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-zero-greater-than-zero" xsi:type="boolean">true</item>
+                        <!--<item name="required-entry" xsi:type="boolean">true</item>-->
+                    </item>
+                    <item name="index" xsi:type="string">maximum</item>
+                </item>
+            </argument>
+        </field>
+        <field name="start_datetime">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <!--<item name="component" xsi:type="string">Ced_Auction/js/starttime</item>
+                    <item name="elementTmpl" xsi:type="string">Ced_Auction/starttime</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>-->
+                    <item name="label" xsi:type="string">Bidding Start Time</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="options" xsi:type="array">
+                        <item name="dateFormat" xsi:type="string">yyyy-MM-dd</item>
+                        <item name="timeFormat" xsi:type="string">H:mm:ss</item>
+                        <item name="showsTime" xsi:type="boolean">true</item>
+                        <!--<item name="timezone" xsi:type="string">Asia/Kolkata</item>-->
+
+                    </item>
+                    <!--<item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">Enter the auction start date and time.</item>
+                    </item>-->
+                </item>
+            </argument>
+        </field>
+
+        <field name="end_datetime">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Bidding End Time</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="options" xsi:type="array">
+                        <item name="dateFormat" xsi:type="string">yyyy-MM-dd</item>
+                        <item name="timeFormat" xsi:type="string">H:mm:ss</item>
+                        <item name="showsTime" xsi:type="boolean">true</item>
+                    </item>
+                   <!-- <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">Enter the auction end date and time.</item>
+                    </item>-->
+                </item>
+            </argument>
+        </field>
+
+        <!--<field name="extended_time">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Extended Time</item>
+                    <item name="js_config" xsi:type="array">
+                        <item name="component" xsi:type="string">Ced_Auction/js/timepicker</item>
+                    </item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">Enter the auction extended hours.</item>
+                    </item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-digits" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+-->
+         <field name="sellproduct">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Ced\Auction\Model\Source\Status</item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Product Purchasable</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">auction</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">
+                            If yes then maximum Bid should be less than the products actual price.
+                            If no then maximum Bid should be of the value entered or if empty there should no limit on maximum bid.
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

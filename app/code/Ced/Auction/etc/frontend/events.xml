@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+  *
+  * NOTICE OF LICENSE
+  *
+  * This source file is subject to the End User License Agreement (EULA)
+  * that is bundled with this package in the file LICENSE.txt.
+  * It is also available through the world-wide-web at this URL:
+  * https://cedcommerce.com/license-agreement.txt
+  *
+  * @category  Ced
+  * @package   Ced_Auction
+  * @author    CedCommerce Core Team <connect@cedcommerce.com >
+  * @copyright Copyright CEDCOMMERCE (https://cedcommerce.com/)
+  * @license      https://cedcommerce.com/license-agreement.txt
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <event name="auction_winner">
+        <observer name="ced_winner_data_save" instance="Ced\Auction\Observer\Winner" shared="false"/>
+    </event>
+
+    <event name="checkout_cart_product_add_after">
+        <observer name="customprice" instance="Ced\Auction\Observer\CustomPrice" shared="false"/>
+    </event>
+
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="close_bid" instance="Ced\Auction\Observer\CloseBid" shared="false"/>
+    </event>
+
+    <event name="customer_login">
+        <observer name="add_to_cart_check" instance="Ced\Auction\Observer\AddtocartCheck" shared="false"/>
+    </event>
+</config>

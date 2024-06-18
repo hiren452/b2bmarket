@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license     https://cedcommerce.com/license-agreement.txt
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="ced_auction_addauctiongrid_data_source" xsi:type="string">
+                    Ced\Auction\Model\ResourceModel\Auction\Grid\Collection
+                </item>
+                <item name="ced_auction_winnergrid_data_source" xsi:type="string">
+                    Ced\Auction\Model\ResourceModel\Winner\Grid\Collection
+                </item>
+                <item name="ced_auction_viewbids_data_source" xsi:type="string">
+                    Ced\Auction\Model\ResourceModel\BidDetails\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Ced\Auction\Model\ResourceModel\Auction\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ced_auction_auctionlist</argument>
+            <argument name="resourceModel" xsi:type="string">Ced\Auction\Model\ResourceModel\Auction</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Ced\Auction\Model\ResourceModel\Winner\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ced_auction_winnerlist</argument>
+            <argument name="resourceModel" xsi:type="string">Ced\Auction\Model\ResourceModel\Winner</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Ced\Auction\Model\ResourceModel\BidDetails\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ced_auction_biddetails</argument>
+            <argument name="resourceModel" xsi:type="string">Ced\Auction\Model\ResourceModel\BidDetails</argument>
+        </arguments>
+    </virtualType>
+
+    <preference for="Magento\Catalog\Pricing\Render\FinalPriceBox" type="Ced\Auction\Pricing\Render\FinalPriceBox" />
+
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="hide_add_to_cart" type="Ced\Auction\Plugin\AddtoCartPlugin"/>
+    </type>
+</config>

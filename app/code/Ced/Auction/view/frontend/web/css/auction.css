@@ -1,0 +1,171 @@
+/* Auction list css start */
+.product-item-info {
+    max-width: 100%;
+    width: 190px !important;
+}
+.products-grid .product-items{
+    text-align: center;
+}
+.products-grid .product-item-details {
+    /*min-height: 118px;*/
+    text-align: center;
+}
+.products-grid .product-item-details .start-bid-price {
+    min-height: 35px;
+}
+.product-item-details .bidding-button .start-bid{
+    border-radius: 0px;
+    background: #DB9065;
+    border: 1px;
+    color: #fff;
+}
+.countdowntimer span{
+    color: brown;
+    border: 1px solid #e4e4e4;
+    padding: 1px 4px;
+}
+.products-grid .product-item-details label {
+    font-weight: 600;
+}
+.product-item .price-box {
+    margin: 10px 0 6px;
+}
+
+/* Auction list css ends */
+/*auction product css start*/
+.auction-list .product-item-info{
+    border:1px solid #7369dd;
+}
+.auction-list .product-info-main .product .page-title span{
+    text-transform: capitalize;
+}
+.product-info-main .product-info-stock-sku {
+    display: block;
+    padding-bottom: 10px;
+    padding-left: 0px !important; 
+    text-align: left;
+    vertical-align: top;
+}
+.countdowntimer span {
+    font-size: 20px;
+    color: brown;
+    border: 1px solid #e4e4e4;
+    padding: 2px 6px;
+}
+.auction-list .product-item-details {
+    min-height: 155px;
+    text-align: center;
+}
+.auction-list .product-item .price-box {
+    margin: 10px 0 8px;
+}
+.starting-bid label{
+    color: #333;
+    font-weight: 500;
+
+}
+
+.starting-bid span {
+    color: #252525;
+    font-size: 15px;
+    text-shadow: 0 0 0;
+}
+.current-bid label{
+
+    color: #333;
+}
+.current-bid span {
+    font-size: 15px;
+    color: #252525;
+    text-shadow: 0 0 0;
+}
+.current-bidder-name label{
+
+    color: #333;
+}
+.current-bidder-name span {
+    font-size: 15px;
+    text-transform: capitalize;
+    text-shadow: 0 0 0;
+    color: #252525;
+}
+.starting-bid,
+.current-bid{
+    margin-bottom: 5px;
+}
+.bid-input-wrapper::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.bid-input-wrapper input {
+    width: 50%;
+    float: left;
+    height: 32px;
+    vertical-align: middle;
+}
+.bid-input-wrapper {
+    padding: 5px 0px;
+    margin-top: 13px;
+}
+.bid-input-wrapper .action {
+    background-color: black;
+    border: 1px solid black;
+    vertical-align: middle;
+    display: inline-block;
+    height: 32px;
+    border-radius: 0px;
+    font-size: 11px;
+}
+.bid-input-wrapper .action:hover {
+    background: black;
+    border: 1px solid black;
+    color: #ffffff;
+}
+.stock.available span{
+    color: #20bc6b;
+}
+.increment-bid {
+    margin-bottom: 8px;
+}
+.increment-bid label {
+    font-size: 15px;
+}
+.increment-bid span {
+    color: #252525;
+    font-size: 15px;
+    text-shadow: 0 0 0;
+}
+/*auction list css ends*/
+
+/*auction category css start*/
+.products-grid .product-item-actions {
+    margin: 0px 0px;
+}
+.auction_timer {
+    display: inline-block;
+    padding: 3px 10px;
+    margin-bottom: 5px;
+    border: 1px solid #e4e4e4;
+}
+.auction_timer_days, .auction_timer_seconds, .auction_timer_minutes, .auction_timer_hours {
+    width: 35px;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    color: brown;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.product-info-main .product-info-price .price-box {
+    display: block;
+    vertical-align: top;
+    width: 1px;
+}
+@media screen and (max-width: 380px){
+    .action.primary{
+        white-space: unset;
+        padding: 5px 3px;
+    }
+}
+/*auction category css ends*/

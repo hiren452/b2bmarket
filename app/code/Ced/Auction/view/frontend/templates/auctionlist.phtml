@@ -1,0 +1,25 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_Auction
+ * @author    CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+?>
+
+<?php
+$viewModel = $block->getData('viewModel');
+if (json_decode((string)$viewModel->getConfigData('auction_entry_1/standard/standard_enable'), true)):?>
+<li class="nav item location-nav" >
+    <a href="<?= /* @noEscape */ $block->getUrl('auction/auctionlist/productlist'); ?>"><?= /* @noEscape */ __('Auction List') ?></a></li>
+<?php endif; ?>
