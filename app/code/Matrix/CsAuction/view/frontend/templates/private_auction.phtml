@@ -1,0 +1,222 @@
+<?php
+/** @var PrivateAuction $block */
+
+$auctions = $block->getAuctions();
+$customers = $block->getCustomerCollection();
+
+$auction_id = $block->getRequest()->getParam('id');
+$details = $block->getPrivateAuctionDetails($auction_id);
+$customer_ids = [];
+if (!empty($details['customer_ids'])) {
+    $customer_ids = explode(',', $details['customer_ids']);
+}
+$customer_emails = [];
+if (!empty($details['customer_emails'])) {
+    $customer_emails = json_decode($details['customer_emails'], true);
+}
+
+use Matrix\CsAuction\Block\PrivateAuction;
+
+//@codingStandardsIgnoreStart
+?>
+<div class="row">
+    <div class="col-md-12" style="margin-top:10px;">
+        <div class="panel panel-default">
+            <div class="panel-heading uptransform clearfix" style="font-weight:bold;padding:8px 15px;font-size:17px;">
+                <div class=" panel_product_heading "
+                     style="line-height:31px;font-size:17px;padding-left:0; display: inline-block;">
+                    <?php //echo __('Invite Buyers');?>
+                </div>
+                <div class="buttons-set buttons_scb" style="text-align:right; display: inline;">
+                    <button class="button btn btn-success uptransform product-button"
+                            title="<?php echo __('Post Auction') ?>" type="submit"
+                            onClick="jQuery('#form-validate').submit();" id="save_butn"
+                            style="float:right; margin-left: 10px;">
+                        <span><span><?php echo __('Post Auction') ?></span></span>
+                    </button>
+                    <button class="button btn btn-success uptransform product-button" title="<?php echo __('Exit') ?>"
+                            type="submit"
+                            onClick="window.location.href='<?php echo $block->getUrl('csauction/auctionlist/index') ?>';"
+                            style="float:right;">
+                        <span><span><?php echo __('Exit') ?></span></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="fieldset">
+                        <form class="form"
+                              action="<?php echo $block->getUrl('csauction/auctionlist/saveprivateauction') ?>"
+                              method="post" id="form-validate" autocomplete="off">
+                            <input type="hidden" name="form_key" value="<?php echo $block->getFormKey() ?>"/>
+
+                            <ul class="form-list">
+                                <li class="wide">
+                                    <label class="label"><span><?= __('Select Auction'); ?></span><span class="required">*</span></label>
+                                    <div class="input-box">
+                                        <select name="auction_id" class="select admin__control-select select2"
+                                                data-validate="{required:true}">
+                                            <option value=""><?= __('Select Public/Private Auction'); ?></option>
+                                            <?php foreach ($auctions as $auction) { ?>
+                                                <option
+                                                    value="<?php echo $auction->getId() ?>" <?php if ($auction_id == $auction->getId()) { ?> selected <?php } ?>><?php echo $auction->getProductName() . ' (' . $auction->getStartingPrice() . ')' ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li class="wide">
+                                    <label class="label"><span><?= __('Select Buyers'); ?></span><span class="required">*</span></label>
+                                    <div class="input-box">
+                                        <select name="customer_ids[]" multiple="multiple" size="10"
+                                                class="select multiselect admin__control-multiselect select2"
+                                                data-validate="{required:true}">
+                                            <?php foreach ($customers as $customer) { ?>
+                                                <option
+                                                    value="<?php echo $customer->getId() . ',' . $customer->getFirstname() . ',' . $customer->getLastname() . ',' . $customer->getEmail() ?>" <?php if (isset($details['auction_id']) && in_array($customer->getId(), $customer_ids)) { ?> selected <?php } ?>><?php echo $customer->getName() . ' - ' . $customer->getEmail() ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </li>
+                                <li class="wide">
+                                    <label class="label"><span><?= __('Invite Buyers'); ?></span></label>
+                                    <div class="input-box">
+                                        <div class="field add_buyer">
+                                            <div class="control">
+                                                <ul class="form-list nav">
+                                                    <li class="wide">
+                                                        <label
+                                                            class="label"><span><?= __('Company Name'); ?></span></label>
+                                                        <div class="input-box">
+                                                            <input name="company_name[]"
+                                                                   title="<?= $block->escapeHtmlAttr(__('Company Name')) ?>"
+                                                                   class="input-text" type="text"/>
+                                                        </div>
+                                                    </li>
+                                                    <li class="wide">
+                                                        <label
+                                                            class="label"><span><?= __('First Name'); ?></span></label>
+                                                        <div class="input-box">
+                                                            <input name="first_name[]"
+                                                                   title="<?= $block->escapeHtmlAttr(__('First Name')) ?>"
+                                                                   class="input-text" type="text"/>
+                                                        </div>
+                                                    </li>
+                                                    <li class="wide">
+                                                        <label
+                                                            class="label"><span><?= __('Last Name'); ?></span></label>
+                                                        <div class="input-box">
+                                                            <input name="last_name[]"
+                                                                   title="<?= $block->escapeHtmlAttr(__('Last Name')) ?>"
+                                                                   class="input-text" type="text"/>
+                                                        </div>
+                                                    </li>
+                                                    <li class="wide">
+                                                        <label class="label"><span><?= __('Email'); ?></span></label>
+                                                        <div class="input-box">
+                                                            <input name="customer_emails[]"
+                                                                   title="<?= $block->escapeHtmlAttr(__('First Name')) ?>"
+                                                                   class="input-text" type="text"/>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <?php if (!empty($customer_emails)) { ?>
+                                            <?php foreach ($customer_emails as $customer_email) { ?>
+                                                <div class="control">
+                                                    <ul class="">
+                                                        <li class="wide">
+                                                            <label class="label"><span><?= __('Company Name'); ?></span></label>
+                                                            <div class="input-box">
+                                                                <input name="company_name[]"
+                                                                       title="<?= $block->escapeHtmlAttr(__('Company Name')) ?>"
+                                                                       class="input-text" type="text"
+                                                                       value="<?php echo $customer_email['company_name'] ?>"/>
+                                                            </div>
+                                                        </li>
+                                                        <li class="wide">
+                                                            <label
+                                                                class="label"><span><?= __('First Name'); ?></span></label>
+                                                            <div class="input-box">
+                                                                <input name="first_name[]"
+                                                                       title="<?= $block->escapeHtmlAttr(__('First Name')) ?>"
+                                                                       class="input-text" type="text"
+                                                                       value="<?php echo $customer_email['first_name'] ?>"/>
+                                                            </div>
+                                                        </li>
+                                                        <li class="wide">
+                                                            <label
+                                                                class="label"><span><?= __('Last Name'); ?></span></label>
+                                                            <div class="input-box">
+                                                                <input name="last_name[]"
+                                                                       title="<?= $block->escapeHtmlAttr(__('Last Name')) ?>"
+                                                                       class="input-text" type="text"
+                                                                       value="<?php echo $customer_email['last_name'] ?>"/>
+                                                            </div>
+                                                        </li>
+                                                        <li class="wide">
+                                                            <label
+                                                                class="label"><span><?= __('Email'); ?></span></label>
+                                                            <div class="input-box">
+                                                                <input name="customer_emails[]"
+                                                                       title="<?= $block->escapeHtmlAttr(__('First Name')) ?>"
+                                                                       class="input-text" type="text"
+                                                                       value="<?php echo $customer_email['email'] ?>"/>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            <?php } ?>
+                                        <?php } ?>
+
+                                        <div class="field add_more_buyer"></div>
+
+                                        <div class="field add_more"><a href="javascript:void(0);"
+                                                                       class="button btn btn-success btn-right"><?php echo __('Add More') ?></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="termlabel">
+                                
+                                <span class="required">*</span> <input type="checkbox" name="terms" data-validate='{"required":true}'>
+                                <label for="custom-terms" class="label label-agree ">
+                                <span><b>I agree with the</b></span>
+                                  <a href="javascript:void(0);">Terms &amp; Conditions</a>
+                                </label>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['jquery', 'select2'], function ($) {
+
+        $(document).ready(function () {
+            $('.select2').select2();
+
+            $('.add_more').click(function () {
+                var html = '<div style="border-top:1px dotted #ddd; margin:5px 0;">' + $('.add_buyer').html() + ' <div class="remove" style="text-align:right"><a href="javascript:void(0);" class="button btn btn-success btn-right"><?php echo __('Remove') ?></a></div></div>';
+
+                $('.add_more_buyer').append(html);
+            });
+
+            $(document).on('click', '.remove', function () {
+                $(this).parent().remove();
+            });
+
+        });
+    });
+</script>
+<script>
+    require(["jquery", "mage/mage"], function ($) {
+        $('#form-validate').mage('validation', {});
+    });
+</script>
+<?php //@codingStandardsIgnoreEnd?>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="matrix" frontName="matrix">
+            <module name="Matrix_CsAuction"/>
+        </route>
+        <!-- START: new configuration -->
+        <route id="csauction">
+            <module name="Matrix_CsAuction" after="Ced_CsAuction"/>
+        </route>
+        <!-- END:   new configuration -->
+    </router>
+</config>

@@ -1,0 +1,14 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="vendor-2columns-left"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="csmarketplace_vendor"/>
+    <body>
+        <referenceBlock name="timer.auctions">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Matrix_CsAuction::timer.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="vendor.dashboard.wrapper">
+            <block class="Magento\Framework\View\Element\Template" template="Matrix_CsAuction::validation.phtml" name="auctionform.validation.js" after="timer.auctions"/>
+        </referenceContainer>
+    </body>
+</page>

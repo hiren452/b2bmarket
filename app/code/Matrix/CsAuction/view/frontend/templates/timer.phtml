@@ -1,0 +1,13 @@
+<?php //@codingStandardsIgnoreStart
+$timezone = $block->getTimeZone();
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Matrix_CsAuction/js/startdatepicker": {
+                "timezone": "<?= $timezone ?>"
+            }
+        }
+    }
+</script>
+<?php //@codingStandardsIgnoreEnd?>

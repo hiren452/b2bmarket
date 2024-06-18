@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <update handle="csmarketplace_vendor"/>
+    <head>
+        <css src="Matrix_CsAuction::css/select2.min.css"/>
+    </head>
+    <body>
+        <block name="require.js" class="Ced\CsMarketplace\Block\Page\RequireJs" template="Magento_Backend::page/js/require_js.phtml"/>
+
+        <referenceBlock name="vendor.dashboard.wrapper">
+            <block class="Matrix\CsAuction\Block\PrivateAuction" name="private_auction" cacheable="false" template="Matrix_CsAuction::private_auction.phtml" />
+        </referenceBlock>
+    </body>
+</page>

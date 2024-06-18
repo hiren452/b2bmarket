@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ced\CsAuction\Block\AddAuction\Edit\Tab\AuctionList"
+                type="Matrix\CsAuction\Preference\AddAuction\Edit\Tab\CustomizedAuctionList"/>
+    <preference for="Ced\CsAuction\Controller\AddAuction\Save"
+                type="Matrix\CsAuction\Preference\Controller\AddAuction\CustomizedSave"/>
+    <preference for="Ced\CsAuction\Block\AuctionList\Grid"
+                type="Matrix\CsAuction\Preference\Block\AuctionList\CustomisedGrid"/>
+</config>

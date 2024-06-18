@@ -1,0 +1,13 @@
+<script>
+    require([
+        'jquery',
+        'moment',
+        'jquery/ui',
+    ], function ($) {
+        $( document ).ready(function() {
+            setTimeout(function() {
+                jQuery('#edit_form [aria-required=true]').addClass('required-entry _required');
+            }, 3000);
+        });
+    });
+</script>
