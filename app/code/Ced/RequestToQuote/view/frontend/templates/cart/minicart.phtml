@@ -1,0 +1,339 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+?>
+<?php
+$login = $block->isLoggedIn();
+$custGroups = $block->getAllowedCustomerGroups();
+$currencySymbol = $block->getCurrencyCode();
+if (empty($login)) {
+    $groupId = '0';
+} else {
+    $groupId = $block->getGroupId();
+}
+?>
+<?php if (in_array($groupId, $custGroups)) {
+    $requestQuote = $block->getRequestQuoteData();
+    ?>
+    <?php if (count($requestQuote)) { ?>
+        <div data-block="quotecart" class="minicart-wrapper">
+            <a class="action quotecart" href="javascript:void(0)"
+               data-bind="scope: 'quotecart_content'">
+                <span class="quotetext">
+                    <?= /* @noEscape */  __('My Quotes'); ?>
+                </span>
+                <span class="counter qty empty"
+                      data-bind="css: { empty: !!getCartParam('summary_count') == false }, blockLoader: isLoading">
+                    <span class="counter-label"><?= (int)$block->getItemCount() ?></span>
+                </span>
+            </a>
+            <div class="block block-minicart"
+                 data-role="dropdownDialog"
+                 data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=quotecart]",
+                "triggerTarget":".quotecart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":[]}}'>
+                <div id="minicart-content-wrapper" class="min-quote-wrap" data-bind="scope: 'quotecart_content'">
+                    <div class="custom_login">
+                        <button type="button" class="action close" title="<?= /* @noEscape */ __('Close')?>">
+                            <span><?= /* @noEscape */ __('Close')?></span>
+                        </button>
+                        <div class="items-total">
+				          <span class="count">
+                              <span class="item-count"><?= /* @noEscape */ (int)$block->getItemCount() ?></span>
+                              <span><?= /* @noEscape */ __('items'); ?></span>
+                        </div>
+                        <div class="subtotal">
+                            <span class="label">
+                                <span><?= /* @noEscape */ __('Quote Subtotal') ?></span>
+                            </span>
+                            <div class="amount price-container">
+                                <span class="price-wrapper" data-bind="html: cart().subtotal_excl_tax">
+                                    <span class="price"><?= /* @noEscape */ $block->getQuoteSubtotal() ?></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div data-action="scroll" class="minicart-items-wrapper">
+                            <ol id="mini-cart" class="minicart-items"
+                                data-bind="foreach: { data: getCartParam('items'), as: 'item' }">
+
+                                <?php foreach ($requestQuote as $_quote): ?>
+                                    <?php $product_id = $_quote->getProductId();
+                                    $product = $block->getProduct($product_id);
+                                    ?>
+                                    <li class="item product product-item odd last" data-role="product-item">
+                                        <div class="product">
+                                            <a data-bind="attr: {href: product_url, title: product_name}"
+                                               tabindex="-1"
+                                               class="product-item-photo"
+                                               href="javascript:void(0)"
+                                               title="Compete Track Tote">
+										<span class="product-image-container" data-bind="style: {width: width + 'px'}"
+                                              style="width: 75px;">
+										    <span class="product-image-wrapper"
+                                                  data-bind="style: {'padding-bottom': height/width*100 + '%'}"
+                                                  style="padding-bottom: 100%;">
+										        <img class="product-image-photo"
+                                                     data-bind="attr: {src: src, alt: alt}, style: {width: width + 'px', height: height + 'px'}"
+                                                     src="<?= /* @noEscape */ $block->getImage($product) ?>"
+                                                     alt="<?= /* @noEscape */ $_quote->getName() ?>"
+                                                     style="width: 75px; height: 75px;">
+										    </span>
+										</span>
+                                            </a>
+                                            <div class="product-item-details">
+                                                <strong class="product-item-name">
+                                                    <a data-bind="attr: {href: product_url}, text: product_name"
+                                                       href="<?= /* @noEscape */ $product->getProductUrl() ?>">
+                                                        <?= /* @noEscape */ $_quote->getName() ?>
+                                                    </a>
+                                                    <?php if ($_quote->getProductType() == 'configurable') { ?>
+                                                        <?php if ($customOption = $_quote->getCustomOption()) { ?>
+                                                        <?php $options = json_decode($customOption, true);?>
+                                                        <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+
+                                                            <div class="product options" role="tablist"
+                                                                 data-collapsible="true">
+                                                                <span data-role="title" class="rfq_toggle toggle"
+                                                                      tabindex="0" onclick="">
+                                                                    <?= /* @noEscape */ __('See Details') ?>
+                                                                </span>
+                                                                <div data-role="content" class="rfq_content" role="tabpanel"
+                                                                     aria-hidden="true" style="display: none;">
+                                                                    <strong class="subtitle">
+                                                                        <?= /* @noEscape */ __('Options Details') ?>
+                                                                    </strong>
+
+                                                                    <?php foreach ($options['attributes_info'] as $value): ?>
+                                                                        <p>
+                                                                            <strong><?= /* @noEscape */ $value['label'] ?>:</strong>
+                                                                            <?= /* @noEscape */ ucfirst($value['value']) ?>
+                                                                        </p>
+                                                                    <?php endforeach; ?>
+
+                                                                </div>
+                                                            </div>
+                                                        <?php } ?>
+                                                    <?php } ?>
+                                                    <?php } ?>
+                                                </strong>
+                                                <div class="product-item-pricing">
+                                                    <div class="price-container">
+  												<span class="price-wrapper" data-bind="html: price">
+    												<span class="price-excluding-tax" data-label="Excl. Tax">
+            											<span class="minicart-price">
+            												<span class="price"><?= /* @noEscape */ $block->getFormattedPrice($_quote['quote_price']) ?></span>
+            											</span>
+        											</span>
+												</span>
+                                                    </div>
+                                                    <div class="details-qty ">
+                                                        <label class="label" data-bind="i18n: 'Qty', attr: {
+                           								for: 'cart-item-'+item_id+'-qty'}"
+                                                               for="cart-item-<?= /* @noEscape */ $product_id; ?>-qty"><?= /* @noEscape */ __('Qty') ?></label>
+                                                        <input size="4" class="item-qty cart-item-qty ced-rfq-qty-input" maxlength="12"
+                                                               id="cart-item-<?= /* @noEscape */ $product_id; ?>-qty"
+                                                               data-product-id="<?= /* @noEscape */ $_quote['product_id']; ?>"
+                                                               value="<?= /* @noEscape */ $_quote['quote_qty']; ?>"
+                                                               data-oldval="<?= /* @noEscape */ $_quote['quote_qty']; ?>"
+                                                               oldval="<?= /* @noEscape */ $_quote['quote_qty']; ?>"
+                                                               data-price="<?= /* @noEscape */ $_quote['quote_price']?>"
+                                                               data-currency-symbol="<?= /* @noEscape */$currencySymbol?>"
+                                                               type="number">
+                                                        <button class="update-cart-item ced-rfq-qty-update-button" style="display: none;"><?= /* @noEscape */ __('Update')?></button>
+
+                                                    </div>
+                                                </div>
+                                                <div class="product actions">
+                                                    <div class="secondary">
+                                                        <a href="javascript:void(0)"
+                                                           value="<?= /* @noEscape */ $_quote['product_id'] ?>"
+                                                           class="action delete delete-item" title="Remove item">
+                                                            <span data-bind="i18n: 'Remove'"><?= /* @noEscape */ __('Remove'); ?></span>
+                                                        </a>
+                                                        <input type="hidden"
+                                                               value="<?= /* @noEscape */ $_quote['product_id'] ?>">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </div>
+
+                        <div class="actions">
+                            <div class="secondary">
+                                <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}"
+                                   href="<?= /* @noEscape */ $block->getQuoteCartUrl() ?>">
+                                    <span><span class="action primary"><?= /* @noEscape */ __('View and Edit Quote') ?></span></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } else { ?>
+        <div data-block="quotecart" class="minicart-wrapper">
+            <a class="action quotecart" href="javascript:void(0)"
+               data-bind="scope: 'quotecart_content'">
+            </a>
+            <div class="block block-minicart empty"
+                 data-role="dropdownDialog"
+                 data-mage-init='{"dropdownDialog":{
+		                "appendTo":"[data-block=quotecart]",
+		                "triggerTarget":".quotecart",
+		                "timeout": "2000",
+		                "closeOnMouseLeave": false,
+		                "closeOnEscape": true,
+		                "triggerClass":"active",
+		                "parentClass":"active",
+		                "buttons":[]}}'>
+                <div id="minicart-content-wrapper" class="min-quote-wrap" data-bind="scope: 'quotecart_content'">
+                    <div class="custom_login">
+                        <button type="button" class="action close" title="Close">
+                            <span><?= /* @noEscape */ __('Close') ?></span>
+                        </button>
+                    </div>
+                    <div class="ced-rfq-cart-empty">
+                        <strong class="subtitle empty">
+                            <?= /* @noEscape */ __('You have no item in your quote cart.');?>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+<?php } ?>
+<script>
+
+    require(['jquery'], function ($) {
+        /*for toggel the options in cart*/
+        $('.rfq_toggle').click(function() {
+            $(this).next().toggle('fast');
+        });
+        var currencySymbol = '<?= /* @noEscape */ $currencySymbol ?>';
+        var minicartitemswrapper = $(".minicart-items-wrapper");
+
+        minicartitemswrapper.on('click', '.delete-item', function () {
+            var self = $(this);
+            var minicartWrapper = $(this).closest('div.minicart-wrapper');
+            $.ajax({
+                type: "POST",
+                url: "<?= /* @noEscape */ $block->getUrl('requesttoquote/quotes/delete')?>",
+                data: {productid: parseInt($(this).next().val())},
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success == '1') {
+                        self.closest('li').remove();
+                        var sum = 0;
+                        var itemCount = 0;
+                        minicartWrapper.find('.ced-rfq-qty-input').each( function(){
+                            var qty = $(this).val();
+                            var price = $(this).data('price');
+                            itemCount = itemCount + parseInt(qty);
+                            sum += parseInt(qty * price);
+                        });
+                        if (itemCount <= 0) {
+                            minicartWrapper.find('.min-quote-wrap').html(response.html);
+                            minicartWrapper.find('.quotecart').html('');
+                        } else {
+                            minicartWrapper.find('.subtotal').find('.price').text(currencySymbol + sum);
+                            minicartWrapper.find('.custom_login').find('.items-total').find('.item-count').text(itemCount);
+                            minicartWrapper.find('.quotecart').find('.counter-label').text(itemCount);
+                        }
+                    }
+                }
+            });
+        });
+
+        minicartitemswrapper.on('change', '.ced-rfq-qty-input', function () {
+            var newqty = $(this).val();
+            var oldqty = $(this).data('oldval');
+            var updateButton = $(this).closest('div').find('.ced-rfq-qty-update-button');
+            updateButton.attr('disabled', false);
+            if (!newqty) {
+                $(this).val(oldqty);
+                return;
+            }
+            if (parseInt(newqty) <= 0){
+                $(this).parent().find('.cart-item-qty').val(oldqty);
+            } else {
+                updateButton.show();
+            }
+        });
+
+        minicartitemswrapper.on('click', '.ced-rfq-qty-update-button', function () {
+            var inputQty = $(this).closest('div').find('.ced-rfq-qty-input');
+            var productid = inputQty.data('product-id');
+            var currencySymbol = inputQty.data('currency-symbol');
+            var newqty = inputQty.val();
+            inputQty.val(parseInt(newqty));
+            inputQty.attr('value', parseInt(newqty));
+            inputQty.attr('data-oldval', parseInt(newqty));
+            inputQty.attr('oldval', parseInt(newqty));
+            var updateButton = $(this).closest('div').find('.ced-rfq-qty-update-button');
+            updateButton.attr('disabled', true);
+            var minicartWrapper = $(this).closest('div.minicart-wrapper');
+            $.ajax({
+                type: "POST",
+                url: "<?= /* @noEscape */ $block->getUrl('requesttoquote/cart/updateqty')?>",
+                data: {productid: parseInt(productid), qty:parseInt(newqty)},
+                success: function (html) {
+                    if (html.error) {
+                        window.location.reload();
+                    }
+                    if (html.logout) {
+                        window.location.href = '<?= /* @noEscape */ $block->getUrl('customer/account/login');?>';
+                    }
+                    updateButton.hide();
+                    var sum = 0;
+                    var itemCount = 0;
+                    minicartWrapper.find('.ced-rfq-qty-input').each( function(){
+                        if (productid == $(this).data('product-id')) {
+                            var qty = $(this).val();
+                        } else {
+                            var qty = $(this).attr('oldval');
+                            $(this).val(qty);
+                            $(this).attr('value', qty);
+                        }
+                        $(this).closest('div').find('.ced-rfq-qty-update-button').hide();
+                        var price = $(this).data('price');
+                        itemCount = itemCount + parseInt(qty);
+                        sum += parseInt(qty * price);
+                    });
+                    minicartWrapper.find('.subtotal').find('.price').text(currencySymbol + sum);
+                    minicartWrapper.find('.custom_login').find('.items-total').find('.item-count').text(itemCount);
+                    minicartWrapper.find('.quotecart').find('.counter-label').text(itemCount);
+                }
+            });
+        });
+
+        $(".minicart-wrapper").on('click', 'button.close', function () {
+            $(".minicart-wrapper").find('.quotecart').trigger('click');
+        });
+    });
+
+</script>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_onepage_controller_success_action">
+    	<observer name="quote_success" instance="Ced\RequestToQuote\Observer\Success"  />
+	</event>
+	<event name="sales_quote_collect_totals_before">
+        <observer name="change_product_price" instance="Ced\RequestToQuote\Observer\CollectTotal" />
+    </event>
+    <event name="controller_action_predispatch_checkout_cart_add">
+        <observer name="controller_action_pretdispatch_checkout_cart_add_for_requesttoquote"
+                  instance="Ced\RequestToQuote\Observer\AddToCartBefore" />
+    </event>
+    <event name="controller_action_predispatch_checkout_sidebar_updateitemqty">
+        <observer name="controller_action_pretdispatch_checkout_sidebar_updateitemqty_for_requesttoquote"
+                  instance="Ced\RequestToQuote\Observer\SidebarUpdateItemQtytBefore" />
+    </event>
+</config>

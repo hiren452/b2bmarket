@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+        <update handle="checkout_cart_sidebar_item_renderers"/>
+        <update handle="checkout_cart_sidebar_item_price_renderers"/>
+        <update handle="checkout_cart_sidebar_total_renderers"/>
+        
+    <head>
+      <css src="Ced_RequestToQuote::css/rfq.css" />
+    </head>
+    <body>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components"
+                   name="checkout_page_head_components"
+                   template="Magento_Checkout::js/components.phtml" cacheable ="false"/>
+
+        </referenceBlock>
+        <referenceContainer name="header-wrapper">
+            <block class="Ced\RequestToQuote\Block\Cart\Sidebar"
+                   ifconfig="requesttoquote_configuration/active/enable"
+                   name="quotecart" as="quotecart" after="minicart"
+                   template="Ced_RequestToQuote::cart/minicart.phtml" cacheable ="false">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="types" xsi:type="array"/>
+                        <item name="components" xsi:type="array">
+                            <item name="quotecart_data" xsi:type="array">
+                                <item name="component" xsi:type="string">Ced_RequestToQuote/js/view/quotecart</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Ced_RequestToQuote/minicart/content</item>
+                                </item>
+                                <item name="children" xsi:type="array">
+                                    <item name="subtotal.container" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">subtotalContainer</item>
+                                        </item>
+                                        <item name="children" xsi:type="array">
+                                            <item name="subtotal" xsi:type="array">
+                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                <item name="config" xsi:type="array">
+                                                    <item name="template" xsi:type="string">Magento_Checkout/minicart/subtotal</item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                    <item name="extra_info" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">extraInfo</item>
+                                        </item>
+                                    </item>
+                                    <item name="promotion" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">promotion</item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+                <container name="minicart.addons" label="Mini-cart promotion block"/>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="page.messages" >
+            <block class="Ced\RequestToQuote\Block\Customer\QuoteMessage"
+                   ifconfig="requesttoquote_configuration/active/enable"
+                   name="ced.rfq.default.quote.message"
+                   template="Ced_RequestToQuote::customer/quoteMessage.phtml"
+                   cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

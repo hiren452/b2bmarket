@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+	<template id="requesttoquote_configuration_email_ced_requesttoquote_customer_quote_creation" label="Quote Created" file="ced_requesttoquote/quote_created.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_ced_requesttoquote_customer_po_creation" label="PO Created" file="ced_requesttoquote/po_created.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_quote_create_email" label="New Quote email" file="ced_requesttoquote/new_quote_email.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_quote_update_email_template" label="Quote Update email" file="ced_requesttoquote/quote_update_email.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_admin_quote_submit_email_template" label="New Quote email to Admin" file="ced_requesttoquote/admin_new_quote_email.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_admin_quote_update_email_template" label="Quote Update email to Admin" file="ced_requesttoquote/admin_quote_update_email.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_admin_ced_requesttoquote_customer_po_creation" label="PO Created Mail to Admin" file="ced_requesttoquote/admin_po_created.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="requesttoquote_configuration_email_admin_quote_complete_email_template" label="Quote Complete email to admin" file="ced_requesttoquote/admin_quote_complete_email.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+</config>

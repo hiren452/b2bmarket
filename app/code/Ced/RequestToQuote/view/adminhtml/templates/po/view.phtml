@@ -1,0 +1,204 @@
+<?php
+
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+?>
+<?php
+$priceHelper = $block->pricingHelper;
+$currentPo = $block->getPo();
+$poId = $currentPo->getPoIncrementId();
+$created = $currentPo->getCreatedAt();
+$customer_id = $currentPo->getPoCustomerId();
+$poCustomer = $block->getCustomer($customer_id);
+$customer_email = $poCustomer->getEmail();
+$customer_name = $poCustomer->getName();
+$address = $block->getCustomerAddress($currentPo->getQuoteId());
+$po = $block->getItems();
+$poData = $block->getPoData($poId, $currentPo->getQuoteId());
+$vendor_id = $block->getVendorId();
+$quoteIncrementId = $block->getQuoteIncrementId($currentPo->getQuoteId());
+$subtotal = 0;
+?>
+<div class="page-main-actions">
+    <div class="page-actions-placeholder"></div>
+    <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+        <div class="page-actions-inner" data-title="New Invoice">
+            <div class="page-actions-buttons">
+                <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?= /* @noEscape */ $block->getBackUrl(); ?>')">
+                    <span><?= /* @noEscape */ __("Back to Grid");?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container" class="main-col">
+    <section class="admin__page-section order-view-account-information">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */ __("Proposal Information");?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= /* @noEscape */ '# ' . $poId; ?></span>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-information-table">
+                        <tbody>
+                        <tr>
+                            <th><?= /* @noEscape */ __("Quote Id");?></th>
+                            <td><a href="<?= /* @noEscape */ $block->getUrl('requesttoquote/quotes/edit/', ['id' => $currentPo->getQuoteId()]);?>"><?= /* @noEscape */ $quoteIncrementId;?></a></td>
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */ __("Proposal Date");?></th>
+                            <td><?= /* @noEscape */ $created;?></td>
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */ __("Proposal Status");?></th>
+                            <td><span id="order_status"><?= /* @noEscape */ $block->getStatus(); ?></span></td>
+                        </tr>
+
+                        </tbody></table>
+                </div>
+            </div>
+
+            <div class="admin__page-section-item order-account-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= /* @noEscape */ __("Account Information");?></span>
+                    <div class="actions"></div>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-account-information-table">
+                        <tbody><tr>
+                            <th><?= /* @noEscape */ __("Customer Name");?></th>
+                            <td>
+                                <span><?= /* @noEscape */ $customer_name;?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */ __("Email Id");?></th>
+                            <td><?= /* @noEscape */ $customer_email;?></td>
+
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */ __("Customer Group");?></th>
+                            <td><?= /* @noEscape */ $block->getCustomerGroup($poCustomer)?></td>
+                        </tr>
+                        </tbody></table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section order-addresses">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */ __("Address Information");?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-billing-address">
+                <address class="admin__page-section-item-content"><?= /* @noEscape */ $customer_name;?><br>
+
+                    <?= /* @noEscape */ $address['street'];?><br>
+                    <?= /* @noEscape */ $address['city'];?>, <?= /* @noEscape */ $address['state'];?>, <?= /* @noEscape */ $address['pincode'];?>
+                    <?php /* @noEscape */ $address['country'];?><br>
+                    <?= /* @noEscape */ __("Telephone :");?>
+                    <?= /* @noEscape */ $address['telephone'];?>
+                </address>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */ __('Item(s) Information')?></span>
+        </div>
+
+        <div id="invoice_item_container" class="admin__page-section-content">
+            <div class="admin__table-wrapper">
+                <table class="data-table admin__table-primary order-invoice-tables">
+                    <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?= /* @noEscape */ __("Product ");?></span></th>
+                        <th class="col-qty"><span><?= /* @noEscape */ __("Quantity");?></span></th>
+                        <th class="col-qty"><span><?= /* @noEscape */ __("Price");?></span></th>
+                        <th class="col-total last"><span><?= /* @noEscape */ __("Row Total");?></span></th>
+                    </tr>
+                    </thead>
+                    <tbody class="even">
+                    <?php foreach ($poData->getData() as $value) {
+                        $product_id = $value['product_id'];
+                        $product = $block->getProduct($product_id);
+                        $unitprice = $block->getProductIndividualPrice($product_id);
+                        $remainingQty = $value['remaining_qty'];
+                        if(!$remainingQty) {
+                            $remainingQty = 0;
+                        }
+                        $subtotal += $value['po_price'];
+                        ?>
+                    <tr>
+                        <td class="col-product">
+                            <div id="order_item_1_title" class="product-title"><?= /* @noEscape */ $value['name'];  ?>
+                            </div>
+
+                            <div class="product-sku-block">
+                                <span><?= /* @noEscape */ __('SKU')?>:</span> <?= /* @noEscape */ $value['sku'];  ?>
+                            </div>
+                            <?php if ($value['product_type'] == 'configurable' && $customOption = $value['custom_option']) { ?>
+                                <?php $options = json_decode($customOption, true); ?>
+                                <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+                                    <?php foreach ($options['attributes_info'] as $option): ?>
+                                        <div class="product-sku-block">
+                                            <span><?= /* @noEscape */ ucfirst($option['label'])?>:</span> <?= /* @noEscape */ $option['value'];  ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php } ?>
+                            <?php } ?>
+                        </td>
+                        <td class="col-qty"><?= /* @noEscape */ $value['quoted_qty'];  ?></td>
+                        <td class="col-price">
+                            <div class="price-excl-tax">
+                                <span class="price">
+                                    <?= /* @noEscape */ $block->priceFormat($product->getPrice())?>
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="col-qty">
+                            <?= /* @noEscape */ $priceHelper->currency($value['po_price'], true, false);?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-totals">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= /* @noEscape */ __('Proposal Total') ?></span>
+                </div>
+                <table class="data-table admin__table-secondary order-subtotal-table">
+                    <tbody>
+                    <tr class="col-0">
+                        <td class="label"><strong><?= /* @noEscape */ __('Subtotal');?></strong></td>
+                        <td>
+                            <span><span class="price"><strong><?= /* @noEscape */ $priceHelper->currency($subtotal, true, false);?></strong></span></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>

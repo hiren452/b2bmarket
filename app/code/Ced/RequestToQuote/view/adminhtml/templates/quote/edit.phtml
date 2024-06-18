@@ -1,0 +1,486 @@
+<?php
+
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+?>
+
+<?php
+
+$quote = $block->getQuoteData();
+$quoteItems = $block->getItems();
+$chatshistory = $block->getMessages();
+$customer = $block->getCustomer($quote->getCustomerId());
+$chatDate = '';
+$status = $quote->getStatus();
+?>
+<main id="anchor-content" class="page-content">
+    <div class="page-main-actions">
+        <div class="page-actions-placeholder"></div>
+        <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+            <div class="page-actions-inner" data-title="New Invoice">
+                <div class="page-actions-buttons">
+                    <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?= /* @noEscape */ $block->getBackUrl(); ?>')">
+                        <span><?= /* @noEscape */__("Back to Grid");?></span>
+                    </button>
+                    <?php if ($quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING
+                    ) {
+                        ?>
+                        <button id="approve" title="Approve" type="button" class="action-default scalable approve">
+                            <span><?= /* @noEscape */ __("Approve");?></span>
+                        </button>
+                        <button id="reject" title="Reject" type="button" class="action-default scalable reject">
+                            <span><?= /* @noEscape */ __("Reject");?></span>
+                        </button>
+                    <?php }?>
+                    <?php if ($quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING ||
+                                  $quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_APPROVED ||
+                                  $quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PARTIAL_PO
+                    ) { ?>
+                        <button id="reset" title="Create Proposal" type="button" class="action-default scalable reset" onclick="setLocation('<?= /* @noEscape */ $block->getPOUrl(); ?>')">
+                            <span><?= /* @noEscape */ __("Create Proposal");?></span>
+                        </button>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page:main-container" class="page-columns">
+        <div class="admin__old">
+            <div id="container" class="main-col">
+                <form id="edit_form" class="order-invoice-edit" method="post" action="<?= /* @noEscape */ $block->getSaveUrl(); ?>" novalidate="novalidate">
+                    <div>
+                        <input name="form_key" value="<?= /* @noEscape */ $block->getFormkey()?>" type="hidden">
+                        <input name="status" type="hidden" value="<?= /* @noEscape */ $quote->getStatus() ?>"/>
+                    </div>
+                    <section class="admin__page-section order-view-account-information">
+                            <div class="admin__page-section-title">
+                                <span class="title"><?= /* @noEscape */ __("Quote & Account Information");?></span>
+                            </div>
+                            <div class="admin__page-section-content">
+                                <div class="admin__page-section-item order-information">
+                                    <div class="admin__page-section-item-title">
+                                        <span class="title">
+                                            <span><?=/* @noEscape */ __("Quote #");?><?= /* @noEscape */ $quote->getQuoteIncrementId();?></span>
+                                            <input type="hidden" name="id" value="<?= /* @noEscape */ $quote->getQuoteId();?>" />
+                                        </span>
+                                    </div>
+                                    <div class="admin__page-section-item-content">
+                                        <table class="admin__table-secondary order-information-table">
+                                            <tbody>
+                                                <tr>
+                                                    <th><?= /* @noEscape */ __("Quote Date");?></th>
+                                                    <td><?= /* @noEscape */ $quote->getCreatedAt();?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th><?= /* @noEscape */ __("Current Quote Status");?></th>
+                                                    <td>
+                                                        <strong>
+                                                            <span id="order_status"><?= /* @noEscape */ $block->getQuoteStatus($quote->getStatus());?></span>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                        <th><?= /* @noEscape */ __("Quote Created From");?></th>
+                                                        <td><?= /* @noEscape */ $block->getStoreDetails();?></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="admin__page-section-item order-account-information">
+                                    <div class="admin__page-section-item-title">
+                                        <span class="title"><?= /* @noEscape */ __("Account Information");?></span>
+                                        <div class="actions"></div>
+                                    </div>
+                                    <div class="admin__page-section-item-content">
+                                        <table class="admin__table-secondary order-account-information-table">
+                                            <tbody><tr>
+                                                <th><?= /* @noEscape */ __("Customer Name");?></th>
+                                                <td>
+                                                    <a href="<?= /* @noEscape */ $block->getUrl('customer/index/edit', ['id' => $quote->getCustomerId()]);?>" target="_blank">
+                                                        <span><?= /* @noEscape */ $customer->getName();?></span>
+                                                    </a>
+                                                    <input type="hidden"
+                                                           name="customer_id"
+                                                           value="<?= /* @noEscape */ $quote->getCustomerId();?>"
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */ __("Customer Email");?></th>
+                                                <td><a href="mailto:<?= /* @noEscape */ $customer->getEmail();?>"><?= /* @noEscape */ $customer->getEmail();?></a></td>
+                                                <input type="hidden"
+                                                       name="customer_email"
+                                                       value="<?= /* @noEscape */ $customer->getEmail();?>"
+                                                />
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */ __("Customer Group");?></th>
+                                                <td><?= /* @noEscape */ $block->getCustomerGroup($quote->getCustomerId());?></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="admin__page-section order-addresses">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */ __("Address Information");?></span>
+                        </div>
+                        <div class="admin__page-section-content">
+                            <div class="admin__page-section-item order-billing-address">
+                                <div class="admin__page-section-item-title">
+                                    <span class="title"><?= /* @noEscape */ __("Shipping Address");?></span>
+                                </div>
+                                <address class="admin__page-section-item-content"><?= /* @noEscape */ $customer->getName();?><br>
+
+                                    <?php $address = $block->getCustomerAddress();?><?= /* @noEscape */ $address['street'] ?><br>
+                                    <?= /* @noEscape */ $address['city'] ?>,  <?/* @noEscape */ $address['state'] ?>, <?= /* @noEscape */ $address['pincode'] ?><br>
+                                    <?= /* @noEscape */ $address['country'] ?> <br>
+                                    <?= /* @noEscape */ __("T");?>: <?= /* @noEscape */ $address['telephone'] ?>
+                                </address>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="admin__page-section">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */ __("Quoted Items:");?></span>
+                        </div>
+                        <div class="admin__page-section-content grid">
+                            <div class="admin__table-wrapper">
+                                <table class="data-table admin__table-primary order-invoice-tables" id ="edit-order-table">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th class="col-product"><span><?= /* @noEscape */__("Product:");?></span></th>
+                                            <th class="col-status"><span><?= /* @noEscape */ __("Stock:");?></span></th>
+                                            <th class="col-status"><span><?= /* @noEscape */ __("Price:");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */ __("Requested Qty:");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */ __("Requested Unit Price:");?></span></th>
+                                            <th class="col-ordered-qty"><span><?= /* @noEscape */ __("Proposed Qty:");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */ __("Proposed Unit Price:");?></span></th>
+                                            <th class="col-total last"><span><?= /* @noEscape */ __("Row Total");?></span></th>
+                                        </tr>
+                                    </thead>
+                                <tbody class="even">
+                                    <?php
+                                $total = 0;
+foreach ($quoteItems as $item) {
+    $product_id = $item->getProductId();
+    $product = $block->getProduct($product_id);
+    $unitprice = $item->getUnitPrice();
+    $subtotal = 0;
+    if ($item['remaining_qty']) {
+        $subtotal = $item['remaining_qty'] * $item['unit_price'];
+    } elseif ($item['remaining_qty'] === '0') {
+        $subtotal = 0;
+    } else {
+        $subtotal =  $item['quote_updated_qty'] * $item['unit_price'];
+    }
+    $qty_to_po = 0;
+    if($item['remaining_qty']) {
+        $qty_to_po = $item['remaining_qty'];
+    } elseif($item['remaining_qty'] === '0') {
+        $qty_to_po = 0;
+    } else {
+        $qty_to_po = $item['quote_updated_qty'];
+    }
+    $qty_already_poed = 0;
+    if($item['remaining_qty']) {
+        $qty_already_poed =  $item['quote_updated_qty'] - $item['remaining_qty'];
+    } elseif($item['remaining_qty'] === '0') {
+        $qty_already_poed = $item['quote_updated_qty'];
+    } else {
+        $qty_already_poed = 0;
+    }
+    $total += $subtotal;
+    ?>
+                                        <input id="product[<?= /* @noEscape */ $product_id;  ?>]"
+                                               value="<?= /* @noEscape */ $product_id;  ?>"
+                                               type="hidden"
+                                        />
+                                        <tr>
+                                            <td class="col-product">
+                                                <div id="order_item_2_title" class="product-title"><?= /* @noEscape */ $item['name'];  ?>
+                                                </div>
+                                                <div class="product-sku-block">
+                                                    <span><?= /* @noEscape */ __('SKU')?>:</span> <?= /* @noEscape */ $item['sku'];  ?>
+                                                </div>
+                                                <?php if ($item['product_type'] == 'configurable' && $customOption = $item['custom_option']) { ?>
+                                                    <?php $options = json_decode($customOption, true); ?>
+                                                    <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+                                                        <?php foreach ($options['attributes_info'] as $option): ?>
+                                                            <p>
+                                                                <strong><?= /* @noEscape */ ucfirst($option['label']) ?>:</strong>
+                                                                <?= /* @noEscape */ $option['value'] ?>
+                                                            </p>
+                                                        <?php endforeach; ?>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </td>
+                                            <td class="col-price-original"><span><?= /* @noEscape */ $block->getProductStock($product_id);  ?></span>
+                                            </td>
+                                            <td class="col-price">
+                                                <div class="price-excl-tax">
+                                                    <?php if ($productPrice = $product->getPrice()) {
+                                                        ?>
+                                                        <span class="price"><?= /* @noEscape */ $block->priceFormat($productPrice); ?></span>
+                                                    <?php } ?>
+                                                </div>
+                                            </td>
+                                            <td class="col-initial-qty">
+                                                <div class="initial-qty">
+                                                    <span class="price"><?= /* @noEscape */ $item['product_qty'];?></span>
+                                                </div>
+                                            </td>
+                                            <td class="col-price">
+                                                <div class="price-excl-tax">
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode()?></span>
+                                                    <span class="price"><?= /* @noEscape */$item['price'];  ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="col-ordered-qty">
+                                                <table class="qty-table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="col-qty-invoice">
+                                                                <input id="quantity_to_po[<?= /* @noEscape */ $product_id;  ?>]"
+                                                                       class="input-text admin__control-text qty-input qty-field-po common numbersOnly"
+                                                                       name="item[<?= /* @noEscape */ $item->getId();?>][qty]"
+                                                                       value="<?= /* @noEscape */ $qty_to_po > 0 ? $qty_to_po : $item['product_qty']; ?>"
+                                                                       type="text"
+                                                                       onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')"  <?php if($quote->getStatus() > \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PROCESSING) {?>
+                                                                        readonly
+                                                                        required
+                                                                        <?php }?>
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><?= /* @noEscape */ __("Proposal Created for Qty"); ?>: </th>
+                                                            <td><b><?= /* @noEscape */ $qty_already_poed;  ?></b></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td class="col-price">
+                                                <div class="price-excl-tax">
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode(); ?>
+                                                        <input id="updateprice[<?= /* @noEscape */ $product_id;  ?>]"
+                                                               class="input-text admin__control-text qty-input po-price-updated common currency numbersOnly"
+                                                               name="item[<?= /* @noEscape */ $item->getId();?>][unitprice]"
+                                                               value="<?= /* @noEscape */ $item['unit_price'] > 0 ? $item['unit_price'] : $item['price']; ?>"
+                                                               type="text"
+                                                            <?php if($quote->getStatus() > \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PROCESSING) {?>
+                                                                readonly
+                                                            <?php }?>
+                                                        />
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="col-subtotal">
+                                                <div class="price-excl-tax">
+                                                    <strong>
+                                                        <span><?= /* @noEscape */ $block->getCurrencyCode();  ?></span>
+                                                        <span><?= /* @noEscape */ $subtotal; ?></span>
+                                                    </strong>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php }?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="admin__page-section">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */ __("Messaging section"); ?> </span>
+                        </div>
+                        <div class="admin__page-section-content">
+                            <div class="admin__page-section-item order-comments-history">
+                                <div class="admin__page-section-item-title">
+                                    <span class="title"><?= /* @noEscape */ __("Chat History"); ?></span>
+                                </div>
+                                <div id="history_form" class="admin__page-section-item-content order-history-form">
+                                    <div class="admin__field">
+                                        <div class="message_history">
+                                            <?php if($chatshistory && count($chatshistory)>0 && !empty($chatshistory->getData())) {
+                                                ?>
+                                                <ul class="note-list">
+                                                    <?php foreach ($chatshistory as $_chathistory) {?>
+                                                        <?php if ($chatDate != date('Y-m-d', strtotime($_chathistory->getCreatedAt()))) {
+                                                            $chatDate = date('Y-m-d', strtotime($_chathistory->getCreatedAt()));
+                                                            ?>
+                                                        <li class="purchaseorder-middle-chat-column aaaaa">
+                                                            <div class="chat-date"><?= /* @noEscape */ $chatDate; ?></div>
+                                                        </li>
+                                                    <?php } ?>
+                                                        <?php if ($_chathistory->getSentBy()=='Admin') { ?>
+                                                            <li class="purchaseorder-right-chat-column">
+                                                                <?php if ($_chathistory->getMessage()) { ?>
+                                                                    <div class="purchaseorder-right-chat-column-chat"><?= /* @noEscape */ $block->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </li>
+                                                        <?php } elseif($_chathistory->getSentBy()=='Vendor') {?>
+                                                                <li class="purchaseorder-left-chat-column">
+                                                                    <div class="purchaseorder-left-chat-column-chat">
+                                                                        <strong><?= /* @noEscape */ __('Vendor')?></strong>
+                                                                        <?php if ($_chathistory->getMessage()) { ?>
+                                                                            <div class="purchaseorder-left-chat-column-chat"><?= /* @noEscape */ $block->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+
+                                                                            </div>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                </li>
+
+                                                            <?php } else {  ?>
+                                                            <li class="purchaseorder-left-chat-column" >
+                                                                <div class="purchaseorder-left-chat-column-chat">
+                                                                    <strong><?= /* @noEscape */ $customer->getName()?></strong>
+                                                                    <?php if ($_chathistory->getMessage()) { ?>
+                                                                        <div class="note-list-comment"><?= /* @noEscape */ $block->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+
+                                                                        </div>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            </li>
+
+                                                        <?php } ?>
+                                                    <?php } ?>
+                                                </ul>
+                                            <?php } ?>
+                                        </div>
+
+                                        <label for="invoice_comment_text" class="admin__field-label">
+                                            <span><?= /* @noEscape */ __("Message"); ?></span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <textarea id="invoice_comment_text" name="message" class="admin__control-textarea" rows="5" cols="5"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="invoice_totals" class="admin__page-section-item order-totals">
+                                <div class="admin__page-section-item-title">
+                                    <span class="title"><?= /* @noEscape */ __("Quote Totals"); ?></span>
+                                </div>
+                                <div class="admin__page-section-item-content order-totals-actions">
+                                    <table class="data-table admin__table-secondary order-subtotal-table">
+
+                                        <tfoot>
+                                        <tr class="col-0">
+                                            <td class="label">
+                                                <strong><?= /* @noEscape */ __("Grand Total");?></strong>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode();?></span>
+                                                    <span>
+                                                    <?= /* @noEscape */ $total;?>
+                                                </span>
+                                                </strong>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="col-3">
+                                            <td class="label">
+                                                <strong><?=  /* @noEscape */ __("Total Due");?></strong>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                    <span><?= /* @noEscape */  $block->getCurrencyCode();?></span>
+                                                    <span>
+                                                        <?= /* @noEscape */  $total + $quote->getShippingAmount()?>
+                                                    </span>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+
+                                        <tbody>
+                                        <tr class="col-0">
+                                            <td class="label"><?= /* @noEscape */__("Subtotal");?></td>
+                                            <td>
+                                                <strong>
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode();?></span>
+                                                    <span><?= /* @noEscape */$total;?></span>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <?php if($status != \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_CANCELLED) {?>
+                                    <div class="actions">
+                                        <button id="submit" title="Save Quote" type="submit" class="action-default scalable save submit-button primary" >
+                                            <span><?= /* @noEscape */ __("Save Quote"); ?></span>
+                                        </button>
+                                    </div>
+                                    <?php }?>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    require(['jquery'], function($) {
+        $("#approve").on('click', function () {
+            $('input[name="status"]').val('<?= /* @noEscape */ \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_APPROVED  ?>');
+            $('#submit').trigger('click');
+        });
+
+        $("#reject").on('click', function () {
+            $('input[name="status"]').val('<?= /* @noEscape */ \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_CANCELLED  ?>');
+            $('#submit').trigger('click');
+        });
+
+        $(".numbersOnly").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A, Command+A
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $('.message_history').scroll(function(e){
+            var dateColumn = $(this).find('.purchaseorder-middle-chat-column');
+            dateColumn.addClass('active');
+            setTimeout(function() {
+                dateColumn.removeClass('active');
+            }, 2000);
+        });
+        if ($('.message_history').find('ul li:last-child').length) {
+            $('.message_history').animate({scrollTop: $('.message_history').find('ul li:last-child').offset().top},'fast');
+        }
+    });
+</script>

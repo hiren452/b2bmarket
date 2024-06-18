@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_requestquote" resource="default" engine="innodb" comment="ced_requestquote">
+        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="quote_increment_id" length="20" comment="Quote Increment Id"/>
+        <column xsi:type="int" name="customer_id" comment="Customer Id"/>
+        <column xsi:type="int" name="vendor_id" comment="Vendor Id"/>
+        <column xsi:type="varchar" name="customer_email" nullable="false" length="40" comment="Customer Email"/>
+        <column xsi:type="varchar" name="country" comment="Country" nullable="false" length="60"/>
+        <column xsi:type="varchar" name="state" nullable="false" length="60" comment="State" />
+        <column xsi:type="varchar" name="city" nullable="false" length="60" comment="City" />
+        <column xsi:type="int" name="pincode" unsigned="true" nullable="false" comment="pincode" />
+        <column xsi:type="varchar" length="100" name="address" nullable="false" comment="Address" />
+        <column xsi:type="varchar" length="20" name="telephone" nullable="false" comment="Contact Info" />
+        <column xsi:type="int" name="store_id" nullable="false" comment="Quote Store Id"/>
+        <column xsi:type="int" name="quote_total_qty" nullable="false" comment="Quoted Qty" />
+        <column xsi:type="decimal" name="quote_total_price" nullable="false" scale="2" precision="10" comment="Quoted Price" />
+        <column xsi:type="varchar" length="20" name="remaining_qty" nullable="false" comment="Quote remaining qty"/>
+        <column xsi:type="decimal" name="quote_updated_price" nullable="false" scale="2" precision="10" comment="Quote Updated Price" />
+        <column xsi:type="decimal" name="shipping_amount" unsigned="true" nullable="false" scale="2" precision="10" comment="Shipping Amount" />
+        <column xsi:type="varchar" name="shipment_method" nullable="false" length="50" comment="Shipping Method" />
+        <column xsi:type="int" name="status" nullable="false" comment="0-Created and Pending,1-Processing,2-Approved,3-Cancelled,4-PO created,5-Partial Po, 6-Ordered,7-Complete" />
+        <column xsi:type="int" name="quote_updated_qty" nullable="false" comment="Quote Updated Qty" />
+        <column xsi:type="timestamp" name="created_at" nullable="false" on_update="false" default="CURRENT_TIMESTAMP" comment="Created At" />
+        <column xsi:type="varchar" name="last_updated_by" nullable="false" length="1000" comment="Last Updation done in quote value" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="quote_id"/>
+        </constraint>
+    </table>
+    <table name="ced_requestquote_detail" resource="default" engine="innodb" comment="Ced Requestquote Detail">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="quote_id" unsigned="true" nullable="false" comment="Quote Id"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" comment="Customer Id"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" comment="Product Id"/>
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" comment="Parent Id"/>
+        <column xsi:type="int" name="vendor_id" unsigned="true" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="int" name="store_id" unsigned="true" nullable="false" comment="Store Id"/>
+        <column xsi:type="int" name="product_qty" unsigned="true" nullable="false" comment="Product Quantity" />
+        <column xsi:type="decimal" name="price" unsigned="true" nullable="false" scale="2" precision="10" comment="Original Quote Price" />
+        <column xsi:type="int" name="quote_updated_qty" unsigned="true" nullable="false" comment="Quote Updated Quantity" />
+        <column xsi:type="varchar" length="20" name="remaining_qty" nullable="false" comment="Quote remaining qty" />
+        <column xsi:type="decimal" name="updated_price" nullable="false" scale="2" precision="10" comment="Updated Unit Price" />
+        <column xsi:type="decimal" name="unit_price" nullable="false" scale="2" precision="10" comment="Updated Unit Price" />
+        <column xsi:type="int" name="status" nullable="false" comment="Status 0-Unapproved 1- Approved 2- Partial Quantities 3- Cancelled"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" on_update="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="text" name="custom_option" nullable="false" comment="Custom Option" />
+        <column xsi:type="text" name="last_updated_by" nullable="false"  comment="Last updated by" />
+        <column xsi:type="varchar" name="product_type" nullable="false" comment="Product Type" />
+        <column xsi:type="varchar" name="name" nullable="false" comment="Product Name" />
+        <column xsi:type="varchar" name="sku" nullable="false" comment="Product Sku" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="ced_requestquote_message" resource="default" engine="innodb" comment="requestquote message">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="quote_id" unsigned="true" nullable="false" comment="Quote Id"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" comment="Customer Id"/>
+        <column xsi:type="int" name="vendor_id" unsigned="true" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" on_update="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="text" name="message" nullable="false" comment="Message"/>
+        <column xsi:type="text" name="sent_by" nullable="false" comment="Send By"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="ced_request_po_detail" resource="default" engine="innodb" comment="ced request po detail">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" length="20" name="po_id" nullable="false" comment="PO Id"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" comment="Order Id"/>
+        <column xsi:type="int" name="quote_id" unsigned="true" nullable="false" comment="Quote Id"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" comment="Product Id"/>
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" comment="Parent Id"/>
+        <column xsi:type="int" name="vendor_id" unsigned="true" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="int" name="product_qty" nullable="false" comment="Product qty"/>
+        <column xsi:type="int" name="quoted_qty" nullable="false" comment="Quoted Qty"/>
+        <column xsi:type="decimal" name="quoted_price" nullable="false" scale="2" precision="10" comment="Quoted Price" />
+        <column xsi:type="decimal" name="po_price" nullable="false" scale="2" precision="10" comment="Po Price" />
+        <column xsi:type="int" name="remaining_qty" nullable="false" comment="Remaining Qty"/>
+        <column xsi:type="text" name="custom_option" nullable="false" comment="Custom Option"/>
+        <column xsi:type="int" name="status" nullable="false" comment="0-Not Accepted,1-Accepted,1-Accepted and Ordered,2-Cancelled,3-Complete"/>
+        <column xsi:type="varchar" name="product_type" nullable="false" comment="Product Type"/>
+        <column xsi:type="varchar" name="name" nullable="false" comment="Product Name"/>
+        <column xsi:type="varchar" name="sku" nullable="false" comment="Product Sku"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="ced_request_po" resource="default" engine="innodb" comment="ced request po">
+        <column xsi:type="int" name="po_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Po id"/>
+        <column xsi:type="varchar" name="po_increment_id" length="20" nullable="false" comment="Increment Id"/>
+        <column xsi:type="int" name="order_id" nullable="false" comment="Order Id"/>
+        <column xsi:type="int" name="quote_id" nullable="false" comment="Quote Id"/>
+        <column xsi:type="int" name="vendor_id" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="int" name="quote_approved_qty" unsigned="true" nullable="false" comment="Quote Approved Qty"/>
+        <column xsi:type="decimal" name="quote_approved_price" nullable="false" scale="2" precision="10" comment="Quote Approved Amount" />
+        <column xsi:type="int" name="po_qty" unsigned="true" nullable="false" comment="Po Qty"/>
+        <column xsi:type="decimal" name="po_price" nullable="false" scale="2" precision="10" comment="Po Amount" />
+        <column xsi:type="decimal" name="remaining_price" nullable="false" scale="2" precision="10" default="0.00" comment="Remaining Po Price" />
+        <column xsi:type="int" name="po_customer_id" unsigned="true" nullable="false" comment="Customer Id"/>
+        <column xsi:type="int" name="status" nullable="false" comment="0=Pending 1=Confirmed 2=Declined 3=Ordered"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" on_update="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="po_id"/>
+        </constraint>
+    </table>
+    <table name="request_quote" resource="default" engine="innodb" comment="ced request po">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="product_id" nullable="false" comment="Product Id"/>
+        <column xsi:type="int" name="customer_id" nullable="false" comment="Customer Id"/>
+        <column xsi:type="varchar" name="customer_email" length="30" nullable="false" comment="Customer Email"/>
+        <column xsi:type="int" name="vendor_id" nullable="false" comment="Vendor Id"/>
+        <column xsi:type="int" name="store_id" nullable="false" comment="Store Id"/>
+        <column xsi:type="decimal" name="quote_qty"  nullable="false" scale="2" precision="10" comment="Quote Qty"/>
+        <column xsi:type="decimal" name="quote_price" nullable="false" scale="2" precision="10" comment="Quote Price" />
+        <column xsi:type="varchar" name="product_type" length="40" nullable="false" comment="Product Type"/>
+        <column xsi:type="varchar" name="name" length="40" nullable="false" comment="Product Name"/>
+        <column xsi:type="varchar" name="sku" nullable="false" comment="Product Sku"/>
+        <column xsi:type="text" name="custom_option" nullable="false" comment="Custom Option"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="quote_item" resource="default" engine="innodb" comment="Quote Item Id">
+        <column xsi:type="int" name="ced_po_id" nullable="false" comment="Ced Po Id"/>
+    </table>
+</schema>

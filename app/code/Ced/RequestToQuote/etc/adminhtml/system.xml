@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="requesttoquote" translate="label" sortOrder="100">
+            <label>CEDCOMMERCE RFQ</label>
+        </tab>
+        <section id="requesttoquote_configuration" showInStore="0" showInWebsite="1" showInDefault="1">
+            <tab>requesttoquote</tab>
+            <label>Configuration</label>
+            <resource>Ced_RequestToQuote::requesttoquote</resource>
+            <group id="active" translate="label" type="text" sortOrder="1" showInStore="0" showInWebsite="1" showInDefault="1">
+                <label>Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="custgroups" translate="label" type="multiselect" sortOrder="2" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Allowed Customer Groups to Access RFQ</label>
+                    <source_model>Ced\RequestToQuote\Model\System\Config\Customer\GroupsForRFQ</source_model>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="hidepriceandcart" translate="label" type="select" sortOrder="3" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Hide Price And Add To Cart Button For Above Customer Groups</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="hideguestcart" translate="label" type="select" sortOrder="4" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Allow Guest Customer To Add To Cart And Display Price</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="email_identity" translate="label" type="select" sortOrder="5"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Admin Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="pricemsg" translate="label" type="text" sortOrder="6" showInStore="1" showInWebsite="1" showInDefault="1">
+                    <label>Login Message for Guest Customer</label>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="admin_name_in_chat" translate="label" type="text" sortOrder="7" showInStore="1" showInWebsite="0" showInDefault="1">
+                    <label>Admin Display Name in Chat</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="admin_mail" translate="label" type="text" sortOrder="6" showInStore="1" showInWebsite="1" showInDefault="1">
+                    <label>Admin email for recieving all mails</label>
+                    <depends><field id="enable">1</field></depends>
+                </field>
+            </group>
+            <group id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                <depends>
+                    <field id="requesttoquote_configuration/active/enable">1</field>
+                </depends>
+                <label>Email Configuration</label>
+                <field id="quote_create_email" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>New Quote Create Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+               <field id="ced_requesttoquote_customer_po_creation" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Proposal Create Email</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+               </field>
+               <field id="quote_update_email_template" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Quote Update Email</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+               <field id="ced_requesttoquote_customer_quote_creation" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Quote Create Email</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+               <field id="admin_quote_submit_email_template" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Quote approve by Admin</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+               </field>
+               <field id="admin_quote_update_email_template" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Quote Update by Admin</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+               </field>
+               <field id="admin_ced_requesttoquote_customer_po_creation" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Admin proposal creation</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+               </field>
+               <field id="admin_quote_complete_email_template" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                   <label>Quote complete Email to Admin</label>
+                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+               </field>
+            </group>
+        </section>
+    </system>
+</config>

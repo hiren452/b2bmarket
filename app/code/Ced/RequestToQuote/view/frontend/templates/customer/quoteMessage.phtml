@@ -1,0 +1,33 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+/** @var $block Ced\RequestToQuote\Block\Customer\QuoteMessage */
+
+$proposalId = $block->isCurrentQuoteHasProposalItems();
+?>
+<?php if ($proposalId) :
+    $proposalUrl = $block->getUrl('requesttoquote/customer/editpo', ['poId' => $proposalId]);
+    $checkoutUrl = $block->getUrl('checkout/index/index')
+    ?>
+    <div class="messages">
+        <div class="message-warning warning message">
+            <div>
+                <?= $block->escapeHtml(__('Shopping Cart with proposal item(s) can\'t be updated. <a href="%1">Proceed to checkout</a> or <a href="%2">remove proposal</a> from cart to add new item(s).', $checkoutUrl, $proposalUrl), ['a']); ?></div>
+        </div>
+    </div>
+<?php endif; ?>

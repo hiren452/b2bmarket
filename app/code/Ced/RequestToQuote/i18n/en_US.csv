@@ -1,0 +1,247 @@
+"Login To See The Price","Login To See The Price"
+"Manage POs","Manage POs"
+"Please Enable the extension.","Please Enable the extension."
+"'Po has been successfully created. ' .","'Po has been successfully created. ' ."
+"Something went wrong while creating the PO. Kindly enter the correct data.","Something went wrong while creating the PO. Kindly enter the correct data."
+"Create Proposal for # %1","Create Proposal for # %1"
+"Something went wrong.","Something went wrong."
+"This Po no longer exist.","This Po no longer exist."
+"Quote # %1","Quote # %1"
+"This quote no longer exist.","This quote no longer exist."
+"Quote # %1 has been successfully updated","Quote # %1 has been successfully updated"
+"Error Occured, Please try again.","Error Occured, Please try again."
+"Manage Quote Requests","Manage Quote Requests"
+"You cannot delete quote item","You cannot delete quote item"
+"Please login first","Please login first"
+"Requested Quotation Cart","Requested Quotation Cart"
+"Quote cart has been updated successfully.","Quote cart has been updated successfully."
+"Quote cart has been cleared successfully.","Quote cart has been cleared successfully."
+"Something wen't wrong, Please try again.","Something wen't wrong, Please try again."
+"This Po does not belongs to you.","This Po does not belongs to you."
+"#%1 has been successfully cancelled.","#%1 has been successfully cancelled."
+"#%1 is already cancelled.","#%1 is already cancelled."
+"#%1 has already been ordered.","#%1 has already been ordered."
+"Soething wen't wrong please try again.","Soething wen't wrong please try again."
+"This po does not related to you.","This po does not related to you."
+"This po no longer exist.","This po no longer exist."
+"You are not allowed to update this po. Kindly update your PO only.","You are not allowed to update this po. Kindly update your PO only."
+"You are not allowed to update this quote. Kindly update the available quotes only.","You are not allowed to update this quote. Kindly update the available quotes only."
+"%1 has been approved successfully.","%1 has been approved successfully."
+"Po ' . . ' was successfully cancelled.","Po ' . . ' was successfully cancelled."
+"PO ' . . ' is already cancelled.","PO ' . . ' is already cancelled."
+"PO ' . . ' has already been ordered.","PO ' . . ' has already been ordered."
+"Error Occured, please try again","Error Occured, please try again"
+"My Quotes","My Quotes"
+"This quote does not belongs to you.","This quote does not belongs to you."
+"You are not allowed to update this quote. Kindly update your quotes only.","You are not allowed to update this quote. Kindly update your quotes only."
+"Quote has been updated successfully.","Quote has been updated successfully."
+"Message has been sent successfully.","Message has been sent successfully."
+"You added %1 to your shopping cart.","You added %1 to your shopping cart."
+"We can't add this item to your shopping cart right now.","We can't add this item to your shopping cart right now."
+"Out of stock","Out of stock"
+"Cant add all products, some already exist in cart .","Cant add all products, some already exist in cart ."
+"Invalid Request","Invalid Request"
+"This PO has already been ordered.","This PO has already been ordered."
+"This PO has been already cancelled.","This PO has been already cancelled."
+"You can't proceed with other customer data","You can't proceed with other customer data"
+Close,Close
+"You have no item in your quote cart.","You have no item in your quote cart."
+"You cannot delete the quote item","You cannot delete the quote item"
+"Item was deleted successfully","Item was deleted successfully"
+"You added %1 to your quote cart.","You added %1 to your quote cart."
+"Something went wrong while saving the quote. Kindly enter the state.","Something went wrong while saving the quote. Kindly enter the state."
+"Something went wrong while saving the quote. Kindly enter the city.","Something went wrong while saving the quote. Kindly enter the city."
+"Something went wrong while saving the quote. Kindly enter the correct address.","Something went wrong while saving the quote. Kindly enter the correct address."
+"Something went wrong while saving the quote. Kindly enter the correct zipcode.","Something went wrong while saving the quote. Kindly enter the correct zipcode."
+"Something went wrong while saving the quote. Kindly enter the correct data.","Something went wrong while saving the quote. Kindly enter the correct data."
+"You have no items in your quote cart.","You have no items in your quote cart."
+"You have successfully submitted your Quote.","You have successfully submitted your Quote."
+"You cannot edit the quote item","You cannot edit the quote item"
+"We can't update the shopping cart.","We can't update the shopping cart."
+"Quantity edit for the quote item is not allowed.","Quantity edit for the quote item is not allowed."
+"Unable to send mail.","Unable to send mail."
+"Mail has been sent.","Mail has been sent."
+Pending,Pending
+Confirmed,Confirmed
+Declined,Declined
+Ordered,Ordered
+Processing,Processing
+Approved,Approved
+Cancelled,Cancelled
+"PO Created","PO Created"
+"Partial PO","Partial PO"
+Complete,Complete
+"Partial PO","Partial PO"
+"Partial Complete","Partial Complete"
+Updated,Updated
+Rejected,Rejected
+"Complete Proposal","Complete Proposal"
+"Partial Proposal","Partial Proposal"
+"Awaiting Seller's Approval","Awaiting Seller's Approval"
+"Seller Updated the Quote","Seller Updated the Quote"
+"Quote Approved, Awaiting Seller's Proposal","Quote Approved, Awaiting Seller's Proposal"
+"Seller Rejected the Quote","Seller Rejected the Quote"
+"Seller Created the Proposal","Seller Created the Proposal"
+"Seller Created Partial Proposal","Seller Created Partial Proposal"
+"Quote Items Purchased","Quote Items Purchased"
+Customer,Customer
+Admin,Admin
+"Please Select","Please Select"
+" View More"," View More"
+"Quantity edit for the quote item is not allowed","Quantity edit for the quote item is not allowed"
+View,View
+Edit,Edit
+Back,Back
+Cancel,Cancel
+"Account Information","Account Information"
+"Customer Group","Customer Group"
+"Customer Email","Customer Email"
+"Customer Name","Customer Name"
+"Address Information","Address Information"
+"Customer Address Information","Customer Address Information"
+"Item(s) Information","Item(s) Information"
+Product,Product
+"Requested Unit Price","Requested Unit Price"
+"Proposed Unit Price","Proposed Unit Price"
+"Proposed Qty","Proposed Qty"
+"Row Total","Row Total"
+SKU:,SKU:
+"Proposal Created for Qty","Proposal Created for Qty"
+"Proposal Total","Proposal Total"
+"Grand Total","Grand Total"
+"Total Due","Total Due"
+Subtotal,Subtotal
+"Submit Proposal","Submit Proposal"
+"Back to Grid","Back to Grid"
+"Proposal Information","Proposal Information"
+"Proposal Date","Proposal Date"
+"Proposal Status","Proposal Status"
+"Email Id","Email Id"
+"Shipping Address","Shipping Address"
+"Telephone :","Telephone :"
+"Product ","Product "
+"Requested Price ","Requested Price "
+"Requested Qty ","Requested Qty "
+"Remaining Qty ","Remaining Qty "
+SKU,SKU
+Approve,Approve
+Reject,Reject
+"Create Proposal","Create Proposal"
+"Quote & Account Information","Quote & Account Information"
+"Quote #","Quote #"
+"Quote Date","Quote Date"
+"Current Quote Status","Current Quote Status"
+"Quote Created From","Quote Created From"
+T,T
+"Quoted Items:","Quoted Items:"
+Product:,Product:
+"Item Stock:","Item Stock:"
+"Requested Qty:","Requested Qty:"
+"Requested Unit Price:","Requested Unit Price:"
+"Proposed Qty:","Proposed Qty:"
+"Proposed Unit Price:","Proposed Unit Price:"
+"Messaging section","Messaging section"
+"Chat History","Chat History"
+Vendor,Vendor
+Message,Message
+"Quote Totals","Quote Totals"
+"Save Quote","Save Quote"
+"Shopping Cart Items","Shopping Cart Items"
+Item,Item
+"Product Name","Product Name"
+Sku,Sku
+Qty,Qty
+"Price Per Unit","Price Per Unit"
+Remove,Remove
+"See Details","See Details"
+"Delete Quote","Delete Quote"
+"Clear Quote Cart","Clear Quote Cart"
+"Update Quote Cart","Update Quote Cart"
+Summary,Summary
+Country,Country
+State,State
+State/Province,State/Province
+"Please select a region, state or province.","Please select a region, state or province."
+City,City
+Address,Address
+"Zip Code","Zip Code"
+"Contact Info","Contact Info"
+"Message or Comment","Message or Comment"
+Totals,Totals
+"Quote Total","Quote Total"
+"Submit Quote","Submit Quote"
+items,items
+"Quote Subtotal","Quote Subtotal"
+"Options Details","Options Details"
+Update,Update
+"View and Edit Quote","View and Edit Quote"
+"You have no items in your requested quotations.","You have no items in your requested quotations."
+"Click <a href=""%1"">here</a> to continue shopping.","Click <a href=""%1"">here</a> to continue shopping."
+"Proposal Items","Proposal Items"
+"Add To Cart","Add To Cart"
+Name,Name
+Price,Price
+"Back to Quote","Back to Quote"
+"* Required Fields","* Required Fields"
+Quote,Quote
+Status,Status
+"Product Details","Product Details"
+"Requested Quote","Requested Quote"
+"Proposed Quote","Proposed Quote"
+"Product SKU","Product SKU"
+"Requested Qty","Requested Qty"
+Proposal,Proposal
+"Proposal #","Proposal #"
+"Created At","Created At"
+Messages,Messages
+Send,Send
+"Quote Id ","Quote Id "
+"Quote Status","Quote Status"
+Action,Action
+"No quotes available.","No quotes available."
+"Customize and Add","Customize and Add"
+"Add to Quote","Add to Quote"
+"Try login to request a quote for the product","Try login to request a quote for the product"
+"Get Quote","Get Quote"
+"Required Quantity","Required Quantity"
+"Price Per Quantity","Price Per Quantity"
+"has been created a new Quote","has been created a new Quote"
+"Thank you","Thank you"
+%store_frontname,%store_frontname
+%subject,%subject
+%po_id,%po_id
+%customername,%customername
+"%po_price,","%po_price,"
+"%po_qty,","%po_qty,"
+"%quote_id,","%quote_id,"
+%store_frontname.,%store_frontname.
+"has been updated and having status","has been updated and having status"
+Dear,Dear
+"Your Quote has been successfully created.","Your Quote has been successfully created."
+"Your Quote id is","Your Quote id is"
+"and status is","and status is"
+"A new proposal has been created.","A new proposal has been created."
+"Your Proposal id is","Your Proposal id is"
+"If you want to accept and add the products in the cart, go for the following button","If you want to accept and add the products in the cart, go for the following button"
+%link,%link
+"Continue and Add to Cart","Continue and Add to Cart"
+"If you have any questions about your account or any other matter, please feel free to contact us.","If you have any questions about your account or any other matter, please feel free to contact us."
+%cancel_link,%cancel_link
+"Your Quote","Your Quote"
+"<?= $buttonTitle ?>","<?= $buttonTitle ?>"
+"Request For Quotation","Request For Quotation"
+"Manage Quotations","Manage Quotations"
+"Manage PO","Manage PO"
+Configuration,Configuration
+"Request For Quotation Management","Request For Quotation Management"
+"Request For Quotation Configuration Options","Request For Quotation Configuration Options"
+"Enable Module","Enable Module"
+"Allowed Customer Groups to access RFQ","Allowed Customer Groups to access RFQ"
+"Hide price and addtocart button for above customer groups","Hide price and addtocart button for above customer groups"
+"Allow guest customer to addtocart","Allow guest customer to addtocart"
+"Admin email for recieving all mails","Admin email for recieving all mails"
+"Login To see price message","Login To see price message"
+"PO Id","PO Id"
+"Quote Id","Quote Id"
+Store,Store
+"Quote Updated By","Quote Updated By"

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+        <add id="Ced_RequestToQuote::requesttoquote" title="CEDCOMMERCE RFQ" module="Ced_RequestToQuote" sortOrder="30" resource="Ced_RequestToQuote::requesttoquote" dependsOnConfig="requesttoquote_configuration/active/enable"/>
+        <add id="Ced_RequestToQuote::manage_quotes" title="Manage Quotations" module="Ced_RequestToQuote" sortOrder="10" parent="Ced_RequestToQuote::requesttoquote" action="requesttoquote/quotes/view" resource="Ced_RequestToQuote::manage_quotes" />
+        <add id="Ced_RequestToQuote::manage_po" title="Manage Proposals" module="Ced_RequestToQuote" sortOrder="15" parent="Ced_RequestToQuote::requesttoquote" action="requesttoquote/po/index" resource="Ced_RequestToQuote::manage_po"/>
+        <add id="Ced_RequestToQuote::config" title="Configuration" module="Ced_RequestToQuote" sortOrder="15" parent="Ced_RequestToQuote::requesttoquote" action="adminhtml/system_config/edit/section/requesttoquote_configuration" resource="Ced_RequestToQuote::config"/>
+    </menu>
+</config>

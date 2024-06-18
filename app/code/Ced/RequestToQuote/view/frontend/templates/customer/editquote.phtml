@@ -1,0 +1,444 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_RequestToQuote
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Ced\RequestToQuote\Block\Customer\EditQuote $block */
+?>
+<?php
+$quoteItems = $block->getCollection()->getData();
+$currentQuote = $block->getQuote();
+$chatDate = '';
+$poCollection = $block->getPoCollection();
+$currentQuoteStatus = $currentQuote->getStatus();
+$currentQuoteStatusColor = '#001f3f';
+$viewModel = $block->getData('view_model');
+$adminName = $viewModel->getAdminNameInChat();
+if(isset($currentQuoteStatus)) {
+    switch ($currentQuoteStatus) {
+        case '0': $currentQuoteStatusColor = '#001f3f';
+            break;
+        case '1': $currentQuoteStatusColor = '#ff851b';
+            break;
+        case '2': $currentQuoteStatusColor = '#0074d9';
+            break;
+        case '3': $currentQuoteStatusColor = '#ff4136';
+            break;
+        case '4': $currentQuoteStatusColor = '#2ecc40';
+            break;
+        case '5': $currentQuoteStatusColor = '#01ff70';
+            break;
+        case '6': $currentQuoteStatusColor = 'blue';
+            break;
+        case '7': $currentQuoteStatusColor = '#aaaaaa';
+            break;
+        case '8': $currentQuoteStatusColor = '#aaaaaa';
+            break;
+    }
+}
+?>
+<form class="form wishlist share form-quote-wrap"
+      action="<?= /* @noEscape */ $block->getSendUrl(); ?>"
+      id="form-validate"
+      method="POST"
+      data-hasrequired="<?= /* @noEscape */ __('* Required Fields') ?>"
+      data-mage-init='{"validation":{}}'>
+    <div class="product info detailed ced-rfq-tab-wrapper">
+        <div class="product data items" role="tablist">
+            <!-- Quote Items -->
+            <div class="data item title active" data-content-id="#quote-items" data-role="collapsible" role="tab" data-collapsible="true" aria-selected="true" aria-expanded="true" tabindex="0">
+                <a class="data switch" tabindex="-1" data-toggle="switch" href="javascript:void(0)">
+                    <?= /* @noEscape */ __('Quote') ?>
+                </a>
+            </div>
+            <div class="data item content table" id="quote-items" data-role="content" role="tabpanel" aria-hidden="true" style="display: block;">
+                <div class="ced-rfq-quote-status-wrapper">
+                    <div class="rfq-quote-status">
+                        <span><?= /* @noEscape */ __('Status');?></span> :
+                        <span class="ced-rfq-status" style="color: <?= /* @noEscape */ $currentQuoteStatusColor ?>">
+                            <?= /* @noEscape */ $block->getQuoteStatus($currentQuoteStatus);?>
+                        </span>
+                    </div>
+                    <?php if ($currentQuote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PROCESSING) { ?>
+                        <div class="rfq-quote-action">
+                            <span class="rfq-status-action ced-rfq-approve"><?= /* @noEscape */ __('Approve')?></span>
+                        </div>
+                    <?php } ?>
+                </div>
+                <div class="cart-container">
+                    <div class="cart table-wrapper">
+                        <?= /* @noEscape */ $block->getBlockHtml('formkey')?>
+                        <input type='hidden' name="quote_id" value="<?= /* @noEscape */ $currentQuote->getQuoteId();?>" >
+                        <table class="cart items data-table" id="shopping-cart-table">
+                            <thead>
+                            <tr>
+                                <th colspan="2" class="column-align">
+                                   <?= /* @noEscape */ __('Product Details') ?>
+                                </th>
+                                <th colspan="3" class="column-align">
+                                   <?= /* @noEscape */ __('Requested Quote')?>
+                                </th>
+                                <th colspan="3" class="column-align">
+                                    <?= /* @noEscape */ __('Proposed Quote')?>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="col item col-border"><span><?= /* @noEscape */ __('Product') ?></span></th>
+                                <th scope="col" class="col price col-border"><span><?= /* @noEscape */ __('SKU') ?></span></th>
+                                <th scope="col" class="col item col-border"><span><?= /* @noEscape */ __('Qty') ?></span></th>
+                                <th scope="col" class="col item col-border"><span><?= /* @noEscape */ __('Price') ?></span></th>
+                                <th scope="col" class="col item col-border"><span><span><?= /* @noEscape */ __('Subtotal') ?></span></th>
+                                <th scope="col" class="col item col-border"><span><?= /* @noEscape */ __('Qty') ?></span></th>
+                                <th scope="col" class="col item col-border"><span><?= /* @noEscape */ __('Price') ?></span></th>
+                                <th scope="col" class="col item"><span><span><?=/* @noEscape */ __('Subtotal') ?></span></th>
+                            </tr>
+                            </thead>
+                            <tbody class="cart item">
+                            <?php foreach ($quoteItems as $value) {
+                                $product_id = (isset($value['parent_id']) && $value['parent_id']) ? $value['parent_id'] : $value['product_id'];
+                                $product = $block->getProduct($product_id);
+                                ?>
+                                <tr class="item-info">
+                                    <td data-th="<?= /* @noEscape */ $block->escapeHtml(__('Product')); ?>" class="col item col-border">
+                                        <a href="<?= /* @noEscape */ $product->getProductUrl(); ?>"
+                                           title="<?= /* @noEscape */ $value['name']; ?>"
+                                           tabindex="-1"
+                                           class="product-item-photo">
+                                       <span style="width:90px;" class="product-image-container">
+                                            <span style="padding-bottom: 100%;" class="product-image-wrapper">
+                                                <img width="165" height="165" alt="<?= /* @noEscape */ $value['name']; ?>"
+                                                     src="<?= /* @noEscape */ $block->getProductImage($product); ?>"
+                                                     class="product-image-photo">
+                                            </span>
+                                        </span>
+                                        </a>
+                                        <div class="product-item-details">
+                                            <strong class="product-item-name">
+                                                <a href="<?= /* @noEscape */ $product->getProductUrl(); ?> ">
+                                                    <?= /* @noEscape */ $value['name']; ?>
+                                                </a>
+                                                <?php if ($value['product_type'] == 'configurable' && $customOption = $value['custom_option']) { ?>
+                                                    <?php $options = json_decode($customOption, true); ?>
+                                                    <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+                                                        <div class="product options" role="tablist"
+                                                             data-collapsible="true">
+                                                            <div data-role="content" class="rfq_content" role="tabpanel"
+                                                                 aria-hidden="true" style="display: block;">
+                                                                <?php foreach ($options['attributes_info'] as $option): ?>
+                                                                    <p>
+                                                                        <strong><?= /* @noEscape */ ucfirst($option['label']) ?>:</strong>
+                                                                        <?= /* @noEscape */ $option['value'] ?>
+                                                                    </p>
+                                                                <?php endforeach; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </strong>
+                                        </div>
+                                    </td>
+                                    <td class="col sku col-border" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Product SKU')); ?>">
+                                        <span data-label="Excl. Tax" class="price-excluding-tax">
+                                            <span class="cart-price">
+                                                <span><?= /* @noEscape */ $value['sku'] ?></span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="col product_qty col-border" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Requested Qty')); ?>">
+                                        <span data-label="Excl. Tax" class="price-excluding-tax">
+                                            <span class="cart-price">
+                                                <span>
+                                                    <?php if($currentQuote->getStatus() > \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PROCESSING) {?>
+                                                        <?= /* @noEscape */ $value['product_qty'];  ?>
+                                                    <?php } else {?>
+                                                        <input id="quantity_to_po[<?= /* @noEscape */ $product_id;  ?>]"
+                                                               class="qty-field-po common numbersOnly required-entry"
+                                                               name="item[<?= /* @noEscape */ $value['id'] ?>][qty]"
+                                                               value="<?= /* @noEscape */  $value['product_qty'];  ?>"
+                                                               type="number" step="1"/>
+                                                    <?php } ?>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="col price col-border" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Requested Unit Price')); ?>">
+                                        <span data-label="Excl. Tax" class="price-excluding-tax">
+                                            <span class="cart-price">
+                                                <span>
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode(); ?></span>
+                                                    <?php if($currentQuote->getStatus() > \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PROCESSING) {?>
+                                                        <?= /* @noEscape */ $value['price'];  ?>
+                                                    <?php } else { ?>
+                                                        <input id="updateprice[<?= /* @noEscape */ $product_id;  ?>]"
+                                                               class="po-price-updated common numbersOnly required-entry"
+                                                               name="item[<?= /* @noEscape */ (int) $value['id'];?>][price]"
+                                                               value="<?= /* @noEscape */ (int) $value['price']; ?>"
+                                                               type="text" step="1"/>
+                                                    <?php } ?>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="col updated_subtotal col-border" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Subtotal')); ?>">
+                                        <strong>
+                                            <span data-label="Excl. Tax" class="price-excluding-tax">
+                                                <span class="cart-price">
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode(); ?><span class="row-total common"><?= /* @noEscape */ round(($value['price'] * $value['product_qty']), 2);  ?></span></span>
+                                                </span>
+                                            </span>
+                                            <strong>
+                                    </td>
+                                    <td class="col quote_updated_qty col-border" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Proposed Qty')); ?>">
+                                        <span data-label="Excl. Tax" class="price-excluding-tax">
+                                            <span class="cart-price">
+                                                <span>
+                                                    <?php if (isset($value['quote_updated_qty']) && $value['quote_updated_qty'] > 0) {
+                                                        /* @noEscape */ echo $value['quote_updated_qty'];
+                                                    } else {
+                                                        /* @noEscape */ echo "-";
+                                                    }
+                                ?>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="col updated_price col-border" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Proposed Unit Price')); ?>">
+                                        <span data-label="Excl. Tax" class="price-excluding-tax">
+                                            <span class="cart-price">
+                                                <span>
+                                                    <?php if (isset($value['unit_price']) && $value['unit_price'] > 0) {?>
+                                                        <span><?= /* @noEscape */ $block->getCurrencyCode(); ?></span><?= /* @noEscape */ $value['unit_price'];  ?>
+                                                    <?php } else {
+                                                        /* @noEscape */ echo "-";
+                                                    }
+                                ?>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </td>
+
+                                    <td class="col updated_subtotal" data-th="<?= /* @noEscape */ $block->escapeHtml(__('Subtotal')); ?>">
+                                        <strong>
+                                            <span data-label="Excl. Tax" class="price-excluding-tax">
+                                                <span class="cart-price">
+                                                    <span><?= /* @noEscape */ $block->getCurrencyCode(); ?><span class="row-total common"><?= /* @noEscape */ round(($value['unit_price'] * $value['quote_updated_qty']), 2);  ?></span></span>
+                                                </span>
+                                            </span>
+                                            <strong>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <?php if($currentQuote->getStatus() <= \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PROCESSING) {?>
+                    <div class="actions-toolbar">
+                        <div class="primary">
+                            <button type="submit" name="update" value="update" title="<?= /* @noEscape */ __('Update') ?>" class="action submit primary">
+                                <span><?= /* @noEscape */ __('Update') ?></span>
+                            </button>
+                        </div>
+                    </div>
+                <?php }?>
+            </div>
+            <!-- Quote Items -->
+
+            <!-- Proposals -->
+            <?php if ($poCollection && (is_array($poCollection) || is_object($poCollection)) && count($poCollection) > 0) { ?>
+                <div class="data item title" data-content-id="#related-pos" data-role="collapsible" role="tab" data-collapsible="true" aria-selected="true" aria-expanded="true" tabindex="0">
+                    <a class="data switch" tabindex="-1" data-toggle="switch" href="javascript:void(0)">
+                        <?= /* @noEscape */ __('Proposal') ?>
+                    </a>
+                </div>
+                <div class="data item content ced-rfq-proposal-wrapper" id="related-pos" data-role="content" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <table class="data-table" id="my-orders-table">
+                        <thead>
+                        <tr>
+                            <th><?= /* @noEscape */ __('Proposal #');?></th>
+                            <th><?= /* @noEscape */ __('Created At');?></th>
+                            <th><?= /* @noEscape */ __('Status');?></th>
+                            <th><?= /* @noEscape */ __('View');?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach($poCollection as $po) { ?>
+                            <tr>
+                                <td><?= /* @noEscape */ $po->getPoIncrementId(); ?></td>
+                                <td><?= /* @noEscape */ $po->getCreatedAt() ? date('d/m/Y', strtotime($po->getCreatedAt())) : ''; ?></td>
+                                <td>
+                                    <?php
+                                        $status = $po->getStatus();
+                            switch ($status) {
+                                case '1':
+                                    /* @noEscape */ echo "<span style='color:red'>" . $block->getPoStatus($po->getStatus()) . "</span>";
+                                    break;
+                                case '3':
+                                    /* @noEscape */ echo "<span style='color:green'>" . $block->getPoStatus($po->getStatus()) . "</span>";
+                                    break;
+                            }
+                            ?>
+                                </td>
+                                <td>
+                                    <a class="action action-edit" href="<?= /* @noEscape */ $block->getUrl('requesttoquote/customer/editpo/', ['poId'=>$po->getId()]); ?>" >
+                                        <span><?= /* @noEscape */ __('View') ?> </span>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php } ?>
+            <!-- Proposals -->
+
+            <!-- Messages -->
+            <div class="data item title" data-content-id="#quote-messages" data-role="collapsible" role="tab" data-collapsible="true" aria-selected="true" aria-expanded="true" tabindex="0">
+                <a class="data switch" tabindex="-1" data-toggle="switch" href="javascript:void(0)">
+                    <?= /* @noEscape */  __('Messages') ?>
+                </a>
+            </div>
+            <div class="data item content" id="quote-messages" data-role="content" role="tabpanel" aria-hidden="true" style="display: none;">
+                <?php if($block->getChatHistory() && !empty($block->getChatHistory())) {?>
+                    <div class="purchaseorder-history-block" id="purchaseorder-history-block">
+                        <div class="purchaseorder-comment-wrapper">
+                            <ul class="note-list">
+                                <?php foreach ($block->getChatHistory() as $_chathistory) {?>
+                                    <?php if ($chatDate != date('Y-m-d', strtotime($_chathistory->getCreatedAt()))) {
+                                        $chatDate = date('Y-m-d', strtotime($_chathistory->getCreatedAt()));
+                                        ?>
+                                        <li class="purchaseorder-middle-chat-column">
+                                            <div class="chat-date"><?= /* @noEscape */ $chatDate; ?></div>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if ($_chathistory->getSentBy() == 'Customer') { ?>
+                                        <li class="purchaseorder-right-chat-column">
+                                            <?php if ($_chathistory->getMessage()) { ?>
+                                                <div class="purchaseorder-right-chat-column-chat"><?= /* @noEscape */ $block->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                                            <?php } ?>
+                                        </li>
+                                    <?php } elseif ($_chathistory->getSentBy() == 'Vendor') {
+                                        if ($viewModel->isModuleOutputEnabled('Ced_CsRfq')) {
+                                            $vendor = $this->helper('Ced\CsRfq\Helper\Data');
+                                            $vendorPublicName = $vendor->getSeller($currentQuote->getVendorId());
+                                            ?>
+                                                <li class="purchaseorder-left-chat-column">
+                                                    <div class="purchaseorder-left-chat-column-chat">
+                                                        <strong><?= /* @noEscape */ $vendorPublicName?></strong>
+                                                        <?php if ($_chathistory->getMessage()) { ?>
+                                                            <div class="note-list-comment"><?= /* @noEscape */ $block->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                </li>
+                                                <?php
+                                        }
+                                    } else {  ?>
+                                        <li class="purchaseorder-left-chat-column" >
+                                            <div class="purchaseorder-left-chat-column-chat">
+                                                <strong><?= /* @noEscape */ $adminName ?></strong>
+                                                <?php if ($_chathistory->getMessage()) { ?>
+                                                    <div class="note-list-comment"><?= /* @noEscape */ $block->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </li>
+                                    <?php } ?>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                        <div class="field text">
+                            <label class="label" for="chat"><span><?= /* @noEscape */ __('Message') ?></span></label>
+                            <div class="control">
+                                <textarea id="message" name="message" cols="60" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions-toolbar">
+                        <div class="primary">
+                            <button type="submit" name="send" value="send" title="<?= /* @noEscape */ __('Send') ?>" class="action submit primary">
+                                <span><?= /* @noEscape */ __('Send') ?></span>
+                            </button>
+                        </div>
+                    </div>
+                <?php }?>
+            </div>
+            <!-- Messages -->
+        </div>
+    </div>
+</form>
+<script>
+    require(['jquery'], function($) {
+        var scrollFirstTime = true;
+
+        $(".numbersOnly").keydown(function (e) {
+            /* Allow: backspace, delete, tab, escape, enter and .*/
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                /* Allow: Ctrl+A, Command+A*/
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 /*Allow: home, end, left, right, down, up*/
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 /*let it happen, don't do anything*/
+                return;
+            }
+             /*Ensure that it is a number and stop the keypress*/
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $(".numbersOnly").on('change', function () {
+            if ($(this).val() <= 0)
+                $(this).val(1);
+        });
+
+        $('.purchaseorder-comment-wrapper').scroll(function(e){
+            var dateColumn = $(this).find('.purchaseorder-middle-chat-column');
+            dateColumn.addClass('active');
+            setTimeout(function() {
+                dateColumn.removeClass('active');
+            }, 2000);
+        });
+        if ($('.purchaseorder-comment-wrapper').find('ul li:last-child').length) {
+            $('.purchaseorder-comment-wrapper').animate({scrollTop: $('.purchaseorder-comment-wrapper').find('ul li:last-child').offset().top},'fast');
+        }
+
+        $('.title').on('click', function () {
+            $('.ced-rfq-tab-wrapper').find('.title').removeClass('active');
+            $(this).addClass('active');
+            $('.ced-rfq-tab-wrapper').find('.content').hide();
+            var content_id = $(this).data('content-id');
+            $($(this).data('content-id')).show();
+            if (content_id == '#quote-messages' && scrollFirstTime && $('.purchaseorder-comment-wrapper').find('ul li:last-child').length) {
+                scrollFirstTime = false;
+                $('.purchaseorder-comment-wrapper').animate({scrollTop: $('.purchaseorder-comment-wrapper').find('ul li:last-child').offset().top},'fast');
+            }
+        });
+
+        $('.ced-rfq-approve').on('click', function () {
+            if ($('.form-quote-wrap').valid()) {
+                if ($('.form-quote-wrap').find('input[name="approve"]').length > 0) {
+                    $('.form-quote-wrap').submit();
+                } else {
+                    $('.form-quote-wrap').append("<input type='hidden' name='approve' value='1'/>");
+                    $('.form-quote-wrap').submit();
+                }
+            }
+        });
+    });
+</script>
