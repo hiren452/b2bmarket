@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Ced\CsAuction\Controller\StartBid\Start">
+        <plugin name="notify_vendor_on_bid"
+                type="OX\Auction\Plugin\NotifyBid" sortOrder="10"/>
+    </type>
+</config>

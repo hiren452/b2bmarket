@@ -1,0 +1,79 @@
+<?php
+
+$helper = $this->helper('OX\Auction\Helper\Data');
+$customerId = $block->getCustomerId();
+
+// Get the limit parameter from the request in a secure way
+$limit = $block->getRequest()->getParam('limit', 10);
+
+// Validate the limit parameter
+if (!is_numeric($limit) || $limit <= 0) {
+    $limit = 10;
+}
+
+$auction = $block->getAuction($customerId, $limit);
+$selected = $limit;
+
+if (!empty($auction)) {
+    $count = $block->getCount($customerId);
+    ?>
+
+<div class="table-wrapper orders-history customClass">
+    <table class="data table table-order-items history" id="my-orders-table">
+        <caption class="table-caption">Auction Invitations</caption>
+        <thead>
+        <tr>
+            <th scope="col" class="col product_name"><?= /* @noEscape */ __('Product Name') ?></th>
+            <th scope="col" class="col start_bid_price"><?= /* @noEscape */ __('Starting Bid Price') ?></th>
+            <th scope="col" class="col start_date"><?= /* @noEscape */ __('Start Date') ?></th>
+            <th scope="col" class="col close_date"><?= /* @noEscape */ __('End Date') ?></th>
+            <th scope="col" class="col status"><?= /* @noEscape */ __('Status') ?></th>
+            <th scope="col" class="col shared_link"><?= /* @noEscape */ __('Shared Link') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if ($auction) {
+            foreach ($auction as $data) { ?>
+            <tr>
+                <td data-th="Product" class="col product_name"><?= /* @noEscape */ $data['product_name']; ?></td>
+                <td data-th="Start Bid Price" class="col start_bid_price"><span class="price"><?= /* @noEscape */ $data['starting_price']; ?></span>
+                </td>
+                <td data-th="Start Date" class="col start_date"><span class="start_date"><?= /* @noEscape */ $data['start_time_utc'] . " UTC"; ?></span>
+                </td>
+                <td data-th="End Date" class="col end_date"><span class="end_date"><?= /* @noEscape */ $data['end_time_utc'] . " UTC"; ?></span>
+                </td>
+                <td data-th="status" class="col status"><span class="status"><?= /* @noEscape */ $data['status']; ?></span>
+                </td>
+                <td data-th="shared Link" class="col shared_link"><span class="shared_link"><a href="<?= /* @noEscape */ $helper->getProductDetail($data['product_id'])->getProductUrl(); ?>" target="_blank"><?= /* @noEscape */ $helper->getProductDetail($data['product_id'])->getProductUrl(); ?></a></span>
+                </td>
+            </tr>
+        <?php }
+            }?>
+        </tbody>
+    </table>
+</div>
+      
+<div class="pager">
+   <div class="limiter">
+      <strong class="limiter-label">Show</strong>
+      <select id="limiter" class="limiter-options" onchange="location.href = this.value">
+<?php
+//@codingStandardsIgnoreStart
+$counted = 0;
+    while ($counted < $count) {
+        $counted += 10;
+        $sel = ($selected == $counted) ? "selected" : "";
+        echo '<option value="' . $this->getUrl('*/*/*', ['limit' => $counted]) . '" ' . $sel . '>' . $counted . '</option>';
+    }
+    ?>
+    </select>
+      <span class="limiter-text">per page</span>
+   </div>
+</div>
+<?php
+} else { ?>
+    <div class="message info empty"><span><?= /* @noEscape */ __('Grid records not available.'); ?></span></div>
+<?php
+//@codingStandardsIgnoreEnd
+}
+?>

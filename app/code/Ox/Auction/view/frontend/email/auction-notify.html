@@ -1,0 +1,60 @@
+<!--@vars {
+"var product_name":"Product Name",
+"var auction_status":"Status",
+"var starting_date":"Start Date",
+"var ending_date":"End Date",
+"var product_url":"Product Url",
+"var title":"Title For Email",
+"var subject":"Subject for Email",
+"var recipient_name":"To Person Name"
+} @-->
+<!--@subject {{trans "%subject" subject=$subject}} @-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td align="left" valign="top" style="padding:20px 0 20px 0">
+
+            <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650">
+                {{depend recipient_name}}
+                <tr>
+                    <td>
+                        <h1 style="font-size:22px;font-weight:normal;line-height:22px;margin:0 0 11px 0;">{{trans "Hello, "}}{{var recipient_name}}</h1>
+                    </td>
+                </tr>
+                {{/depend}}
+                <tr>
+                    <td>
+                        <p>{{trans "%title" title=$title}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>{{trans "Product Name: "}}</td>
+                                <td>{{var product_name}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Status: "}}</td>
+                                <td>{{var auction_status}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Start Date: "}}</td>
+                                <td>{{var starting_date}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "End Date: "}}</td>
+                                <td>{{var ending_date}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Product Url: "}}</td>
+                                <td><a href="{{var product_url}}">{{trans "Click here to view product"}}</a></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{{template config_path="design/email/footer_template"}}

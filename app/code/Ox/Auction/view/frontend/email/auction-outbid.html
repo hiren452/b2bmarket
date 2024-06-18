@@ -1,0 +1,49 @@
+<!--@vars {
+"var product_name":"Product Name",
+"var product_url":"Product Url",
+"var subject":"Subject for Email",
+"var customer_name":"To customer Name"
+} @-->
+<!--@subject {{trans "%subject" subject=$subject}} @-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td align="left" valign="top" style="padding:20px 0 20px 0">
+
+            <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650">
+                <tr>
+                    <td>
+                        <h1 style="font-size:22px;font-weight:normal;line-height:22px;margin:0 0 11px 0;">{{trans "Hello, "}}{{var customer_name}}</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>{{trans "You have been out-bided by another purchaser/bidder for the below described product and bidding details. Please visit the auction to post your new bid"}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>{{trans "Product Name: "}}{{var product_name}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Product Link: "}}{{var product_url}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Your Bidding Price: "}}{{var customer_bidprice}}</td> 
+                            </tr>
+                            <tr>
+                                <td>{{trans "Latest Bidding Price: "}}{{var out_bidprice}}</td>
+                            </tr>
+                             <tr>
+                                <td>{{trans "visit the link to place your new bid: "}}{{var product_link}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{{template config_path="design/email/footer_template"}}

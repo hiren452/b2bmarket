@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="auction_notify_dates" resource="default" engine="innodb"
+           comment="Dates to send email notification every 48 hours for upcoming auction">
+        <column xsi:type="int" name="id" unsigned="false" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="smallint" name="auction_id" unsigned="true" nullable="false" identity="false" default="0"
+                comment="Auction Id"/>
+        <column xsi:type="date" name="notify_date" comment="Notify Dates for upcoming auction"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+
+    <table name="ced_auction_biddetails" resource="default" engine="innodb"
+           comment="Ced Auction Biddetails Table ">
+        <column xsi:type="int" name="auction_id" unsigned="false" nullable="false" identity="false" comment="Auction Id"/>
+    </table>
+</schema>

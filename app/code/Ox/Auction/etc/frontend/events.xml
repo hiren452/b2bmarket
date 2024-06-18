@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="ox_auction_product_create">
+        <observer name="auction_product" instance="OX\Auction\Observer\AuctionProduct"/>
+    </event>
+</config>

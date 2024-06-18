@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="auction_entry_1_standard_vendor_bid_email_template" label="Vendor bid notify template"
+              file="vendor-bid-notify.html" type="html" module="OX_Auction" area="frontend"/>
+    <template id="auction_entry_1_standard_auction_creation_notify" label="New Auction Created"
+              file="auction-create-notify.html" type="html" module="OX_Auction" area="frontend"/>
+    <template id="auction_entry_1_standard_auction_notify" label="Reminder for Auction"
+              file="auction-notify.html" type="html" module="OX_Auction" area="frontend"/>
+    <template id="auction_entry_1_standard_auction_began" label="Auction Started"
+              file="auction-began.html" type="html" module="OX_Auction" area="frontend"/>
+    <template id="auction_entry_1_standard_auction_closed" label="Auction Closed"
+              file="auction-closed.html" type="html" module="OX_Auction" area="frontend"/> 
+    <template id="auction_entry_1_standard_auction_bid_buyer" label="Auction Closed"
+              file="auction-bid.html" type="html" module="OX_Auction" area="frontend"/>           
+    <template id="auction_entry_1_standard_auction_outbid" label="Auction Closed"
+              file="auction-outbid.html" type="html" module="OX_Auction" area="frontend"/>
+    <template id="auction_entry_1_standard_auction_terminated" label="Auction Closed"
+              file="auction-terminated.html" type="html" module="OX_Auction" area="frontend"/>
+</config>

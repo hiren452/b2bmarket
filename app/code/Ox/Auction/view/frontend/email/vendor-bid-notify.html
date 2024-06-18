@@ -1,0 +1,46 @@
+<!--@vars {
+"var product_name":"Product Name",
+"var bid_amount":"Bid Amount",
+"var product_url":"Product Url",
+"var vendor_name":"Vendor Name"
+} @-->
+<!--@subject {{trans "New bid has been placed for your auction"}} @-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td align="left" valign="top" style="padding:20px 0 20px 0">
+
+            <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650">
+                <tr>
+                    <td>
+                        <h1 style="font-size:22px;font-weight:normal;line-height:22px;margin:0 0 11px 0;">{{trans "Hello, "}}{{var vendor_name}}</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>{{trans "New bid has been placed for your auction product."}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>{{trans "Product Name: "}}</td>
+                                <td>{{var product_name}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Product Url: "}}</td>
+                                <td><a href="{{var product_url}}">{{trans "Click here"}}</a></td>
+                            </tr>
+                            <tr>
+                                <td>{{trans "Bid Amount: "}}</td>
+                                <td>{{var bid_amount}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{{template config_path="design/email/footer_template"}}
