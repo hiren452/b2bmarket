@@ -1,0 +1,244 @@
+<?php
+$total = 0;
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+
+$customer = $block->getCustomer($nonCatalogRfq->getCustomerId());
+
+$customer_email = $customer->getEmail();
+$customer_name = $customer->getName();
+$isShowBuyerInfo = $_noncatRfqHelper->showBuyerInfo($nonCatalogRfq->getCustomerId());
+$rfqProducts = $this->getRfqProducts();
+
+$uomOptions =  $_noncatRfqHelper->getUomOptions($rfqProducts->getData('rfq_product_id'));
+$uomlabel = $uomOptions[$rfqProducts->getData('umo')];
+
+?>
+<form method="POST" action="<?php /* @noEscape */ echo $block->getPOUrl();?>">
+
+<div id="container" class="main-col">
+	 <section class="admin__page-section order-addresses">
+		 <div style="text-align:right;">
+		 <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?php /* @noEscape */ echo $this->getbackUrl(); ?>')">
+                        <span><?php /* @noEscape */ echo __("Back");?></span>
+         </button>
+         </div>
+         <div>&nbsp;</div>		 
+		 <div class="alert alert-warning" role="alert">
+			    <?php
+                if($this->isNegotiationAccpected()) {
+                    /* @noEscape */ echo __("Proposal  Will be created based on Accpected Negotiation");
+                } else {
+                    /* @noEscape */ echo __("Proposal  Will be created based on Buyer Quotation");
+                }
+?>
+	     </div>
+     
+        <div class="admin__page-section-title">
+            <span class="title"><?php /* @noEscape */ echo __("Buyer Information");?></span>            
+        </div>
+        <?php if($isShowBuyerInfo) {?>	
+         <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-billing-address">
+                <div class="admin__page-section-item-title">                    
+                    <span class="title"><?php /* @noEscape */ echo __("Billing Address");?>
+                    </span>
+                </div>
+                <address class="admin__page-section-item-content">
+					<?php /* @noEscape */ echo $this->getFormattedAddress($customer->getDefaultBilling());?>
+			
+                </address>                
+            </div>
+            
+            <div class="admin__page-section-item order-billing-address">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?php /* @noEscape */ echo __("Shipping Address");?>
+                    </span>
+                </div>
+                <address class="admin__page-section-item-content">
+					<?php /* @noEscape */ echo $this->getFormattedAddress($customer->getDefaultShipping());?>			
+                </address>                
+            </div>
+            
+            <div class="admin__page-section-item order-billing-address">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?php /* @noEscape */ echo __("Customer Information");?>      </span>
+                </div>
+                <address class="admin__page-section-item-content">
+					<?php /* @noEscape */ echo $customer->getName();?><br />              
+					<?php /* @noEscape */ echo $customer->getEmail();?><br />				
+                </address>                
+            </div>
+            
+            
+         </div>        
+         <?php } else {?> 
+			 
+			 <div class="admin__page-section-content">
+			   <center><i class="fa fa-lock fa-5x" aria-hidden="true"></i></center>	
+			 </div>
+	     <?php }?>
+       </section>
+       <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */ __('Item(s) Information') ?></span>
+        </div>
+        <div class="admin__table-wrapper">
+		<?php if($this->isNegotiationAccpected()) {?>	
+			<?php
+            $products =  $this->getNegotistionHistoryById($this->getAccpectedNegotiationId());
+		    ?>
+            <table class="data-table admin__table-primary edit-order-table" id ="edit-order-table">
+                <thead>
+                    <tr class="headings">                        
+                         <tr class="headings">
+								<th class="col-product"><span><?php /* @noEscape */ echo __("Product:");?></span></th>																
+								<th class="col-ordered-qty"><span><?php /* @noEscape */ echo __("Requested Qty:");?></span></th>
+								<th class="col-price"><span><?php /* @noEscape */ echo __("Requested Unit Price:");?></span></th>
+								<th class="col-price"><span><?php /* @noEscape */ echo __("Negotiated Qty:");?></span></th>
+								<th class="col-price"><span><?php /* @noEscape */ echo __("Negotiated Unit Price:");?></span></th>
+								<th class="col-total last"><span><?php /* @noEscape */ echo __("Row Total");?></span></th>
+                         </tr>
+                    </tr>
+                </thead>
+				   <tbody class="even">
+					   <?php
+		               foreach($products as $product) {
+		                   ?>
+					   <tr>
+						   <td><?php /* @noEscape */ echo $rfqProducts->getData('name');?></td>
+						   <td><del><?php /* @noEscape */ echo $product->getData('quoted_qty') . ' ' . $uomlabel; ?></del></td>
+						   <td><del>
+							   <?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')
+		                           ->currency($product->getData('quoted_price'), true, false);?>
+							   </del>
+							</td>
+						   <td><strong><?php /* @noEscape */ echo $product->getData('negotiotion_qty');?></strong></td>
+						   <td>
+							   <strong>							     
+							     <?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')
+		                           ->currency($product->getData('negotiotion_price'), true, false);?>
+						      </strong>
+						   </td>
+						   <td>
+							   <?php
+		                           $qty  = (float) $product->getData('negotiotion_qty');
+		                   $price = (float) $product->getData('negotiotion_price');
+		                   $rowTotal =  $price * $qty;
+		                   $total =+ $rowTotal;
+		                   $formatedrowTotal = $this->helper('Magento\Framework\Pricing\Helper\Data')
+		                   ->currency($rowTotal, true, false);
+		                   /* @noEscape */ echo $formatedrowTotal;
+		                   ?>
+						   </td>
+						   
+					   </tr>
+					   <?php }?>
+			        </tbody>
+		    </table>
+        <?php } else {?>		    
+			<table class="data-table admin__table-primary edit-order-table" id ="edit-order-table">
+                <thead>
+                    <tr class="headings">                        
+                         <tr class="headings">
+								<th class="col-product"><span><?php /* @noEscape */ echo __("Product:");?></span></th>																
+								<th class="col-ordered-qty"><span><?php /* @noEscape */ echo __("Requested Qty:");?></span></th>
+								<th class="col-price"><span><?php /* @noEscape */ echo __("Requested Unit Price:");?></span></th>
+								<th class="col-total last"><span><?php /* @noEscape */ echo __("Row Total");?></span></th>
+                         </tr>
+                    </tr>
+                </thead>
+				   <tbody class="even">					  					 
+						  <td><?php /* @noEscape */ echo $rfqProducts['name'];?></td>
+						  <td><?php /* @noEscape */ echo $rfqProducts['qty'] . ' ' . $uomlabel;?></td>
+						  <td>
+							  <?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')
+		                   ->currency($rfqProducts['target_price'], true, false);?>							  
+						  </td>						  
+						  <td>
+						   <?php
+		                   $qty  = (float) $rfqProducts['qty'];
+            $price = (float) $rfqProducts['target_price'];
+            $rowTotal =  $price * $qty;
+            $total =+ $rowTotal;
+            $formatedrowTotal = $this->helper('Magento\Framework\Pricing\Helper\Data')
+            ->currency($rowTotal, true, false);
+            /* @noEscape */ echo $formatedrowTotal;
+            ?>					  
+					     </td>		   
+				   </tbody>
+		    </table>
+		<?php }?>	
+		  </div>      
+		 </div>      
+      </section>
+       <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?php /* @noEscape */ echo __("Proposal Total");?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-totals">
+                <table class="data-table admin__table-secondary order-subtotal-table">
+                    <tfoot>
+                        <tr class="col-0">
+                            <td class="label">
+                                <strong><?php /* @noEscape */ echo __("Grand Total");?></strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    <span><?php ///* @noEscape */ echo $block->getCurrencyCode();?></span>
+                                    <span id="grandtotalofpo">
+										<?php ///* @noEscape */ echo number_format(($quoteData->getShippingAmount() + $total), 2, '.', '');?>
+										<?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($total, true, false);?>
+								    </span>
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr class="col-3">
+                            <td class="label">
+                                <strong><?php /* @noEscape */ echo __("Total Due");?></strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    <span><?php ///* @noEscape */ echo $block->getCurrencyCode();?></span>
+                                    <span id="totaldue"><?php ///* @noEscape */ echo number_format(($quoteData->getShippingAmount() + $total), 2, '.', '');?>
+                                    <?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($total, true, false);?>
+                                    </span>
+                                </strong>
+                            </td>                            
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr class="col-0">
+                            <td class="label"><?php /* @noEscape */ echo __("Subtotal");?></td>
+                            <td>
+                                <strong>
+                                    <span><?php ///* @noEscape */ echo $block->getCurrencyCode();?></span>
+                                    <span id="subtotalofpo"><?php ///* @noEscape */ echo number_format($total, 2, '.', '')?>
+                                    <?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($total, true, false);?>
+                                    </span>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="actions">
+					
+					<input name="negotiation_id" type="hidden" id="negotiation_id" value="<?php /* @noEscape */ echo $block->getAccpectedNegotiationId();?>" />
+					<input name="rfq_id" id="rfq_id" type="hidden" value="<?php /* @noEscape */ echo $nonCatalogRfq['rfq_id'];?>" />
+                    <button title="Submit Order" type="submit" class="action primary" data-ui-id="widget-button-0">
+                        <span><?php /* @noEscape */ echo __("Submit Proposal");?></span>
+                    </button>
+                </div>
+            </div>
+        </div>    
+    </section>                         
+</div>
+</form>
+<script type="text/javascript">
+function setLocation(url){
+	window.location.href = url;
+    }
+</script>
+
+

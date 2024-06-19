@@ -1,0 +1,219 @@
+<?php
+$pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$customer = $block->getCustomer($nonCatalogRfq->getCustomerId());
+$isShowBuyerInfo = $_noncatRfqHelper->showBuyerInfo($nonCatalogRfq->getCustomerId());
+$customer_email = $customer->getEmail();
+$customer_name = $customer->getName();
+$default_billing = $customer->getData('default_billing');
+$default_shipping = $customer->getData('default_shipping');
+$po_info = $block->getPo();
+$poData = $block->getPoData($po_info->getPoIncrementId(), $po_info->getRfqId());
+$uomOptions =  $_noncatRfqHelper->getUomOptions();
+$status = $po_info->getData('status');
+//@codingStandardsIgnoreStart
+?>
+<!--<form method="POST" action="<?php echo $block->getPOUrl();?>">-->
+<div id="container" class="main-col">
+	 
+	 <section class="admin__page-section order-addresses">
+         <div class="page-main-actions">    
+        <div class="page-actions-placeholder"></div>
+        <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+            <div class="page-actions-inner" data-title="New Invoice">
+				<?php
+                            $status = $po_info->getData('status');
+
+$title = __('Edit');
+if(isset($status)) {
+    switch ($status) {
+        /*case '0': echo "<strong>Status :</strong><span style='color:#001f3f'>".$block->getStatus($status)."</span>";
+            $title = __('Edit');
+            break;
+        case '1': echo "<strong>Status :</strong><span style='color:#ff851b'>".$block->getStatus($status)."</span>";
+            $title = __('Edit');
+            break;*/
+        case '2': echo "<strong>Status :</strong><span style='color:#0074d9'>" . $block->getStatus() . "</span>";
+            $title = __('View');
+            break;
+        case '3': echo "<strong>Status :</strong><span style='color:#ff4136'>" . $block->getStatus() . "</span>";
+            $title = __('View');
+            break;
+        case '4': echo "<strong>Status :</strong> <span style='color:#2ecc40'>" . $block->getStatus() . "</span>";
+            break;
+        case '5': echo "<strong>Status :</strong><span style='color:#01ff70'>" . $block->getStatus() . "</span>";
+            $title = __('View');
+            break;
+        case '6': echo "<strong>Status :</strong><span style='color:blue'>" . $block->getStatus() . "</span>";
+            $title = __('View');
+            break;
+        case '7': echo "<strong>Status :</strong><span style='color:#aaaaaa'>" . $block->getStatus() . "</span>";
+            $title = __('View');
+            break;
+        default:
+            echo "<strong>Status :</strong><span style='color:#001f3f'>" . $block->getStatus(\Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING) . "</span>";
+            break;
+    }
+} ?>
+                <div class="page-actions-buttons">
+					
+                    <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?php echo $block->getBackUrl(); ?>')">
+                        <span><?php echo __("Back to Grid");?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+	     
+        <div class="admin__page-section-title">
+            <span class="title"><?php echo __("Customer Information");?></span>
+        </div>        
+        <div class="admin__page-section-content">			
+		  <?php if($isShowBuyerInfo) {?>	
+			<address class="admin__page-section-item-content">
+					<strong><?php echo __("Name");?></strong> : <?php echo $customer_name;?><br />
+					<strong><?php echo __("Email");?></strong> : <?php echo $customer_email;?>
+
+                </address>
+            
+            <div class="admin__page-section-item order-billing-address">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?php echo __("Billing Address (Default) ");?></span>
+                </div>
+                <address class="admin__page-section-item-content">
+					<?php if($default_billing>0) {?>                                
+                                    <?php echo $block->getFormattedAddress($default_billing);?>
+                      <?php }?>
+                </address>
+            </div>
+            
+            <div class="admin__page-section-item order-billing-address">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?php echo __("Shipping Address (Default)");?></span>
+                </div>
+                <address class="admin__page-section-item-content">
+					<?php if($default_billing>0) {?>                                
+                                    <?php echo $block->getFormattedAddress($default_shipping);?>
+                      <?php }?>
+                </address>
+            </div>
+          <?php } else { ?>  
+			   <div style="padding:10px;"><center><i class="fa fa-lock fa-5x" aria-hidden="true"></i></center></div>
+		 <?php }?>	  
+        </div>   
+    </section>
+       <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= __('Item(s) Information')?></span>
+        </div>
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary edit-order-table" id ="edit-order-table">
+                <thead>
+                    <tr class="headings">
+                        <!--<th class="col-product"><span><?php echo __("Product"); ?></span></th>
+                        <th class="col-price"><span><?php echo __("Requested Unit Price"); ?></span></th>
+                        <th class="col-price"><span><?php echo __("Proposed Unit Price"); ?></span></th>
+                        <th class="col-ordered-qty"><span><?php echo __("Proposed Qty"); ?></span></th>
+                        <th class="col-total last"><span><?php echo __("Row Total"); ?></span></th>-->
+                        <tr>
+                           <th class="col name"><?php echo __('Name');?></th>
+                           <th class="col sku"><?php echo __('SKU');?></th>
+                           <th class="col price"><?php echo __('Price');?></th>
+                           <th class="col qty"><?php echo __('Qty');?></th>
+                           <th class="col subtotal"><?php echo __('Subtotal');?></th>
+                </tr>  
+								
+                    </tr>
+                </thead>
+				   <tbody class="even">
+				    <?php
+                    $subtotal = 0;
+foreach ($poData->getData() as $value) {
+    $remainingQty = $value['remaining_qty'];
+    $subtotal += $value['po_price'];
+
+    $custom_option = $value['custom_option'];
+    $custom_option = json_decode($custom_option);
+    $umo = $custom_option->umo;
+    $umoLabel = (isset($umo) && $umo>0) ? $uomOptions[$umo] : '';
+    ?>
+                <tr id="order-item-row-48">
+                    <td class="col name" data-th="Product Name">
+                        <strong class="product name product-item-name"><?php echo $value['name'];  ?></strong>
+                    </td>
+                    <td class="col sku" data-th="SKU"><?php echo $value['sku'];  ?></td>
+                    <td class="col price" data-th="Price">
+                        <span class="price-excluding-tax" data-label="Excl. Tax">
+                            <span class="cart-price">
+                                <span class="price"><?php echo $pricingHelper->currency($value['po_price']/$value['product_qty'], true, false);  ?></span>
+                            </span>
+                        </span>
+                    </td>
+                    <td class="col qty" data-th="Qty">
+                        <ul class="items-qty">
+                            <li class="item">
+                                <span class="content"><?php echo $value['product_qty'] . ' ' . $umoLabel;  ?></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="col subtotal" data-th="Subtotal">
+                        <span class="price-excluding-tax" data-label="Excl. Tax">
+                            <span class="cart-price">
+                                <span class="price"><?php echo $pricingHelper->currency($value['po_price'], true, false);  ?></span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                    <?php }?>
+				   </tbody>
+				 </table>
+			 </div>      
+		 </div>      
+      </section>
+       <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?php echo __("Proposal Total");?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-totals">
+                <table class="data-table admin__table-secondary order-subtotal-table">
+                    <tfoot>
+                        <tr class="col-0">
+                            <td class="label">
+                                <strong><?php echo __("Grand Total");?></strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    <span><?php //echo $block->getCurrencyCode();?></span>
+                                    <span id="grandtotalofpo"><?php echo $pricingHelper->currency($subtotal, true, false);  ?></span>
+                                </strong>
+                            </td>
+                        </tr>
+                        
+                    </tfoot>
+                    <tbody>
+                        <tr class="col-0">
+                            <td class="label"><?php echo __("Subtotal");?></td>
+                            <td>
+                                <strong>
+                                    <span><?php //echo $block->getCurrencyCode();?></span>
+                                    <span id="subtotalofpo"><?php echo $pricingHelper->currency($subtotal, true, false);  ?></span>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                 
+            </div>
+        </div>    
+    </section>                         
+</div>
+<!--</form>-->
+<?php //@codingStandardsIgnoreEnd?>
+<script type="text/javascript">
+function setLocation(url){
+	window.location.href = url;
+    }
+</script>

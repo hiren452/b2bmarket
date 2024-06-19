@@ -1,0 +1,42 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="vendorpanel" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <body>
+		<referenceBlock name="csmarketplace_vendor_navigation">
+			    <block class="Ced\CsMarketplace\Block\Link\Current" name="vendor_noncatrfq" after="vendor_rfq">
+			       <arguments>
+					   <argument name="name" xsi:type="string">vendor_noncatrfq</argument>
+					   <argument name="label" xsi:type="string">Non-Catalog RFQ</argument>
+					   <argument name="path" xsi:type="string">#</argument>
+					   <argument name="font_awesome" xsi:type="string">fa fa-upload</argument>
+			       </arguments>
+			       
+					<block class="Ced\CsMarketplace\Block\Links" name="vendor_noncatrfq_container" as="vendor_noncatrfq_container">
+						<arguments>
+							<argument name="css_class" xsi:type="string">nav nav-second-level collapse</argument>
+						</arguments>
+						
+						<block class="Ced\CsMarketplace\Block\Link\Current" name="manage_noncatquotes">
+							<arguments>
+								<argument name="name" xsi:type="string">manage_noncatquotes</argument>
+								<argument name="label" xsi:type="string">Manage RFQ</argument>
+								<argument name="path" xsi:type="string">vendornoncatrfq/rfq/index</argument>
+								<argument name="font_awesome" xsi:type="string">fa fa-angle-double-right</argument>
+								<argument name="sort_order" xsi:type="string">21</argument>
+							</arguments>
+						</block>
+												
+						<block class="Ced\CsMarketplace\Block\Link\Current" name="manage_noncatpo">
+							<arguments>
+								<argument name="name" xsi:type="string">manage_noncatpo</argument>
+								<argument name="label" xsi:type="string">Manage Proposal</argument>
+								<argument name="path" xsi:type="string">vendornoncatrfq/po/index</argument>
+								<argument name="font_awesome" xsi:type="string">fa fa-angle-double-right</argument>
+								<argument name="sort_order" xsi:type="string">11</argument>
+							</arguments>
+						</block>						
+                       
+					</block>
+			    </block>
+		</referenceBlock>
+  </body>
+</page>
+   

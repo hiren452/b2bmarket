@@ -1,0 +1,93 @@
+<?php
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$uomOptions =  $_noncatRfqHelper->getUomOptions();
+$pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+
+$poData = $block->getPoData($block->getVendorId(), $nonCatalogRfq->getRfqId());
+
+//@codingStandardsIgnoreStart
+
+?>
+<?php if(count($poData)) {?>
+<section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= __('Purchase order')?> <?php  echo '#' . $nonCatalogRfq->getData('quote_increment_id'); ?> </span>
+        </div>
+<div class="admin__table-wrapper">
+<table class="data table table-order-items" id="my-orders-table" summary="Items Ordered">            
+            <thead>
+                <tr>
+                    <th class="col name"><?php echo __('Name');?></th>
+                    <th class="col sku"><?php echo __('SKU');?></th>
+                    <th class="col price"><?php echo __('Price');?></th>
+                    <th class="col qty"><?php echo __('Qty');?></th>
+                    <th class="col subtotal"><?php echo __('Subtotal');?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $subtotal = 0;
+
+    foreach ($poData->getData() as $value) {
+        $remainingQty = $value['remaining_qty'];
+        $subtotal += $value['po_price'];
+
+        $custom_option = $value['custom_option'];
+        $custom_option = json_decode($custom_option);
+        $umo = $custom_option->umo;
+        $umoLabel = (isset($umo) && $umo>0) ? $uomOptions[$umo] : '';
+
+        ?>
+                <tr id="order-item-row-48">
+                    <td class="col name" data-th="Product Name">
+                        <strong class="product name product-item-name"><?php echo $value['name'];  ?></strong>
+                    </td>
+                    <td class="col sku" data-th="SKU"><?php echo $value['sku'];  ?></td>
+                    <td class="col price" data-th="Price">
+                        <span class="price-excluding-tax" data-label="Excl. Tax">
+                            <span class="cart-price">
+                                <span class="price"><?php echo $pricingHelper->currency($value['po_price']/$value['product_qty'], true, false);  ?></span>
+                            </span>
+                        </span>
+                    </td>
+                    <td class="col qty" data-th="Qty">
+                        <?php echo $value['product_qty'] . ' ' . $umoLabel;  ?>
+                    </td>
+                    <td class="col subtotal" data-th="Subtotal">
+                        <span class="price-excluding-tax" data-label="Excl. Tax">
+                            <span class="cart-price">
+                                <span class="price"><?php echo $pricingHelper->currency($value['po_price'], true, false);  ?></span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                    <?php }?>
+            </tbody>
+            <tfoot>
+                <tr class="subtotal">
+                    <th colspan="4" class="mark" scope="row"><?php echo __('Subtotal');?></th>
+                    <td class="amount" data-th="Subtotal">
+                        <span class="price">
+                                <?php  echo $pricingHelper->currency($subtotal, true, false);?>
+                        </span>                    
+                    </td>
+                </tr>
+                <tr class="grand_total">
+                    <th colspan="4" class="mark" scope="row">
+                        <strong><?php echo __('Grand Total')?></strong>
+                    </th>
+                    <td class="amount" data-th="Grand Total">
+                        <strong><span class="price"><?php echo $pricingHelper->currency($subtotal + $block->getShippingAmount(), true, false);?></span></strong>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+</div>
+</section>
+<?php } else {?>        
+	<section class="admin__page-section">
+	<div> <?php echo __('No Proposal found.')?></div>
+	</section>
+<?php }?>
+<?php //@codingStandardsIgnoreEnd?>

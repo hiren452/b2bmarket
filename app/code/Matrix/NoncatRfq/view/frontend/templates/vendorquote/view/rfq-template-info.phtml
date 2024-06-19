@@ -1,0 +1,98 @@
+<?php
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$rfqTypes = $_noncatRfqHelper->getRFQuoteTypes();
+$isShowBuyerInfo = $_noncatRfqHelper->showBuyerInfo($nonCatalogRfq->getCustomerId());
+$buyer = $_noncatRfqHelper->getCustomerInfo($nonCatalogRfq->getCustomerId());
+
+?>
+<?php /*
+ <!--<fieldset class="fieldset" style="padding:5px;">
+         <div class="field name required">
+            <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
+            <div class="control">
+                <input name="name" id="name" title="<?= $block->escapeHtmlAttr(__('Name')) ?>" value="<?php  echo $nonCatalogRfq->getData('name');?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+         <div class="field companyname required">
+            <label class="label" for="companyname"><span><?= $block->escapeHtml(__('Company Name')) ?></span></label>
+            <div class="control">
+                <input name="companyname" id="companyname" title="<?= $block->escapeHtmlAttr(__('Company Name')) ?>" value="<?php echo $nonCatalogRfq->getData('company_name');?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+       </div>
+ </fieldset>--> */ ?>
+<section class="admin__page-section">
+<div class="row">
+<div class="col-7">	
+	<h2><?= /* @noEscape */ __('Buyer Information') ?></h2>
+	<?php if($isShowBuyerInfo) {?>	
+	<table class="data-table">   				
+	<tbody>
+	 
+	  <tr>
+		  <td width="50%"><strong><?= $block->escapeHtml(__('Name')) ?></strong>  </td>		  
+		  <td>: <?php /* @noEscape */ echo $nonCatalogRfq->getData('name');?></td>
+	  </tr>	  
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Company Name')) ?></strong></td>		  
+		  <td>: <?php /* @noEscape */ echo $nonCatalogRfq->getData('company_name');?></td>
+	  </tr>
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Email')) ?></strong></td>		  
+		  <td>: <?php /* @noEscape */ echo $buyer->getEmail();?></td>
+	  </tr>
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Industry')) ?></strong></td>		  
+		  <td>: <?php /* @noEscape */ echo $buyer->getIndustry();?></td>
+	  </tr>
+	</tbody>    
+   </table> 
+   <?php } else {?> 	
+	   <div style="padding:10px;"><i class="fa fa-lock fa-5x" aria-hidden="true"></i></div>
+	<?php }?> 
+	<h2><?= /* @noEscape */ __('RFQ Information') ?></h2>
+  <table class="data-table" >
+	<tbody>	  
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('RFQ Ttpe')) ?></strong></td>		  
+		  <td>: <?php /* @noEscape */ echo $rfqTypes[$nonCatalogRfq->getData('rfq_type')];?></td>
+	  </tr>
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Subtotal')) ?></strong>: </td>		  
+		  <td>: 
+		  <?php /* @noEscape */ echo $this->helper('Magento\Framework\Pricing\Helper\Data')
+          ->currency($nonCatalogRfq->getData('rfq_total_price'), true, false);?>	
+		  </td>
+	  </tr>
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Total Qty')) ?></strong></td>		  
+		  <td>: <?php /* @noEscape */ echo $nonCatalogRfq->getData('rfq_total_qty');?></td>
+	  </tr>
+	   <tr>
+		  <td><strong><?= $block->escapeHtml(__('Response Date')) ?></strong></td>		  
+		  <td>: <?php /* @noEscape */ echo $nonCatalogRfq->getData('respons_date');?></td>
+	  </tr>
+	</tbody>    
+  </table>
+</div>  
+<div class="col-5">
+	<h2><?= /* @noEscape */ __('Shipping and Payment') ?></h2>
+	<?php
+        /* @noEscape */ echo $this->getLayout()
+          ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+          ->setTemplate('Matrix_NoncatRfq::vendorquote/view/shipping-payment.phtml')
+          ->toHtml();
+?>	
+</div>
+</div>  
+<br />
+<h2><?= /* @noEscape */ __('Supplier Requirements') ?></h2>	
+<div>
+	<?php
+    /* @noEscape */ echo $this->getLayout()
+      ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+      ->setTemplate('Matrix_NoncatRfq::vendorquote/view/supplier-requirements.phtml')
+      ->toHtml();
+?>		
+</div>
+</section>

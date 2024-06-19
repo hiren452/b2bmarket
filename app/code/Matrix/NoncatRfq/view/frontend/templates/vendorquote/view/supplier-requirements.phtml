@@ -1,0 +1,33 @@
+<?php
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$supplierCertifications = $_noncatRfqHelper->getCertifications();
+$supplierCertificationsSwatch = $_noncatRfqHelper->getCertificationsOptionSwatchs();
+?>
+<table class="" >
+	<tbody>
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Certifications')) ?></strong> :
+		  <?php //echo  $nonCatalogRfq->getData('vendor_certifications');?>
+
+		  <?php
+          $vendorCertificationsArr = explode(',', $nonCatalogRfq->getData('vendor_certifications'));
+$mediaUrl = $block->getMediaUrl() . 'attribute/swatch/';
+
+foreach ($vendorCertificationsArr as $index => $optionId) {
+    if (!empty($optionId)) {
+        /* @noEscape */ echo '<div style="">' . $supplierCertificationsSwatch[$optionId]['label'] . '</div>';
+        /* @noEscape */ echo '<img src="' . $mediaUrl . $supplierCertificationsSwatch[$optionId]['value'] . '" alt="' . $supplierCertificationsSwatch[$optionId]['label'] . '" style="display: inline ;width: 80px;  height: 100px;padding: 5px;border: 1px solid #2e3440; " />';
+    }
+}?>
+
+		  </td>
+	  </tr>
+	  <tr>
+		  <td><strong><?= $block->escapeHtml(__('Other requirements')) ?></strong>:
+		  <div><?php /* @noEscape */ echo $nonCatalogRfq->getData('vendor_oth_requirement');?></div>
+	  </td>
+	  </tr>
+	</tbody>
+</table>
+

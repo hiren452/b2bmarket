@@ -1,0 +1,66 @@
+<?php
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$mktSuppliers = $block->getSelectedMarketPlaceSuppliers();
+$nonmktVendorCollection = $block->getnonMarketVendorCollection();
+?>
+<h2><?= /* @noEscape */ __('Supplier') ?></h2>
+<div> 
+	   <h3><?= /* @noEscape */ __('Marketplace Supplier') ?> [ <?php /* @noEscape */ echo $mktSuppliers->getSize()?> ]</h3>   
+	   <?php if($mktSuppliers->getSize()<=0) {?>
+		   <div><?= /* @noEscape */ __('No Marketplace Supplier assigned'); ?></div>
+	    <?php } else { ?>	   
+		    <table class="data-table">
+				<thead>
+					<tr>
+						<td><?= /* @noEscape */ __('SL No') ?></td>
+						<td><?= /* @noEscape */ __('Name') ?></td>
+						<td><?= /* @noEscape */ __('Email') ?></td>						
+					</tr>
+				</thead>
+				<tbody>
+			 <?php $slNo = 0;?>
+			  <?php foreach($mktSuppliers as $supplier):?>			
+			    <tr>
+					<td> <?php /* @noEscape */ echo $slNo++; ?> </td>
+					<td> <?php /* @noEscape */ echo $supplier->getData('name'); ?> </td>
+					<td> <?php /* @noEscape */ echo  $_noncatRfqHelper->obfuscate_email($supplier->getData('email')); ?> </td>
+			    </tr>
+			    <?php endforeach;?>	
+			     </tbody>
+		   </table>
+         <?php }?>	
+</div>   
+
+<div class="row">   
+	   <h3><?= /* @noEscape */ __('Invited Non-marketplace Supplier') ?> [ <?php /* @noEscape */ echo $nonmktVendorCollection->getSize()?> ]</h3>   
+	   <?php if($nonmktVendorCollection->getSize()<=0) {?>
+		   <div><?= /* @noEscape */ __('No Invitation found'); ?></div>
+	    <?php } else { ?>	   
+		    <table class="data-table">
+				<thead>
+					<tr>
+						<td><?= /* @noEscape */ __('SL No') ?></td>
+						<td><?= /* @noEscape */ __('Name') ?></td>
+						<td><?= /* @noEscape */ __('Email') ?></td>
+						<td><?= /* @noEscape */ __('Phone') ?></td>
+						<td><?= /* @noEscape */ __('URL') ?></td>
+						<td><?= /* @noEscape */ __('Address') ?></td>
+					</tr>
+				</thead>
+				<tbody>
+			 <?php $slNo = 0;?>
+			  <?php foreach($nonmktVendorCollection as $supplier):?>			
+			    <tr>
+					<td> <?php /* @noEscape */ echo $slNo++; ?> </td>
+					<td> <?php /* @noEscape */ echo $supplier->getData('company_name'); ?> </td>
+					<td> <?php /* @noEscape */ echo  $_noncatRfqHelper->obfuscate_email($supplier->getData('email')); ?> </td>
+					<td> <?php /* @noEscape */ echo $supplier->getData('phone'); ?> </td>
+					<td> <?php /* @noEscape */ echo $supplier->getData('url'); ?> </td>
+					<td> <?php /* @noEscape */ echo $supplier->getData('address'); ?> </td>	
+			    </tr>
+			    <?php endforeach;?>	
+			     </tbody>
+		   </table>
+         <?php }?>	
+</div>   

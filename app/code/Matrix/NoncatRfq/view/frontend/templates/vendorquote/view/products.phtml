@@ -1,0 +1,31 @@
+<?php
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$productJson = $block->getNonCatalogQuoteProductJson();
+//echo $productJson;
+//@codingStandardsIgnoreStart
+?>
+<section class="admin__page-section">
+<div class="row">	
+ <div class="col-12">	 
+	 <div data-bind="scope: 'toProductList'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+     </div>
+  </div>
+</div>
+</section>
+<script type="text/x-magento-init">
+{    
+    "*": {        
+        "Magento_Ui/js/core/app": {            
+            "components": {                
+                "toProductList": {
+                    "component": "Matrix_NoncatRfq/js/view/toProductList",
+                     "data": <?php echo $productJson;?>
+                }
+                
+            }
+        }
+    }
+}
+</script>
+<?php //@codingStandardsIgnoreEnd?>

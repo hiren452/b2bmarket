@@ -1,0 +1,267 @@
+<?php /** @var \Matrix\NoncatRfq\Block\Quotes\Form $block */ ?>
+
+<?php
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$rfProduct =  $block->getRfqProducts();
+$negotistionHistory =  $block->getNegotistionHistory();
+$arr_isaccpected = [0=>'<i class="fa fa-thumbs-o-down" aria-hidden="true"> No </i>',1=>'<i class="fa fa-thumbs-o-up" aria-hidden="true"> Yes </i>'];
+$vendorId = $block->getVendorId();
+$isNegotiationAccpected = $block->isNegotiationAccpected();
+$_noncatRfqHelper = $this->helper('Matrix\NoncatalogueRfq\Helper\Data');
+//$uomOptions =  $_noncatRfqHelper->getUomOptions();
+$uomOptions =  $_noncatRfqHelper->getUomOptions($rfProduct->getData('rfq_product_id'));
+$uomlabel = $uomOptions[$rfProduct->getData('umo')];
+$pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+//@codingStandardsIgnoreStart
+?>
+<?php if($isNegotiationAccpected):?>
+    <div class="actions">
+        <button id="btn-create-proposal" name="btn-create-proposal" title="Create Proposal" type="button" class="action primary" data-ui-id="widget-button-0">
+            <span><?php echo __("Create Proposal");?></span>
+        </button>
+    </div>
+<?php endif;?>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= __('Requested Price and Qty Information')?></span>
+    </div>
+    <div class="admin__table-wrapper">
+        <table class="data-table admin__table-primary edit-order-table">
+            <thead>
+            <tr class="headings">
+                <th class="col-product"><span><?php echo __("Product"); ?></span></th>
+                <th class="col-price"><span><?php echo __("Proposed Unit Price"); ?></span></th>
+                <th class="col-ordered-qty"><span><?php echo __("Proposed Qty"); ?></span></th>
+                <th class="col-total last"><span><?php echo __("Row Total"); ?></span></th>
+            </tr>
+            <tr>
+                <td><?php echo $rfProduct->getData('name');?></td>
+                <td><?php echo $pricingHelper->currency($rfProduct->getData('target_price'), true, false);  ?></td>
+                <td><?php echo $rfProduct->getData('qty') . ' ' . $uomlabel;?></td>
+                <?php
+                $rowTotal = $rfProduct->getData('target_price') * $rfProduct->getData('qty')
+?>
+                <td><?php echo $pricingHelper->currency($rowTotal, true, false);  ?></td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= __('Negotiation Hisory')?></span>
+    </div>
+    <div class="admin__table-wrapper">
+        <table class="data-table admin__table-primary edit-order-table">
+            <thead>
+            <tr class="headings">
+                <th><span><?php echo __("Unit Price"); ?></span></th>
+                <th><span><?php echo __("Qty") . ' (' . $uomlabel . ')'; ?></span></th>
+                <th><span><?php echo __("Lead Time"); ?></span></th>
+                <th><span><?php echo __("Send By"); ?></span></th>
+                <th><span><?php echo __("Comment"); ?></span></th>
+                <th><span><?php echo __("Accepected"); ?></span></th>
+                <th><span><?php echo __("Date"); ?></span></th>
+                <th><span><?php echo __("Action"); ?></span></th>
+            </tr>
+            <?php if($negotistionHistory->getSize()):?>
+                <?php foreach($negotistionHistory as $nhistory):?>
+                    <tr>
+                        <td>
+                            <span style="padding:2px;text-decoration: line-through"><?php echo $pricingHelper->currency($rfProduct->getData('target_price'), true, false);?></span> |
+                            <span style="padding:2px;"><?php echo $pricingHelper->currency($nhistory->getData('negotiotion_price'), true, false);?></span>
+                        </td>
+                        <td>
+                            <span style="padding:2px;text-decoration: line-through"><?php echo $rfProduct->getData('qty');?></span> |
+                            <span style="padding:2px;"><?php echo $nhistory->getData('negotiotion_qty');?></span>
+                        </td>
+                        <td>
+                            <span style="padding:2px;text-decoration: line-through"> <?php echo $nonCatalogRfq->getData('lead_time');?> </span> |
+                            <span style="padding:2px;"><?php echo $nhistory->getData('negotiotion_leadtime');?></span>
+
+                        </td>
+                        <td>
+                            <?php if($nhistory->getData('sent_by') == 'Customer'): ?>
+                                <span style="background:#a3be8c;color:#ffffff;padding:5px;" class="purchaseorder-right-chat-column-chat">Customer</span>
+                            <?php elseif ($nhistory->getData('sent_by') == 'Vendor') :?>
+                                <span style="background:#b48ead;color:#ffffff;padding:5px;" class="note-list-comment">You</span>
+                            <?php endif;?>
+                        </td>
+                        <td width="10%"><span ><a data-comment="<?php echo $nhistory->getData('message');?>" title="<?php echo __("more"); ?>" class="comment-readmore" href="javascript:void(0);"> ..Read</a></span></td>
+                        <td><?php echo $arr_isaccpected[$nhistory->getData('is_accpected')];?></td>
+                        <td><?php echo $nhistory->getData('created_at');?></td>
+                        <td>
+                            <?php
+            $nhistoryArray = $nhistory->toArray();
+                    $nhistoryArray['quoted_price'] = $pricingHelper->currency($nhistoryArray['quoted_price'], true, false);
+                    $nhistoryArray['negotiotion_price'] = $pricingHelper->currency($nhistoryArray['negotiotion_price'], true, false);
+                    $nhistoryArray['quoted_qty'] = $nhistoryArray['quoted_qty'] . ' ' . $uomlabel;
+                    $nhistoryArray['negotiotion_qty'] = $nhistoryArray['negotiotion_qty'] . ' ' . $uomlabel;
+                    $nhistoryArray['message'] = '';
+
+                    ?>
+                            <?php if($nhistory->getData('sent_by') == 'Customer' && $isNegotiationAccpected==false): ?>
+
+                                <a title="<?= __('Accepet the Negotiation.')?>" data-negotiotion='<?php echo json_encode($nhistoryArray);?>' href="javascript:void(0)" class="accpect-negotiation"><?= __('Accepet')?></a>
+
+                            <?php else:?>
+                                N/A
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <?php if(! $isNegotiationAccpected):?>
+        <div class="actions">
+            <button id="btn-add-negotiate" name="btn-add-negotiate" title="Add Negotiate" type="button" class="action primary" data-ui-id="widget-button-0">
+                <span><?php echo __("Add Negotiate");?></span>
+            </button>
+        </div>
+    <?php endif;?>
+</section>
+<div id="negotiateaccepet-popup" style="display:none;">
+    <form class="form noncatrfq"
+          action="<?php /* @escapeNotVerified */ echo $block->getNegotiateAccepetPostUrl(); ?>"
+          name="form-negotiatecccept"
+          id="form-negotiatecccept"
+          method="POST"
+          data-hasrequired="<?php /* @escapeNotVerified */ //echo __('* Required Fields')?>"
+          data-mage-init='{"validation":{}}'>
+        <input type="hidden" name="accepected_negotiate_id" id="accepected_negotiate_id" value="" />
+    </form>
+</div>
+<div id="negotiate-popup" style="display:none;">
+    <form class="form noncatrfq"
+          action="<?php /* @escapeNotVerified */ echo $block->getNegotiatePostUrl(); ?>"
+          name="form-negotiate"
+          id="form-negotiate"
+          method="POST"
+          data-hasrequired="<?php /* @escapeNotVerified */ //echo __('* Required Fields')?>"
+          data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset" style="padding:5px;">
+
+            <table class="data-table admin__table-primary edit-order-table" id ="negotistion-table">
+                <tbody class="even ced-rfq-po-row">
+
+                <tr>
+                    <td><?php /* @escapeNotVerified */ echo __('Proposed Qty') ?></td>
+                    <td><strong><?php echo $rfProduct->getData('qty');?></strong></td>
+                    <td><?php /* @escapeNotVerified */ echo __('Your Qty') ?></td>
+                    <td>
+                        <input type="text" name="negotiotion_qty" id="negotiotion_qty" data-validate="{required:true,'validate-number':true}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php /* @escapeNotVerified */ echo __('Proposed Unit Pric') ?></td>
+                    <td><strong><?php echo $rfProduct->getData('target_price');?></strong></td>
+                    <td><?php /* @escapeNotVerified */ echo __('Your Unit Price') ?></td>
+                    <td>
+                        <input type="text" name="negotiotion_price" id="negotiotion_price" data-validate="{required:true,'validate-number':true}}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php /* @escapeNotVerifescapeNotVerifiedied */ echo __('Lead Time') ?></td>
+                    <td><strong><?php echo $nonCatalogRfq->getData('lead_time') . ' ' . __('Days');?> </strong></td>
+                    <td><?php /* @escapeNotVerified */ echo __('Your Lead Time') ?> </td>
+                    <td>
+                        <input type="text" name="lead_time" id="lead_time" data-validate="{required:true,'validate-number':true}"/>	<span><?php echo __('Days');?></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?php /* @escapeNotVerified */ echo __('Comments') ?></td>
+                    <td>
+                        <textarea id="message" name="message" cols="60" rows="3" data-validate=""></textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="actions-toolbar">
+                <input type="hidden" name="negotiate_id" id="negotiate_id" value="" />
+                <div class="primary">
+                    <button type="submit" id="send" name="send" value="send" title="<?php /* @escapeNotVerified */ echo __('Send') ?>" class="action submit primary">
+                        <span><?php /* @escapeNotVerified */ echo __('Send') ?></span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<?php //@codingStandardsIgnoreEnd?>
+<script type="text/javascript">
+    require(["jquery", "Magento_Ui/js/modal/modal", "Magento_Ui/js/modal/confirm"],function($, modal, confirmation) {
+        $(document).ready(function() {
+
+            $("#btn-create-proposal").click(function(){
+                window.location.href=<?php /* @noEscape */ echo "'" . $block->getPoCreateUrl() . "'"; ?>;
+            });
+            $(".comment-readmore").click(function(){
+                var comment =    $(this).data("comment");
+                alert(comment);
+            });
+
+
+            $(".accpect-negotiation").click(function(){
+                var negotiotion = $(this).data("negotiotion");
+                $("#accepected_negotiate_id").val(negotiotion.id);
+
+                //$.mage.__('Some content')
+                var content = "<table style='width:100%'>";
+                content +="<tr><td colspan='2' style='background-color:#ffa94d;color:#ffffff;padding:5px;text-align:center;border-bottom:1px solid #ffffff;'><strong>Customer Quote Rate & QTY</strong></td><td style='background-color:#FF7538;color:#ffffff;padding:5px;text-align:center;border-bottom:1px solid #ffffff;' colspan='2'><strong>Your Rate & QTY</strong></td></tr>";
+                content += "<tr><td style='background-color:#ffa94d;color:#ffffff;padding:5px'>Quoted Qty</td><td style='background-color:#ffa94d;color:#ffffff;text-decoration: line-through;padding:5px'>"+negotiotion.quoted_qty+"</td><td style='background-color:#FF7538;color:#ffffff;'>QTY</td><td style='background-color:#FF7538;color:#ffffff;'><strong>"+negotiotion.negotiotion_qty+"</strong></td></tr>";
+                content += "<tr><td style='background-color:#ffa94d;color:#ffffff;padding:5px'>Quoted Price</td><td style='background-color:#ffa94d;color:#ffffff;text-decoration: line-through;padding:5px'>"+negotiotion.quoted_price+"</td><td style='background-color:#FF7538;color:#ffffff;'>Price</td><td style='background-color:#FF7538;color:#ffffff;'><strong>"+negotiotion.negotiotion_price+"</strong></td></tr>";
+                content += "<tr><td style='background-color:#ffa94d;color:#ffffff;padding:5px'> Quoted Lead Time</td><td style='background-color:#ffa94d;color:#ffffff;text-decoration: line-through;padding:5px'> "+negotiotion.quoted_leadtime+" Days</td><td style='background-color:#FF7538;color:#ffffff;'>Lead Time</td><td style='background-color:#FF7538;color:#ffffff;'> <strong>"+negotiotion.negotiotion_leadtime+" Days</strong></td></tr>";
+
+
+                content +="</table>";
+                confirmation({
+                    title: $.mage.__('Accept Customer Negotiated Rate'),
+                    content: content,
+                    actions: {
+                        confirm: function(){
+                            //AccepectNegotiation(negotiotion);
+
+                            $("#form-negotiatecccept").submit();
+
+                        },
+                        cancel: function(){},
+                        always: function(){}
+                    }
+                });
+            });
+
+
+
+            $("#btn-add-negotiate").click(function(){
+                var options = {
+                    type: 'popup',
+                    responsive: true,
+                    innerScroll: false,
+                    title:'Add Negotiate',
+                    buttons: [{
+                        text: 'Close',
+                        class: 'supplier-modal1',
+                        click: function () {
+                            this.closeModal();
+                        }
+                    }]
+                };
+                var popup = modal(options, $('#negotiate-popup'));
+                $("#negotiate-popup").modal("openModal");
+
+            });
+
+        });
+
+    });
+</script>

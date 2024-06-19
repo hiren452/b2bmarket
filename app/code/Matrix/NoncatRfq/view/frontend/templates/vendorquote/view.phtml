@@ -1,0 +1,149 @@
+<?php
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+//@codingStandardsIgnoreStart
+?>
+ <div class="page-main-actions">    
+        <div class="page-actions-placeholder"></div>
+        <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+            <div class="page-actions-inner" data-title="New Invoice">
+				<?php
+                            $status = $nonCatalogRfq->getStatus();
+
+$title = __('Edit');
+if(isset($status)) {
+    switch ($status) {
+        /*case '0': echo "<strong>Status :</strong><span style='color:#001f3f'>".$block->getStatus($status)."</span>";
+            $title = __('Edit');
+            break;
+        case '1': echo "<strong>Status :</strong><span style='color:#ff851b'>".$block->getStatus($status)."</span>";
+            $title = __('Edit');
+            break;*/
+        case '2': echo "<strong>Status :</strong><span style='color:#0074d9'>" . $block->getStatus($status) . "</span>";
+            $title = __('View');
+            break;
+        case '3': echo "<span style='color:#ff4136'>" . $block->getStatus($status) . "</span>";
+            $title = __('View');
+            break;
+        case '4': echo "<strong>Status :</strong> <span style='color:#2ecc40'>" . $block->getStatus($status) . "</span>";
+            break;
+        case '5': echo "<strong>Status :</strong><span style='color:#01ff70'>" . $block->getStatus($status) . "</span>";
+            $title = __('View');
+            break;
+        case '6': echo "<strong>Status :</strong><span style='color:blue'>" . $block->getStatus($status) . "</span>";
+            $title = __('View');
+            break;
+        case '7': echo "<strong>Status :</strong><span style='color:#aaaaaa'>" . $block->getStatus($status) . "</span>";
+            $title = __('View');
+            break;
+        default:
+            echo "<strong>Status :</strong><span style='color:#001f3f'>" . $block->getStatus(\Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING) . "</span>";
+            break;
+    }
+} ?>
+                <div class="page-actions-buttons">
+					
+                    <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?php echo $block->getBackUrl(); ?>')">
+                        <span><?php echo __("Back to Grid");?></span>
+                    </button>
+                    <!--<?php if ($nonCatalogRfq->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING
+                    ) {
+                        ?>
+                        <button id="approve" title="Approve" type="button" class="action-default scalable approve">
+                            <span><?php echo __("Approve");?></span>
+                        </button>
+                        <button id="reject" title="Reject" type="button" class="action-default scalable reject">
+                            <span><?php echo __("Reject");?></span>
+                        </button>
+                    <?php }?>-->
+                    <?php if ($nonCatalogRfq->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING ||
+                                  $nonCatalogRfq->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_APPROVED ||
+                                  $nonCatalogRfq->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PARTIAL_PO
+                    ) { ?>
+                        <button id="reset" title="Create Proposal" type="button" class="action-default scalable reset" onclick="setLocation('<?php echo $block->getPoCreateUrl(); ?>')">
+                            <span><?php echo __("Create Proposal");?></span>
+                        </button>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page:main-container" class="page-columns">
+        <div class="admin__old">
+            <div id="container" class="main-col">
+              <ul class="nav nav-tabs" id="noncatrfqtabs">      
+                <li><a data-toggle="tab"  href="#rfqinfo"><?= __('Non-catalog Quote') ?></a></li>
+                <li><a data-toggle="tab" href="#rfqproposal"><?= __('Proposal') ?></a></li>
+                <li><a data-toggle="tab" href="#rfqnegotiation"><?= __('Negotiation') ?></a></li>
+                <li><a data-toggle="tab" href="#rfqmessage"><?= __('Messages') ?></a></li>
+             </ul>
+              <div class="tab-content">
+              <div id="rfqinfo" class="tab-pane">				
+			   <?php
+                echo $this->getLayout()
+                  ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+                  ->setTemplate('Matrix_NoncatRfq::vendorquote/view/rfq-template-info.phtml')
+                  ->toHtml();
+?>
+		<br />
+		<h2><?= __('Additional Information') ?></h2>
+		<section class="admin__page-section">
+		<?php
+        echo $this->getLayout()
+          ->createBlock('Matrix\NoncatalogRfqfrom\Block\Additional')
+          ->setTemplate('Matrix_NoncatalogRfqfrom::view/additional.phtml')
+          ->toHtml();?>
+        </section>  
+		<h2><?= __('Product Basic Information') ?></h2>
+		<?php
+        echo $this->getLayout()
+          ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+          ->setTemplate('Matrix_NoncatRfq::vendorquote/view/products.phtml')
+          ->toHtml();
+?>
+    </div>
+   <div id="rfqproposal" class="tab-pane">
+	   <?php
+echo $this->getLayout()
+  ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+  ->setTemplate('Matrix_NoncatRfq::vendorquote/view/proposal.phtml')
+  ->toHtml();
+?>
+   </div>
+   <div id="rfqnegotiation" class="tab-pane">
+	   <?php
+echo $this->getLayout()
+  ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+  ->setTemplate('Matrix_NoncatRfq::vendorquote/view/negotiation.phtml')
+  ->toHtml();
+?>
+   </div>    
+   <div id="rfqmessage" class="tab-pane">
+	   <?php
+echo $this->getLayout()
+  ->createBlock('Matrix\NoncatRfq\Block\Quotes\Form')
+  ->setTemplate('Matrix_NoncatRfq::vendorquote/view/messages.phtml')
+  ->toHtml();
+?>
+   </div>
+</div>    
+
+</div>
+</div>
+</div>
+<?php //@codingStandardsIgnoreEnd?>
+<script type="text/javascript">
+    require(["jquery", "Magento_Ui/js/modal/modal"],function($) {
+        $(document).ready(function() {
+			$('.nav-tabs a[href="#rfqinfo"]').trigger('click');
+			//$('#noncatrfqtabs a:first').tab('show') ;
+			
+		});
+	});
+</script>	
+<script type="text/javascript">
+function setLocation(url){
+	window.location.href = url;
+    }
+</script>
+
+

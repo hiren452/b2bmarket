@@ -1,0 +1,86 @@
+<?php
+$currentQuote = $block->getQuote();
+$chatDate = '';
+//@codingStandardsIgnoreStart
+?>
+<form class="form noncatalogrfq"
+      action="<?php echo $block->getSendUrl();?>"
+      id="noncatalogrfq"
+      name="noncatalogrfq"
+      method="post"
+      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+     data-mage-init='{"validation":{}}'>
+<div>
+                
+                    <div class="purchaseorder-history-block" id="purchaseorder-history-block">
+						<?php if($block->getChatHistory() && !empty($block->getChatHistory())) {?>
+                        <div class="purchaseorder-comment-wrapper">
+                            <ul class="note-list">
+                                <?php foreach ($block->getChatHistory() as $_chathistory) {?>
+                                    <?php if ($chatDate != date('Y-m-d', strtotime($_chathistory->getCreatedAt()))) {
+                                        $chatDate = date('Y-m-d', strtotime($_chathistory->getCreatedAt()));
+                                        ?>
+                                        <li class="purchaseorder-middle-chat-column">
+                                            <div class="chat-date"><?= $chatDate; ?></div>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if($_chathistory->getSentBy() == 'Customer') { ?>
+                                        <li class="purchaseorder-right-chat-column">
+											<strong> [<?= __('Customer')?>]</strong>
+                                            <?php if ($_chathistory->getMessage()) { ?>
+                                                <div class="purchaseorder-right-chat-column-chat"><?php echo $this->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                                            <?php } ?>
+                                        </li>
+                                    <?php } elseif ($_chathistory->getSentBy() == 'Vendor') {?>
+                                        <li class="purchaseorder-left-chat-column">
+                                            <div class="purchaseorder-left-chat-column-chat">
+                                                <strong><?= __('Vendor')?></strong>
+                                                <?php if ($_chathistory->getMessage()) { ?>
+                                                    <div class="note-list-comment"><?php echo $this->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </li>
+                                    <?php } else {  ?>
+                                        <li class="purchaseorder-left-chat-column" >
+                                            <div class="purchaseorder-left-chat-column-chat">
+                                                <strong><?= __('Admin')?></strong>
+                                                <?php if ($_chathistory->getMessage()) { ?>
+                                                    <div class="note-list-comment"><?php echo $this->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </li>
+                                    <?php } ?>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                        <?php } else {
+                            echo "<div>No Chat</div>";
+                        }?>
+                        <div class="field text">
+                            <label class="label" for="chat"><span><?php /* @escapeNotVerified */ echo __('Message') ?></span></label>
+                            <div class="control">
+                                <textarea id="message" name="message" cols="60" rows="3"  data-validate="{required:true,'restrictUrl':true,'restrictEmail':true}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions-toolbar">
+                        <div class="primary">
+                            <button type="submit" name="send" value="send" title="<?php /* @escapeNotVerified */ echo __('Send') ?>" class="action submit primary">
+                                <span><?php /* @escapeNotVerified */ echo __('Send') ?></span>
+                            </button>
+                        </div>
+                    </div>
+                
+            </div>
+</form>            
+<?php //@codingStandardsIgnoreEnd?>
+<script type="text/x-magento-init">
+	   {
+		   "*": {
+			   "noUrlValidation": {},
+			   "noEmailValidation":{}
+		   }
+	   }
+</script>
