@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">    
+  <menu>
+          <!--<add id="Matrix_RfqEntity::grid" title="NonCatalog RFQ Entity" module="Matrix_RfqEntity" sortOrder="110" parent="Matrix_NoncatalogueRfq::noncatalogrfq" resource="Matrix_RfqForm::grid" />
+    	  <add id="Matrix_RfqEntity::manage_grid" title="Manage NonCatalog RFQ Entity" module="Matrix_RfqEntity" sortOrder="10" parent="Matrix_RfqEntity::grid" resource="Matrix_RfqEntity::manage_grid"  action="noncatalogrfqentity/rfq/index" />    	-->
+    	  <add id="Matrix_RfqEntity::manage_grid" title="Manage NonCatalog RFQ Entity" module="Matrix_RfqEntity" sortOrder="10" parent="Magento_Backend::content" resource="Matrix_RfqEntity::manage_grid"  action="noncatalogrfqentity/rfqentity/index" />    	  
+    </menu>    
+</config>

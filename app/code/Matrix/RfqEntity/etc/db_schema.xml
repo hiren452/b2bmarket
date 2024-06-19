@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="rfq_entity" resource="default" engine="innodb" comment="Entity Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="smallint" name="entity_type_id" unsigned="true" nullable="false" default="0" comment="Entity Type ID"/>
+        <column xsi:type="smallint" name="attribute_set_id" unsigned="true" nullable="false" default="0" comment="Attribute Set ID"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" on_update="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" on_update="true" default="CURRENT_TIMESTAMP" comment="Update Time"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign" referenceId="MX_RFQENTITY_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID" table="rfq_entity" column="entity_type_id" referenceTable="eav_entity_type" referenceColumn="entity_type_id" onDelete="CASCADE" onUpdate="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="MX_RFQENTITY_ATTRIBUTE_SET_ID_EAV_ATTRIBUTE_SET_ATTRIBUTE_SET_ID" table="rfq_entity" column="attribute_set_id" referenceTable="eav_attribute_set" referenceColumn="attribute_set_id" onDelete="CASCADE" onUpdate="CASCADE"/>
+
+        <index referenceId="IDX_ENTITY_TYPE_ID">
+            <column name="entity_type_id"/>
+        </index>
+        <index referenceId="IDX_ATTRIBUTE_SET_ID">
+            <column name="attribute_set_id"/>
+        </index>
+    </table>
+</schema>
