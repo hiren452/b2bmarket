@@ -1,0 +1,296 @@
+<?php
+/** @var \Matrix\RegistrationForm\ViewModel\AdditionalInfoViewModel $viewModel
+ * @var Magento\Framework\Escaper $escaper
+ * @var Ced\RegistrationForm\Block\Additional $block
+ */
+$viewModel = $block->getData('additionalInfoViewModel');
+$configData = false;
+//@codingStandardsIgnoreStart
+?>
+
+<form class="form form-edit-account form-edit-account-1" action="<?= $block->getUrl("regform/additional/save/") ?>" method="post" id="form-validate" enctype="multipart/form-data" data-mage-init='{"validation":{}}'>
+    <fieldset class="fieldset" data-hasrequired="<?=  __('* Required Fields') ?>">
+
+        <?php
+        $attributeCollection = $block->attrCollection();
+$dependable = $block->getDependableAttribute();
+foreach ($attributeCollection as $Data) {
+    if ($Data['attribute_code'] == "buyer_dun_bradstreet" && !$viewModel->checkCountryUSOrNot()) {
+        continue;
+    }
+    $inputValue = $block->getCustomerInputData($Data);
+    $usedInForms = $block->getForms($Data['attribute_id']);
+    $isShowOnEditPage = in_array('customer_account_edit', $usedInForms);?>
+            <?php
+    // $table = $viewModel->getAttributeVaue($Data['attribute_id'], 'attribute_id');
+    if ($Data['is_dependent'] == 1) {
+        continue;
+    }
+    if (in_array($Data['attribute_code'], $dependable)) {
+        continue;
+    }
+    $Data['is_required'] = 1;
+    $Data['form_value'] = $inputValue;
+    if ($Data['is_required'] == 1 && $Data['frontend_label'] != 'Company registration ID/Code' && $Data['frontend_label'] != 'Dun & Bradstreet Number' && $Data['attribute_code'] != 'buyer_employee_id_letter' && $Data['attribute_code'] != 'buyer_wholesale_seller_permit') { ?>
+                <?php if ($viewModel->checkIsCountryUs($Data['attribute_code'])): ?>
+                <div class="field confirmation required">
+                    <label class="label" for="password-confirmation">
+                        <span><?= $Data['frontend_label']?></span></label>
+                    <div class="control">
+                        <?= $childBlock = $block->getChildBlock('customer_additional_form_elements')->setAttributeData($Data)->toHtml(); ?>
+                    </div>
+                </div>
+                    <?php endif; ?>
+            <?php } else {?>
+                <div class="field ">
+                    <label class="label" for="password">
+                    <span><?= $Data['frontend_label'] ?></span></label>
+                    <div class="control">
+                        <?= $childBlock = $block->getChildBlock('customer_additional_form_elements')->setAttributeData($Data)->toHtml(); ?>
+                    </div>
+                </div>
+            <?php     }
+}
+$flag1 = false;
+$flag2 = false;
+foreach ($attributeCollection as $Data) {
+    // $table =  $viewModel->getAttributeVaue($Data['attribute_id'], 'attribute_id');
+    if (in_array($Data['attribute_code'], $dependable) && $Data['is_dependent'] == 1) {
+        $flag1 = true;
+        $usedInForms = $block->getForms($Data['attribute_id']);
+        $isShowOnEditPage = in_array('customer_account_edit', $usedInForms);?>
+                <?php $inputValue = '';
+        $inputValue = $block->getCustomerInputData($Data);
+        ?>
+                <div  class="field<?php if ($Data['is_required'] == 1) {
+                    echo " confirmation required";
+                }?> ">
+                    <label class="label" for="password-confirmation" >
+                        <span><?= $Data['frontend_label']?></span></label>
+                    <div class="control">
+                        <?php
+                        if ($Data['frontend_input'] == "select") {?>
+                            <select class="input-select <?= 'dependable_field_' . $Data['attribute_code']; ?>" name="<?= $Data['attribute_code'] ?>" id="<?= $Data['attribute_code'] ?>" value="<?= $inputValue; ?>">
+                                <?php
+                                $options = $viewModel->getAttributeOptions($Data['attribute_code']);
+                            ?>
+                                <?php foreach ($options as $instance) { ?>
+                                    <option value="<?= $instance['value'] ?>" <?= $inputValue==$instance['value'] ? 'selected' : ''; ?>> <?= $instance['label'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <?php
+                        }
+        ?>
+                    </div>
+                </div>
+                <?php
+    }
+    if ($Data['is_dependent'] == 1 && $flag1 == true) {
+        $usedInForms = $block->getForms($Data['attribute_id']);
+        $isShowOnEditPage = in_array('customer_account_edit', $usedInForms);?>
+                <?php $inputValue = '';
+        $inputValue = $block->getCustomerInputData($Data);
+        $models = $viewModel->getAttributeVaue($v['attribute_code'], 'attribute_code');
+        ?>
+                <div  class="field<?php if ($Data['is_required'] == 1) {
+                    echo __("confirmation required");
+                }?> ">
+                    <span class ="<?= 'dependable' . $models['dependable_attribute'] ?>"><B><?= $Data['frontend_label']?></B></span></label>
+                    <div class="control">
+                        <?php if ($Data['frontend_input'] != "select") {
+                            echo $childBlock = $block->getChildBlock('customer_additional_form_elements')->setAttributeData($Data)->toHtml();
+                        } else { ?>
+                            <?php if ($Data['frontend_input'] == "select") {?>
+                                <select class="input-select" name="<?= $Data['attribute_code'] ?>" id="<?= 'dependable' . $models['dependable_attribute'] ?>" value="<?= $inputValue; ?>" >
+                                    <select class="input-select <?= 'dependable_field_' . $Data['attribute_code']; ?>" name="<?= $Data['attribute_code'] ?>" name="<?= $Data['attribute_code'] ?>" id="<?= $Data['attribute_code'] ?>" onchange="myFunction(this.id)">
+                                        <?php $options = $viewModel->getAttributeOptions($Data['attribute_code']); ?>
+                                        <?php foreach ($options as $instance) { ?>
+                                            <option value="<?= $instance['value'] ?>"> <?= $instance['label'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </select>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                </div>
+            <?php }
+
+    if (in_array($Data['attribute_code'], $dependable) && $Data['is_dependent'] != 1) {
+        $flag2 = true;
+        $usedInForms = $block->getForms($Data['attribute_id']);
+        $isShowOnEditPage = in_array('customer_account_edit', $usedInForms);?>
+                <?php $inputValue = '';
+        $inputValue = $block->getCustomerInputData($Data);
+        ?>
+                <div  class="field<?php if ($Data['is_required'] == 1) {
+                    echo " confirmation required";
+                }?> ">
+                    <label class="label" for="password-confirmation">
+                        <span><?= $Data['frontend_label']?></span></label>
+                    <div class="control">
+                        <?php
+                        if ($Data['frontend_input'] == "select") {?>
+                            <select class="input-select <?= 'dependable_field_' . $Data['attribute_code']; ?>" name="<?= $Data['attribute_code'] ?>" name="<?= $Data['attribute_code'] ?>" id="<?= $Data['attribute_code'] ?>" onchange="myFunction(this.id)">
+                                <?php $options = $viewModel->getAttributeOptions($Data['attribute_code']); ?>
+                                <?php foreach ($options as $instance) { ?>
+                                    <option value="<?= $instance['value'] ?>" <?= $inputValue==$instance['value'] ? 'selected' : ''; ?>> <?= $instance['label'] ?></option>
+                                <?php } ?>
+                            </select>
+                        <?php }
+                        ?>
+                    </div>
+                </div>
+            <?php     }
+    if ($Data['is_dependent'] == 1 && $flag2 == true) {
+        $usedInForms = $block->getForms($Data['attribute_id']);
+        $isShowOnEditPage = in_array('customer_account_edit', $usedInForms);?>
+                <?php $inputValue = '';
+        $inputValue = $block->getCustomerInputData($Data);
+        $models =  $viewModel->getAttributeVaue($v['attribute_code'], 'attribute_code');
+        ?>
+                <div  class="field<?php if ($Data['is_required'] == 1) {
+                    echo __("confirmation required");
+                }?> ">
+                    <span class ="<?= 'dependable' . $models['dependable_attribute'] ?>"><B><?= $Data['frontend_label']?></B></span></label>
+                    <div class="control">
+                        <?= $childBlock = $block->getChildBlock('customer_additional_form_elements')->setAttributeData($Data)->toHtml(); ?>
+                    </div>
+                </div>
+            <?php }
+    }
+
+$att_code = [];
+$datas = $viewModel->getFilterAttributeVaue();
+foreach ($datas as $data) {
+    $att_code[] = $data['attribute_code'];
+} ?>
+
+        <div class="field confirmation required">
+            <label class="label" for="company">
+                <span><?= __("Company") ?></span></label>
+            <div class="control">
+                 <input type="text"  name="company" id="company" class="input-text" required="true"
+                        value="<?= $viewModel->getCompany() ?>"
+                     <?=$escaper->escapeHtml($viewModel->disableCompanyTelephoneField());?>>
+            </div>
+        </div>
+        <div class="field confirmation required">
+            <label class="label" for="telephone">
+                <span><?= __("Telephone") ?></span></label>
+            <div class="control">
+                <input type="text"  name="telephone" class="input-text" required="true"
+                       value="<?= $viewModel->getTelephone() ?>"
+                    <?=$escaper->escapeHtml($viewModel->disableCompanyTelephoneField());?>>
+            </div>
+        </div>
+        <?php if ($viewModel->disableCompanyTelephoneField() == 'disabled'): ?>
+            <span><?= __("Please fill in the address to enable the company and telephone field.") ?></span>
+        <br>
+            <span><?= __("Please visit here to") ?>  <a style="text-decoration: underline" href="<?=$block->getUrl('customer/address/new');?>"><?= __("Create New Address") ?></a></span>
+        <?php endif;?>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" class="action save primary" title="Save"><span><?= __("Save & Update")?></span></button>
+            </div>
+            <div class="primary">
+                <button type="button" class="action save primary next_btn" title="Save"><span><?= __("Save & Next")?></span></button>
+            </div>
+        </div>
+
+    </fieldset>
+    <script>
+        require([
+            "jquery",
+            "mage/calendar",
+        ], function ($){
+            $.each($('.date_type'),function(i,v){
+                $(this).calendar({showsTime: false,dateFormat: "yy/m/d"});
+            });
+            $("input[name='buyer_registration_document_upload").on('change', function () {
+                $("input[name='buyer_registration_document_upload']").valid();
+            });
+
+            //==== hide multi step field ==
+            if(document.getElementById('buyer_multi_step')){
+                $('#buyer_multi_step').parent('div').parent('div').hide();
+            }
+            $(document).ready(function(){
+                $(document).on('click', '.next_btn', function(){
+                    $('#form-validate').append('<input type="hidden" name="next_step" value="1" />');
+                    $('#form-validate').submit();
+                });
+                /*if ($('input[name="buyer_company_website"]')){
+                    $('input[name="buyer_company_website"]').removeClass('required-entry');
+                    $('input[name="buyer_company_website"]').parents('.field, .confirmation, .required').removeClass('required');
+                }*/
+
+            });
+
+        });
+
+        require(["jquery"], function ($) {
+            $( document ).ready(function() {
+                var myJavascriptData = <?= json_encode($att_code) ?>;
+                var arrayLength = myJavascriptData.length;
+                for (var i = 0; i < arrayLength; i++)
+                {
+                    var depend = 'dependable'+myJavascriptData[i];
+                    var field = 0;
+
+                    if( document.getElementById(myJavascriptData[i]) )
+                        var field  = document.getElementById(myJavascriptData[i]).value;
+
+                    if(field !=1)
+                    {
+                        $("#"+depend).css('display','none');
+                        $("."+depend).css('display','none');
+                    }
+                    else
+                    {
+                        $("#"+depend).css('display','');
+                        $("."+depend).css('display','');
+                    }
+                }
+            });
+        });
+
+        require([
+            "jquery",
+            "jquery/jquery-ui-timepicker-addon",
+        ], function ($){
+            $.each($('.timepicker'),function(i,v){
+                $(this).timepicker({showsTime: true});
+            });
+        });
+
+
+
+        function myFunction(x) {
+            require(["jquery"], function ($) {
+                var depend = 'dependable'+x;
+
+                var field  = document.getElementById(x).value;
+
+                if(field !=1)
+                {
+                    $("#"+depend).css('display','none');
+                    $("."+depend).css('display','none');
+                }
+                else{
+                    $("#"+depend).css('display','');
+                    $("."+depend).css('display','');
+                }
+            }); }
+    </script>
+
+<script type="text/x-magento-init">
+        {
+            "*": {
+                "Matrix_RegistrationForm/js/trigger-required-validation": {
+                "config" : "<?=$escaper->escapeJs(json_encode($configData));?>"
+                },
+                "multistepregvalidationrule": {}
+            }
+        }
+</script>
+<?php //@codingStandardsIgnoreEnd?>

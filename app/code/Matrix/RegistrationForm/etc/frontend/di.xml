@@ -1,0 +1,12 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <type name="Ced\RegistrationForm\Block\Additional">
+        <plugin name="Matrix_RegistrationForm_Plugin" type="Matrix\RegistrationForm\Plugin\Block\AdditionalPlugin" />
+    </type>
+    <type name="Magento\Customer\Controller\Account\EditPost">
+        <plugin name="quick_link_edit_profile_redirect" disabled="true"/>
+        <plugin name="save-company-indefaultaddress"
+                type="Matrix\RegistrationForm\Plugin\EditPost"
+                sortOrder="10"/>
+    </type>
+    <preference for="\Ced\RegistrationForm\Block\Additional" type="\Matrix\RegistrationForm\Block\Additional"/>
+</config>

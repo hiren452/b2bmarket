@@ -1,0 +1,64 @@
+<?php
+//@codingStandardsIgnoreStart
+$Data = $block->getAttributeData();
+$viewModel = $block->getData('additionalInfoViewModel');
+if (!isset($Data['attribute_code_id'])) {
+    $Data['attribute_code_id'] = $Data['attribute_code'];
+} ?>
+<?php if ($Data['frontend_input'] == "textarea") { ?>
+    <textarea rows="" cols="" class="<?= ($Data['is_required']==1) ? 'required-entry' : '' ?> textarea" name="<?= $Data['attribute_code'] ?>" id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>">
+        <?= $Data['form_value'] ?>
+    </textarea>
+<?php } elseif ($Data['frontend_input'] == "text") { ?>
+    <?php
+        $class = "input-text";
+    if (isset($Data['is_time']) && $Data['is_time']) {
+        $class .= " timepicker";
+    }
+    if ($Data['attribute_code'] == 'buyer_company_code' || $Data['attribute_code'] == 'buyer_dun_bradstreet') { ?>
+            <input type="text"  name="<?= $Data['attribute_code'] ?>" class="<?= $class ?>" value="<?= $Data['form_value']; ?>" id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>">
+ <?php } else {
+
+     ?>
+    <input type="text"  name="<?= $Data['attribute_code'] ?>" class="<?= ($Data['is_required']==1) ? 'required-entry' : '' ?> <?= $class ?>" value="<?= $Data['form_value']; ?>" id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>">
+<?php } ?>
+<?php } elseif ($Data['frontend_input'] == "date") { ?>
+    <input type="text"  name="<?= $Data['attribute_code'] ?>" class="date_type <?= ($Data['is_required']==1) ? 'required-entry' : '' ?>" value="<?= $Data['form_value']; ?>" id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>">
+<?php } elseif ($Data['frontend_input'] == "select") { ?>
+    <?php
+     $options = $viewModel->getAttributeOptions($Data['attribute_code']);
+    ?>
+    <select class="<?= ($Data['is_required']==1) ? 'required-entry' : '' ?> <?=($Data['is_dependent']) ? "dependable_field_" . $Data['attribute_code'] : "" ?> input-select" name="<?= $Data['attribute_code'] ?>" id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>">
+        <?php foreach ($options as $instance) { ?>
+            <option value="<?= $instance['value'] ?>" <?= $Data['form_value'] == $instance['value'] ? 'selected' : ''; ?>> <?= $instance['label'] ?></option>
+        <?php } ?>
+    </select>
+<?php } elseif ($Data['frontend_input'] == "multiselect") { ?>
+    <?php
+        $options = $viewModel->getAttributeOptions($Data['attribute_code']);
+    ?>
+    <select class="<?= ($Data['is_required']==1) ? 'required-entry' : '' ?> input-select" name="<?= $Data['attribute_code'] ?>[]" multiple id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>">
+        <?php foreach ($options as $instance) { ?>
+            <option value="<?= $instance['value'] ?>" <?= $Data['form_value'] == $instance['value'] ? 'selected' : ''; ?>> <?= $instance['label'] ?></option>
+        <?php } ?>
+    </select>
+<?php } elseif ($Data['frontend_input'] == "file") { ?>
+        <input type="file" name="<?= $Data['attribute_code'] ?>" <?= $Data['fieldAttribute'] ?> id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>" />
+    <?php if (isset($Data['file_note']) && $Data['file_note']) { ?>
+        <span class="note">
+            <span>
+                <?= __($Data['file_note'])?>
+            </span>
+        </span>
+        <br>
+    <?php } else { ?>
+        <span class="note"><span><?= $Data['note'] ?></span></span><br>
+    <?php } ?>
+    <span class="input-given"><?= $Data['form_value']; ?></span>
+<?php } elseif ($Data['frontend_input'] == "image") { ?>
+    <input type="file" name="<?= $Data['attribute_code'] ?>" id="<?=($Data['is_dependent']) ? "dependable" . $Data['dependable_attribute'] : $Data['attribute_code_id'] ?>"/>
+    <span class="note"><span><?= $Data['note'] ?></span></span><br>
+    <div id="images_container">
+        <?= $Data['form_value'] ?>
+    </div>
+<?php } //@codingStandardsIgnoreEnd?>
