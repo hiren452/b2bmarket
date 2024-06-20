@@ -1,0 +1,98 @@
+<!--@subject {{trans " %store_name New Non-Catalog Quote Request" store_name=$store.frontend_name}} @-->
+{{template config_path="design/email/header_template"}}
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+	   <tr>
+		   <td>
+			    <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">					
+				  <tr>
+					   <td valign="top">
+                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">
+								Hello <strong>{{var company_name}} </strong><br />
+								{{var  name}}  {{trans 'has created a new Quote Request for you. Your details are given below'}}.</p>
+                        </td>                        
+                  </tr>	  
+                  <tr>
+					  <td style="text-align:center">						  
+						  <a href="{{var rfqdetailurl}}" target="_blank">{{trans "View Non-Catalog RFQ"}}</a>
+					  </td>
+                  </tr>   
+                  <tr>
+					  <td>
+						  <table>
+							  <tr>
+								  <td>Your Company Name</td><td> :  {{var vendor_companyname}} </td>
+							  </tr>
+							  <tr>
+								  <td>Your  Email</td><td> : {{var vendor_email}} </td>
+							  </tr>
+							  <tr>
+								  <td> Your Phone Number </td><td>  :  {{var vendor_phone}}</td>
+							  </tr>
+							  <tr>
+								  <td>Your Address</td><td> :  {{var vendor_address}} </td>
+						      </tr>
+						  </table>						   
+					  </td>
+                  </tr> 
+                  <tr>
+					  <td>
+                         <a style="background-color: #000000;border: none;color: white;padding: 8px 12px;text-align: center;font-size: 12px;margin: 4px 2px;  opacity: 0.6;transition: 0.3s;display: inline-block;text-decoration: none;cursor: pointer;hover {opacity: 1}" href='{{trans "%link" link=$link }}'>
+							 {{trans 'Register Now'}}
+						  </a> at {{trans "%store_frontname" store_frontname=$store.getFrontendName() }} and process your Quote.						  
+					  </td>
+                  </tr>
+			    </table>
+		   </td>
+	   </tr>
+        <tr>
+            <td align="center" valign="top" style="padding:20px 0 20px 0">
+                <!-- [ header starts here] -->
+                <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                    <!-- [ middle starts here] -->
+                    <tr>
+                        <td valign="top">
+                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">
+								<strong>{{trans 'Quote Request'}}</strong>
+                            </p>
+                        </td>                        
+                    </tr>
+                    <tr>
+						<td>
+							<table>
+							  <tr>
+								  <td><strong>Quote ID#</strong></td><td> :  {{var quote_id}} </td>
+							  </tr>
+							  <tr>
+								  <td><strong>Company</strong></td><td> : {{var company_name}} </td>
+							  </tr>
+							  <tr>
+								  <td><strong> Customer Name</strong> </td><td>  :  {{var name}}</td>
+							  </tr>							  
+						  </table>						   
+						</td>
+                    </tr>
+                    <tr>
+						<td>
+							<table class="email-items">
+								{{layout handle="email_rfqproduct_list" items=$items area="frontend"}}
+						   </table>
+						</td>
+                    </tr>
+                    <tr>
+						<td>
+							<table class="email-items">
+						      {{layout handle="email_noncatalogrfq_totals" items=$totals area="frontend"}}
+						     </table>
+						</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">{{trans 'Thank you'}}, <strong>{{trans "%store_frontname" store_frontname=$store.getFrontendName() }}</strong></p></center></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+{{template config_path="design/email/footer_template"}}

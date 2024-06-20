@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="matrix_noncatalog_rfq" resource="default" engine="innodb" comment="Non RFQ Table">
+        <column xsi:type="varchar" name="category_ids" nullable="true" length="200"  comment="Level Two Category Id"/>
+        <column xsi:type="int" name="rfq_id" nullable="false" identity="true" unsigned="true" primary="true" comment="Non RFQ Id"/>
+        <column xsi:type="int" name="customer_id" nullable="false" unsigned="true" comment="Customer Id"/>
+        <column xsi:type="text" name="customer_email" nullable="false" length="1000" comment="Customer Email"/>
+        <column xsi:type="int" name="is_approve" nullable="true" unsigned="true" default="1" comment="Is Customer Approved"/>
+        <column xsi:type="text" name="quote_increment_id" nullable="true" length="100" comment="Quote Increment Id"/>
+        <column xsi:type="text" name="name" nullable="false" length="100" comment="RFQ Template Name"/>
+        <column xsi:type="text" name="company_name" nullable="false" length="100" comment="Company Name"/>
+        <column xsi:type="int" name="rfq_type" nullable="false" comment="1 => Public, 2 => Private"/>
+        <column xsi:type="text" name="vendor_certifications" nullable="false" length="1000" comment="Vendor Certifications"/>
+        <column xsi:type="text" name="vendor_oth_requirement" nullable="false" length="1000" comment="Vendor Other Requirements"/>
+        <column xsi:type="int" name="rfq_total_qty" nullable="false" comment="Quoted Qty"/>
+        <column xsi:type="decimal" name="rfq_total_price" nullable="false" precision="10" scale="2" unsigned="true" comment="Quoted Price"/>
+        <column xsi:type="int" name="rfq_updated_qty" nullable="false" comment="Quote Updated Qty"/>
+        <column xsi:type="decimal" name="rfq_updated_price" nullable="false" precision="10" scale="2" unsigned="true" comment="Quote Updated Price"/>
+        <column xsi:type="text" name="shipment_method" nullable="false" length="10" comment="Shipping Method"/>
+        <column xsi:type="text" name="shipment_destination" nullable="false" length="10" comment="Shipping Destination"/>
+        <column xsi:type="int" name="lead_time" nullable="false" comment="Lead Time in Days"/>
+        <column xsi:type="text" name="payment_terms" nullable="false" length="10" comment="Payment Terms"/>
+        <column xsi:type="int" name="status" nullable="false" comment="0-Created and Pending, 1-Processing, 2-Approved, 3-Cancelled, 4-PO Created, 5-Partial PO, 6-Ordered, 7-Complete"/>
+        <column xsi:type="timestamp" name="respons_date" nullable="false" default="CURRENT_TIMESTAMP" comment="Response Date"/>
+        <column xsi:type="int" name="is_feespaid" nullable="false" comment="0=>Not Paid, 1=>Paid"/>
+        <column xsi:type="int" name="is_publicmail_send" nullable="true" default="0" comment="0=>Mail Not Sent, 1=>Mail Sent"/>
+        <column xsi:type="decimal" name="rfq_fees" nullable="false" precision="10" scale="2" unsigned="true" comment="Fees Amount"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+    </table>
+
+    <table name="matrix_noncatalog_rfq_products" resource="default" engine="innodb" comment="Non RFQ Products Table">
+        <column xsi:type="varchar" name="umo_other" nullable="true" length="100" comment="Level Two Category Id"/>
+        <column xsi:type="int" name="rfq_product_id" nullable="false" identity="true" unsigned="true" primary="true" comment="Non RFQ Product Id"/>
+        <column xsi:type="int" name="rfq_id" nullable="false" unsigned="true" comment="Non RFQ Id"/>
+        <column xsi:type="text" name="name" nullable="false" length="200" comment="Product Name"/>
+        <column xsi:type="text" name="desc" nullable="false" length="1000" comment="Product Description"/>
+        <column xsi:type="text" name="item_identifier" nullable="false" length="150" comment="Product Identifier"/>
+        <column xsi:type="int" name="qty" nullable="false" comment="Qty"/>
+        <column xsi:type="decimal" name="target_price" nullable="false" precision="10" scale="2" comment="Target Price"/>
+        <column xsi:type="text" name="category_ids" nullable="false" length="100" comment="Category Id"/>
+        <column xsi:type="text" name="umo" nullable="false" length="50" comment="Unit of Measure"/>
+        <column xsi:type="text" name="sourcingpurpose" nullable="false" length="1000" comment="Sourcing Purpose"/>
+        <column xsi:type="text" name="uploads" nullable="false" length="1000" comment="Uploads"/>
+        <column xsi:type="text" name="tradeterms" nullable="true" length="500" comment="Trade Terms"/>
+        <column xsi:type="text" name="memo" nullable="false" length="1000" comment="Memo"/>
+        <column xsi:type="text" name="payment_instruct" nullable="false" length="1000" comment="Payment Instructions"/>
+    </table>
+
+    <table name="matrix_noncatalog_rfq_vendor" resource="default" engine="innodb" comment="Non RFQ Vendor Table">
+        <column xsi:type="int" name="rfq_vendor_id" nullable="false" identity="true" unsigned="true" primary="true" comment="Non RFQ Vendor Id"/>
+        <column xsi:type="int" name="rfq_id" nullable="false" unsigned="true" comment="Non RFQ Id"/>
+        <column xsi:type="int" name="vendor_type" nullable="false" comment="1=>Selected Marketplace Suppliers, 2=>Non Marketplace Suppliers, 99=>Entire Marketplace"/>
+        <column xsi:type="int" name="vendor_id" nullable="false" comment="Marketplace Vendor Id"/>
+        <column xsi:type="int" name="is_emailsend" nullable="false" comment="Is Email Sent"/>
+    </table>
+
+    <table name="matrix_noncatalog_rfq_vendor_nonmarket" resource="default" engine="innodb" comment="Non RFQ Vendor Non-Market Table">
+        <column xsi:type="int" name="rfq_nonmarketvendor_id" nullable="false" identity="true" unsigned="true" primary="true" comment="Non RFQ Vendor Id"/>
+        <column xsi:type="int" name="rfq_id" nullable="false" unsigned="true" comment="Non RFQ Id"/>
+        <column xsi:type="int" name="vendor_id" nullable="true" comment="Marketplace Vendor Id"/>
+        <column xsi:type="text" name="company_name" nullable="false" length="100" comment="Company Name"/>
+        <column xsi:type="text" name="email" nullable="false" length="100" comment="Email"/>
+        <column xsi:type="text" name="phone" nullable="false" length="100" comment="Phone"/>
+        <column xsi:type="text" name="url" nullable="true" length="200" comment="URL"/>
+        <column xsi:type="text" name="address" nullable="false" length="800" comment="Address"/>
+        <column xsi:type="int" name="is_emailsend" nullable="false" comment="Is Email Sent"/>
+        <column xsi:type="int" name="is_signup" nullable="false" comment="Is Sign Up"/>
+    </table>
+
+    <table name="matrix_category_to_uom" resource="default" engine="innodb" comment="Category to UOM Table">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" primary="true" comment="ID"/>
+        <column xsi:type="int" name="category_id" nullable="false" unsigned="true" comment="Category ID"/>
+        <column xsi:type="text" name="uom_options" nullable="true" length="1000" comment="UOM Option IDs"/>
+    </table>
+
+    <table name="matrix_noncatalog_rfq_message" resource="default" engine="innodb" comment="Non RFQ Message Table">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" primary="true" comment="Id"/>
+        <column xsi:type="int" name="quote_id" nullable="false" unsigned="true" comment="Quote Id"/>
+        <column xsi:type="int" name="customer_id" nullable="false" unsigned="true" comment="Customer Id"/>
+        <column xsi:type="text" name="vendor_id" nullable="false" length="100" comment="Vendor Id"/>
+        <column xsi:type="int" name="message_type" nullable="false" comment="Message Type"/>
+        <column xsi:type="text" name="message" nullable="false" length="10000" comment="Message"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+    </table>
+
+    <table name="matrix_noncatalog_rfq_message_attach" resource="default" engine="innodb" comment="Non RFQ Message Attachment Table">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" primary="true" comment="Id"/>
+        <column xsi:type="int" name="message_id" nullable="false" unsigned="true" comment="Message Id"/>
+        <column xsi:type="text" name="file_name" nullable="false" length="1000" comment="File Name"/>
+    </table>
+
+    <table name="matrix_po_requisition" resource="default" engine="innodb" comment="Purchase Order Requisition Table">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" primary="true" comment="Id"/>
+        <column xsi:type="int" name="customer_id" nullable="false" unsigned="true" comment="Customer Id"/>
+        <column xsi:type="int" name="quote_id" nullable="true" unsigned="true" comment="Quote Id"/>
+        <column xsi:type="text" name="po_number" nullable="false" length="1000" comment="PO Number"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="CURRENT_TIMESTAMP" comment="Updated At"/>
+    </table>
+
+    <table name="matrix_po_requisition_items" resource="default" engine="innodb" comment="Purchase Order Requisition Items Table">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" primary="true" comment="Id"/>
+        <column xsi:type="int" name="po_requisition_id" nullable="false" unsigned="true" comment="PO Requisition Id"/>
+        <column xsi:type="int" name="vendor_id" nullable="false" unsigned="true" comment="Vendor Id"/>
+        <column xsi:type="text" name="name" nullable="false" length="1000" comment="Name"/>
+        <column xsi:type="text" name="sku" nullable="false" length="100" comment="SKU"/>
+        <column xsi:type="int" name="qty" nullable="false" comment="Quantity"/>
+        <column xsi:type="decimal" name="price" nullable="false" precision="10" scale="2" comment="Price"/>
+    </table>
+    <table name="quote_item" resource="default" engine="innodb" comment="Quote Item Table">
+        <column xsi:type="int" name="matrix_po_id" nullable="true" comment="Matrix Po Id"/>
+        <column xsi:type="int" name="matrix_rfqfees_id" nullable="true" comment="Matrix RFQ Fees Id"/>
+    </table>
+</schema>

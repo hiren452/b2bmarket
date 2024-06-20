@@ -1,0 +1,112 @@
+<?php
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+?>
+<div class="dashboard-custom-container">
+<div class="row">
+     <div class="col-sm-6"> 
+          <h2 style="font-size: 24px;margin: 0 auto 15px;">Non-catalog Quote #: <?= /* @noEscape */  $nonCatalogRfq->getData('quote_increment_id');?>  </h2>
+     </div>
+     <div class="col-sm-6" style="text-align:right;"> 
+          <button type="button" name="btn-efqlistback" id="btn-efqlistback" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Back')) ?>" class="btn btn-primary primary" style="line-height:14px;"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Back')) ?></span></button>          
+     </div>
+</div>
+<div id="noncatalg-rfqiewloader" data-mage-init='{"loader": { "icon": "<?= /* @noEscape */  $block->getMediaUrl()?>porto/web/images/loader-1.gif"}}'>
+ <div style="visibility:hidden" id="noncatrfqview-content">
+<div class="row">
+   <div class="col-sm-12"> 
+       <strong>Status</strong> : <?= /* @noEscape */  $block->getQuoteStatus($nonCatalogRfq->getStatus());?>
+   </div>
+</div>
+<div class="product data items"
+     data-mage-init='{"mage/tabs": {"openedState": "active", "animate": {"duration": 100},   "disabledState": "disabled"}}'>
+    <div class="item title" data-role="collapsible">
+        <a class="switch" data-toggle="trigger" href="#tab-rfqredit"><?= /* @noEscape */  __('Non-catalog Quote') ?></a>
+    </div>
+    <div id="tab-rfqredit" class="item content  editquote-tab" data-role="content">                
+        <?= /* @noEscape */   $block->getLayout()
+          ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+          ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/rfq-template-info.phtml')
+          ->toHtml();
+?>
+        <br />
+        <h2><?= /* @noEscape */  __('Product Basic Information') ?></h2>
+        <?= /* @noEscape */   $block->getLayout()
+  ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+  ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/products.phtml')
+  ->toHtml();
+?>
+        <br />
+        <h2><?= /* @noEscape */  __('Additional Information') ?></h2>
+        <?= /* @noEscape */  $block->getChildHtml('noncatalogrfq_additional_info'); ?>
+        
+        
+    </div>
+    <div class="item title" data-role="collapsible">
+        <a class="switch" data-toggle="trigger" href="#tab-rfqsupplier"><?= /* @noEscape */  __('Supplier') ?></a>
+    </div>
+    <div id="tab-rfqsupplier" class="item content  editquote-tab" data-role="content">
+        <?= /* @noEscape */   $block->getLayout()
+  ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+  ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/rfq-supplier.phtml')
+  ->toHtml();
+?>
+    </div>
+    
+    <div class="item title" data-role="collapsible">
+        <a class="switch" data-toggle="trigger" href="#tab-rfqrroposal"><?= /* @noEscape */  __('Negotiation') ?></a>
+    </div>
+    <div id="tab-rfqrroposal" class="item content  editquote-tab" data-role="content">
+        <?= /* @noEscape */   $block->getLayout()
+  ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+  ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/negotiation.phtml')
+  ->toHtml();
+?>
+    </div>
+    
+    
+    <div class="item title" data-role="collapsible">
+        <a class="switch" data-toggle="trigger" href="#tab-rfqrroposal"><?= /* @noEscape */  __('Proposal') ?></a>
+    </div>
+    <div id="tab-rfqrroposal" class="item content  editquote-tab" data-role="content">
+        <?= /* @noEscape */   $block->getLayout()
+  ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+  ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/proposal.phtml')
+  ->toHtml();
+?>
+    </div>
+
+    <div class="item title" data-role="collapsible">
+        <a class="switch" data-toggle="trigger" href="#tab-rfqmessages"> <?= /* @noEscape */  __('Messages') ?></a>
+    </div>
+    <div id="tab-rfqmessages" class="item content  editquote-tab" data-role="content">        
+        <?= /* @noEscape */   $block->getLayout()
+  ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+  ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/message.phtml')
+  ->toHtml();?>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    require([
+    "jquery",
+    "loader",
+    "domReady!"
+    ],function($,) {        
+        $('#noncatalg-rfqiewloader').trigger('processStart');
+        $(function(){
+            //$('#noncatalg-rfqiewloader').hide();
+            $("#noncatrfqview-content").css("visibility", "visible");            
+        });
+        
+        var backUrl = <?= /* @noEscape */  '"' . $block->getBaseUrl() . 'noncatalogrequesttoquote/customer/quotes/' . '"';?>;                
+        $("#btn-efqlistback").click(function(){
+            window.location.href = backUrl;
+        })
+    });
+</script>    
+
+
+
+

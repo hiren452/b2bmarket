@@ -1,0 +1,63 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$unsavedData =  $block->getUnsavedData();
+?>
+<div id="customercheck"></div>
+<div id="rfqpostpopup-modal" style="display:none">
+    <div class="row">
+       <div class="col-sm-12">
+           <h3><?= $escaper->escapeHtml(__('RFQ  Information')) ?></h3>
+           <?=  $block->getLayout()->createBlock('Matrix\NoncatalogueRfq\Block\Popupform')
+            ->setTemplate('Matrix_NoncatalogueRfq::rfq/mini-form.phtml')
+            ->toHtml();?>
+      </div>
+   </div>
+</div>
+<script>
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal',
+             'mage/url'
+        ],
+        function(
+            $,
+            modal,
+            urlBuilder
+        ) {
+
+           jQuery(document).ready( function() {
+             $('#btn-rfqpopupcanel').click(function () {
+                  $("#rfqpostpopup-modal").modal("closeModal");
+                  return false;
+              });
+           });
+
+
+           $('.noncatalorrfq-popuppost').click(function(event){ 
+            <?php if ($_noncatRfqHelper->isLoggedIn()):?>
+               var rfqdetailURL = urlBuilder.build('noncatalogrequesttoquote/index/index');
+               window.location.href=rfqdetailURL;
+            <?php else:?>
+
+               var options = {
+                   type: 'popup',
+                   responsive: true,
+                   innerScroll: false,
+                   title: 'Non-catalog RFQ Post',
+                   modalClass: 'noncatalogrfqpopup-modal',
+                   buttons: [/*{
+                    text: $.mage.__('Continue'),
+                    class: '',
+                    click: function () {
+                        this.closeModal();
+                    }
+                }*/]
+               };
+               var popup = modal(options, $('#rfqpostpopup-modal'));
+               $('#rfqpostpopup-modal').modal('openModal');
+            <?php endif;?>
+
+        })
+    });
+</script>

@@ -1,0 +1,20 @@
+<?php $totals = $block->getItems() ?>
+<table class="email-items">
+    <thead>
+        
+    </thead>
+    <tbody>
+    <?php if (is_array($totals)):?>    
+    
+        <tr>
+            <td> <strong><?= /* @escapeNotVerified */  __('Sub Total'); ?></strong>: <?= /* @escapeNotVerified */ $totals['subtotal']; ?></td>
+        </tr>
+        <tr>
+            <td> <strong><?= /* @escapeNotVerified */  __('Grandtotal'); ?></strong>: <?= /* @escapeNotVerified */ $totals['grandtotal']; ?></td>
+             
+        </tr>
+    
+    <?php endif;?>
+    </tbody>
+</table>
+

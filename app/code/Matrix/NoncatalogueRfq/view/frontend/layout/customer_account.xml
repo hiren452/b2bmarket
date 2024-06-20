@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Matrix_NoncatalogueRfq::css/styles.css"/>
+    </head>
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current"     
+                  ifconfig="noncatalogrfq_configuration/active/enable"              
+                   name="noncatalogrequesttoquote_quote" after="customer-account-navigation-address-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">noncatalogrequesttoquote/customer/quotes/</argument>
+                    <argument name="label" xsi:type="string" translate="true">My Non-catalog Quotes</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

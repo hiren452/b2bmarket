@@ -1,0 +1,78 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$uomOptions = $_noncatRfqHelper->getUnitsofMeasures();
+?>
+<div class="row rfq-info">
+<div class="col-sm-4">
+<form class="form noncatalogrfq"
+      action="<?= /* @noEscape */  $block->getFormAction();?>"
+      id="noncatalogrfqpopup-form"
+      name="noncatalogrfqpopup-form"
+      method="post"
+      data-hasrequired="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
+     data-mage-init='{"validation":{}}'>
+    <fieldset class="fieldset">
+        <!--<div class="field templatename-rfqpopup required">
+            <label class="label" for="template_name"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Template Name')) ?></span></label>
+            <div class="control">
+                <input name="template_name" id="template_name" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Template Name')) ?>" value="" class="input-text required-entry" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>-->
+        <div class="field rfqproductname-rfqpopup required">
+            <div class="control">
+                <input name="rfqproductname" id="rfqproductname" placeholder="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('What are you looking for...')) ?>" value="" class="input-text required-entry" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field qty-rfqpopup required">
+
+            <div class="control">
+                <input name="qty" id="noncat-qty" placeholder="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Quantity')) ?>" value="" class="input-text required-entry" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field uom-rfqpopup required">
+
+            <div class="control">
+                <select name="uom" id="uom">
+                    <option value=""><?php __('Select Unit of Measure'); ?></option>
+                       <?php
+                        if (count($uomOptions)) {
+                            foreach ($uomOptions as $key => $option) {
+                                /* @noEscape */     echo '<option value="' . $option['value'] . '">' . $option['label'] . '</option>';
+                            }
+                        }
+?>
+                    <option>Piece/Pieces</option>
+                    <option>Bag</option>
+                </select>
+            </div>
+        </div>
+        <div class="field email-rfqpopup required">
+            <div class="control">
+                <input name="email-rfqpopup" id="email-rfqpopup"   placeholder="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Email')) ?>" value="" class="input-text required-entry validate-email" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+     </fieldset>
+     <div class="row">
+    <div class="col-sm-12">
+      <div>
+             <button type="button"  name="btn-rfqpopupcanel" id="btn-rfqpopupcanel" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Cancel')) ?>" class="btn btn-primary primary">
+                    <span><?= /* @noEscape */  $escaper->escapeHtml(__('Cancel')) ?></span>
+              </button>
+             <input type="hidden" name="btn-rfqpopupsubmit" id="btn-rfqpopupsubmit" value="submit" />
+              <button type="submit" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Request for Quotation')) ?>" class="btn btn-primary primary btn-submit">
+                    <span><?= /* @noEscape */  $escaper->escapeHtml(__('Request for Quotation')) ?></span>
+              </button>
+      </div>
+   </div>
+</div>
+  </form>
+ </div>
+
+<div class="col-sm-8">
+     <?= /* @noEscape */   $block->getLayout()->createBlock('Magento\Cms\Block\Block')
+        ->setBlockId('noncatalog-rfq-poupform')
+        ->toHtml();
+?>
+ </div>
+ </div>
+</div>

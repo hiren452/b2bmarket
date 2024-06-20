@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">    
+    <template id="admin_noncatalogrfq_submit_email_template" label="New Non-catalog Quote email to Admin" file="matrix_noncatalogrfq/admin_new_noncatalogrfq_email.html" type="html" module="Matrix_NoncatalogueRfq" area="frontend"/>
+    <template id="admin_noncatalogrfq_quote_complete_email_template" label="Quote Complete email to admin" file="matrix_noncatalogrfq/admin_quote_complete_email.html" type="html" module="Ced_RequestToQuote" area="frontend"/>
+    <template id="quote_submit_nonmktvendor_email_template" label="New Quote email to Non-Marketplace Vendor" file="matrix_noncatalogrfq/new_nonmarketplacevendor_email.html" type="html" module="Matrix_NoncatalogueRfq" area="frontend"/>
+    <template id="quote_submit_vendor_email_template" label="New Quote email to Marketplace Vendor" file="matrix_noncatalogrfq/new_nmarketplacevendor_email.html" type="html" module="Matrix_NoncatalogueRfq" area="frontend"/>    
+    <template id="noncatalog_rfqsubmit_success_email_template" label="New Non-catalog Quote Request Submit Sucess" file="matrix_noncatalogrfq/new_submitsucess_email.html" type="html" module="Matrix_NoncatalogueRfq" area="frontend"/>
+</config>

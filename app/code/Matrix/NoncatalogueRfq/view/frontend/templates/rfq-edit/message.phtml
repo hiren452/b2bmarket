@@ -1,0 +1,165 @@
+<?php
+$currentQuote = $block->getQuote();
+$chatDate = '';
+?>
+<div>
+    <div class="purchaseorder-history-block" id="purchaseorder-history-block">
+        <?php if ($block->getChatHistory() && !empty($block->getChatHistory())) {?>
+        <div class="purchaseorder-comment-wrapper">
+            <ul class="note-list">
+                <?php foreach ($block->getChatHistory() as $_chathistory) {?>                                    
+                    <?php if ($chatDate != date('Y-m-d', strtotime($_chathistory->getCreatedAt()))) {
+                        $chatDate = date('Y-m-d', strtotime($_chathistory->getCreatedAt()));
+                        ?>
+                <li class="purchaseorder-middle-chat-column">
+                    <div class="chat-date"><?= /* @noEscape */  $chatDate; ?></div>
+                </li>
+                <?php } ?>
+                    <?php if ($_chathistory->getSentBy() == 'Customer') { ?>
+                <li class="purchaseorder-right-chat-column">
+                    <i class="porto-icon-chat" style="color:#adb5bd;"></i><strong> [<?= /* @noEscape */  __('Customer')?>]</strong>
+                        <?php if ($_chathistory->getMessage()) { ?>
+                    <div class="purchaseorder-right-chat-column-chat"><?= /* @noEscape */  $escaper->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                    <?php } ?>
+                </li>
+                <?php } elseif ($_chathistory->getSentBy() == 'Vendor') {?>
+                <li class="purchaseorder-left-chat-column">
+                    <div class="purchaseorder-left-chat-column-chat">
+                        <?php
+                            $vendorModel = $block->getVendorbyId($_chathistory->getVendorId());
+                    ?>
+                        <i class="porto-icon-chat" style="color:#000000;"></i>
+                        <strong><?= /* @noEscape */  $vendorModel->getData('public_name');?>  [<?= /* @noEscape */  __('Vendor')?>]</strong>                                                
+                        <?php if ($_chathistory->getMessage()) { ?>
+                        <div class="note-list-comment">
+                            <?php //echo $this->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a'])?>                            
+                            
+                            <?= /* @noEscape */  $escaper->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                            <a title="<?= /* @noEscape */  __('Reply') ?>" class="sendmessage" href="javascript:void(0);" name="send" value="send" data-messageid="<?= /* @noEscape */  $_chathistory->getId();?>">
+                              <i class="porto-icon-reply" style="font-size:18px;"></i>
+                            </a>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <!--<button type="button" id="sendMessage" name="send" value="send" data-messageid="<?= /* @noEscape */  $_chathistory->getId();?>" title="<?= /* @noEscape */  /* @escapeNotVerified */ __('button') ?>" class="action  primary sendmessage">
+                      <span><?= /* @noEscape */  /* @escapeNotVerified */ __('Reply') ?></span>                    
+                    </button>-->
+                   
+                      
+                    
+                </li>
+                <?php } else {  ?>
+                <li class="purchaseorder-left-chat-column" >
+                    <div class="purchaseorder-left-chat-column-chat">
+                        <strong><?= /* @noEscape */  __('Admin')?></strong>
+                        <?php if ($_chathistory->getMessage()) { ?>
+                        <div class="note-list-comment"><?= /* @noEscape */  $escaper->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </li>
+                <?php } ?>
+                <?php } ?>
+            </ul>
+        </div>
+        <?php } else {
+            echo "<div>No Chat</div>";
+        }?>
+    </div>
+</div>
+<div id="replymessage-popup" style="display:none;">
+    <form class="form noncatrfq"
+        action="<?= /* @noEscape */  /* @escapeNotVerified */ $block->getPostUrl(); ?>"
+        name="form-noncatrfq"
+        id="form-noncatrfq"
+        method="POST"
+        data-hasrequired="<?= /* @noEscape */  /* @escapeNotVerified */ __('* Required Fields') ?>"
+        data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset" style="padding:5px;">
+            <div class="field text">
+                <label class="label" for="chat"><span><?= /* @noEscape */  /* @escapeNotVerified */ __('Message') ?></span></label>
+                <div class="control">
+                    <textarea id="message" name="message" cols="60" rows="3" data-validate="{required:true,'restrictUrl':true,'restrictEmail':true}"></textarea>
+                </div>
+            </div>
+            <div class="actions-toolbar">
+                <input type="hidden" name="message_id" id="message_id" value="" />
+                <div class="primary">
+                    <button type="submit" id="send" name="send" value="send" title="<?= /* @noEscape */  /* @escapeNotVerified */ __('Send') ?>" class="action submit primary">
+                    <span><?= /* @noEscape */  /* @escapeNotVerified */ __('Send') ?></span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div id="rfqmessage-formcontainer" >
+    <form class="form noncatrfqmesage"
+        action="<?= /* @noEscape */  /* @escapeNotVerified */ $block->getPostUrl(); ?>"
+        name="form-noncatrfq"
+        id="form-noncatrfq"
+        method="POST"
+        data-hasrequired="<?= /* @noEscape */  /* @escapeNotVerified */ __('* Required Fields') ?>"
+        data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset" style="padding:5px;">
+            <div class="field text"> 
+                <label class="label" for="chat"><span><?= /* @noEscape */  /* @escapeNotVerified */ __('Message') ?></span></label>
+                <div class="control">
+                    <textarea id="message" name="message" cols="60" rows="3" data-validate="{required:true,'restrictUrl':true,'restrictEmail':true}"></textarea>
+                </div>
+            </div>
+            <div class="actions-toolbar">
+                <input type="hidden" name="message_id" id="message_id" value="" />
+                <div class="primary">
+                    <button type="submit" id="send" name="send" value="send" title="<?= /* @noEscape */  /* @escapeNotVerified */ __('Send') ?>" class="action submit primary">
+                    <span><?= /* @noEscape */  /* @escapeNotVerified */ __('Send') ?></span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    require(["jquery", "Magento_Ui/js/modal/modal"],function($, modal) {
+         $(document).ready(function() {    
+             
+             $(".sendmessage").click(function(){
+                 var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false,
+                title: $.mage.__('Message Reply'),
+                modalClass: 'noncatalogrfmessage-modal',                
+                buttons: [{
+                    text: $.mage.__('Close'),
+                    class: 'supplier-modal1',
+                    click: function () {
+                        this.closeModal();
+                    }
+                }]
+              };              
+              var popup = modal(options, $('#replymessage-popup'));
+               $("#message_id").val($("#sendMessage").data("messageid"));
+                 $("#replymessage-popup").modal("openModal");            
+                 //alert();
+             });
+             
+             
+              /*$('#send').click(function () {
+                  alert($("#sendMessage").data("messageid"));
+                 
+              });*/
+             
+         });
+        
+    });
+</script>
+<script type="text/x-magento-init">
+       {
+           "*": {
+               "noUrlValidation": {},
+               "noEmailValidation":{}
+           }
+       }
+</script>

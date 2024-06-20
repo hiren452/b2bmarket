@@ -1,0 +1,157 @@
+<div class="row">
+<div class="col-lg-12">
+    <form class="form supplierinfo"
+        action="#"
+        id="supplierinfoadd-form"
+        name="supplierinfoadd-form"
+        method="post"
+        data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
+       data-mage-init='{"validation":{}}'> 
+       <fieldset class="fieldset">
+              <legend class="legend"><span><?= $escaper->escapeHtml(__('Non-Marketplace Supplier  Information')) ?></span></legend>
+              <div class="row">
+              <div class="col-md-6">     
+                <div class="field companyname required">
+                    <label class="label" for="companyname"><span><?= $escaper->escapeHtml(__('Company Name')) ?></span></label>
+                    <div class="control">
+                        <input name="companyname" id="companyname" title="<?= $escaper->escapeHtmlAttr(__('Company Name')) ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-6">     
+                <div class="field email required">
+                    <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
+                    <div class="control">
+                        <input name="email" id="email" title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" value="" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>                
+                        <label id="vendoremailalert"></label>
+                    </div>            
+                </div>
+              </div>
+              <div class="col-md-6">  
+                <div class="field telephone">
+                    <label class="label" for="telephone"><span><?= $escaper->escapeHtml(__('Phone Number')) ?></span></label>
+                    <div class="control">
+                        <input name="telephone" id="telephone" title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>" value="" class="input-text" type="text" data-validate="{required:false}" />
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-6"> 
+                <div class="field companyurl">
+                    <label class="label" for="companyurl"><span><?= $escaper->escapeHtml(__('URL')) ?></span></label>
+                    <div class="control">
+                        <input name="companyurl" id="companyurl" title="<?= $escaper->escapeHtmlAttr(__('URL')) ?>" value="" class="input-text" type="text" data-validate="{required:false,url:true}"/>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-12"> 
+                <div class="field address">
+                    <label class="label" for="address"><span><?= $escaper->escapeHtml(__('Address')) ?></span></label>
+                    <div class="control">
+                        <textarea name="address" id="address" title="<?= $escaper->escapeHtmlAttr(__('Address')) ?>" class="input-text" cols="5" rows="3" data-validate="{required:false}"></textarea>
+                    </div>
+                </div>
+              </div>
+            </div>
+       </fieldset> 
+        <div class="actions-toolbar">
+          <div class="primary">
+              
+              <input type="hidden" name="hideit" id="hideit" value="" >
+              <input type="hidden" name="nonmktvendorid" id="nonmktvendorid" value="" >
+
+              <button type="buton"  name="supplierinfoadd_submit" id="supplierinfoadd_submit" title="<?= $escaper->escapeHtmlAttr(__('Create Suppliers')) ?>" class="action submit primary">
+                  <span><?= $escaper->escapeHtml(__('Create Suppliers')) ?></span>
+              </button>
+          </div>
+          <div class="secendery">            
+              <button type="buton" title="<?= $escaper->escapeHtmlAttr(__('Cancel')) ?>" id="btn-close-nonsupmodal" name="btn-close-nonsupmodal" class="action  primary">
+                  <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
+              </button>
+          </div>        
+        </div>
+    </form>
+</div>
+<!--  <div class="col-lg-6">     
+      <?=  $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('invite-non-marketplace-suppliers')->toHtml();
+        ?>
+ </div> -->
+</div> 
+<script>
+    require(['jquery',
+    'Matrix_NoncatalogueRfq/js/view/non-marketplacesuppliers',
+    'mage/url'], 
+    function ($, nonmarketplacesup, url) {
+    $(document).ready(function (email) {
+        function checkVendorMailExist(email){
+            
+            if(email=='') return false;
+             var ajaxUrl = url.build('noncatalogrequesttoquote/ajax/vendorexist');              
+             var isVendorExist = false;
+              $.ajax({
+                url: ajaxUrl,
+                showLoader: true,
+                data: {'email':email},
+                type: "GET",
+                dataType : 'json',
+                beforeSend: function(){
+                    $("#vendoremailalert").html('');
+                },
+                success: function(result) {
+                    
+                    if(result.status && result.vendorexist==true){                        
+                       isVendorExist = true;    
+                       //alert(result.message);
+                       $("#vendoremailalert").html('<span class="porto-icon-cancel" style="color:#ff3300;">' + result.message + '</span>');
+                       $("#supplierinfoadd-form input[name=email]").focus();
+                       $("#supplierinfoadd-form input[name=email]").select();
+                       $('#supplierinfoadd_submit').attr('disabled',true);
+                       //alert('Vednor with email '+ email +' exist in B2BMarkets.com');    
+                    }else if(result.status && result.vendorexist==false){                        
+                        isVendorExist = false;
+                        $('#supplierinfoadd_submit').attr('disabled',false);
+                        //$("#vendoremailalert").html('<span class="porto-icon-ok" style="color:#5c940d;"></span>'+result.message);
+                        //alert(result.message);
+                        //alert('Vednor with email '+ email +' NOT exist in B2BMarkets.com');
+                    }
+                 }
+             });
+             
+             return isVendorExist;
+            
+        
+        }
+        $('#btn-close-nonsupmodal').click(function () {            
+            $("#mktsupplierselect-popupmodal").modal("closeModal");   
+            return false;
+        });
+        
+        $("#supplierinfoadd-form input[name=email]").focusout(function(){
+            var isvendorMailExist = false;
+            var email = $(this).val();
+            if(email!=''){
+              //isvendorMailExist = nonmarketplacesup.prototype.checkVendorEmail(email);
+              isvendorMailExist = checkVendorMailExist(email);              
+            }
+        });
+        $('#supplierinfoadd_submit').click(function () {            
+            if ($('#supplierinfoadd-form').valid()) {
+                  var $inputs = $('#supplierinfoadd-form :input');    
+                  var data = {};
+                  $inputs.each(function() {
+                       data[this.name] = $(this).val();
+                  });                 
+                var isSuccess =  false;     
+                if($("#nonmktvendorid").val()!=''){                    
+                    isSuccess = nonmarketplacesup.prototype.updateSupplier(data);
+                }else{     
+                     isSuccess = nonmarketplacesup.prototype.addSupplier(data);
+                }
+                if(isSuccess){
+                   $("#mktsupplierselect-popupmodal").modal("closeModal");   
+                }
+               return false;
+            }
+        });
+    });
+});
+</script>

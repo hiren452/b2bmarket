@@ -1,0 +1,29 @@
+<div class="table-responsive">
+<table  class="table table-bordered">	
+  	<thead>
+		<tr>		  
+			<td colspan="2" data-bind="text: title"><strong></strong></td>
+			<td colspan="3" style="text-align:right;"><a href="#" data-bind='click: openMoreSupplierPopup' alt="Add More Supplier" title="Add More Supplier"><strong>+ More </strong></a></td>
+		</tr>
+		<tr>
+			<th>#</th>
+			<th>Company</th>
+			<th>Email</th>
+			<th>Phone</th>		  
+			<th>Action</th>
+		</tr>
+  	</thead>
+  	<tbody data-bind="foreach: suppliersList">
+	  	<tr>
+			<td data-bind="text: $index() + 1"></td>
+			<td data-bind="text: $data.companyname"></td>		  
+			<td data-bind="text: $data.email"></td>		  
+			<td data-bind="text: $data.phone"></td>		  			  
+			<td>
+				<a href="#" data-bind='click: $parent.removeSupplier' alt="Remove" title="Remove"><i class="demo-icon porto-icon-cancel-mini"></i></a> | 
+				<a href="#" data-bind='click: $parent.editSupplier' alt="Edit" title="Edit"><i class="demo-icon porto-icon-pencil-mini"></i></a>
+			</td>		  
+	  	</tr>
+  	</tbody>
+</table>
+</div>

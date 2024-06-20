@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Email Product List" design_abstraction="custom">
+    <head>
+        <css src="Matrix_NoncatalogueRfq::css/styles.css"/>
+    </head>
+    <body>
+        <block class="Magento\Framework\View\Element\Template" name="rfq.product.list" template="Matrix_NoncatalogueRfq::email/rfq-product.phtml"/>
+    </body>
+</page>

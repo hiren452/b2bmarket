@@ -1,0 +1,45 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+
+$shippintMethodOptions = $_noncatRfqHelper->getShippingMethods();
+
+foreach ($shippintMethodOptions as $index => $option) {
+    $arrShippingMethods[$option['value']] = $option['label'];
+}
+
+$paymentTermsOptions = $_noncatRfqHelper->getPaymentTerms();
+
+foreach ($paymentTermsOptions as $index => $option) {
+    $arrpaymentTerm[$option['value']] = $option['label'];
+}
+
+?> 
+<table class="data-table" >
+    <tbody>
+      <tr>
+          <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Shipping Method')) ?></strong></td>
+          <td> : <?php
+            if (array_key_exists($nonCatalogRfq->getData('shipment_method'), $arrShippingMethods)) {
+                /* @noEscape */ echo $arrShippingMethods[$nonCatalogRfq->getData('shipment_method')];
+            } else {
+                /* @noEscape */ echo "N/A";
+            }
+?>
+          </td>          
+      </tr>      
+      <tr>
+          <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Destination')) ?></strong></td>
+          <td> : <?= /* @noEscape */  $nonCatalogRfq->getData('shipment_destination');?></td>          
+      </tr>
+      <tr>
+          <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Lead Time')) ?></strong></td>
+          <td> : <?= /* @noEscape */  $nonCatalogRfq->getData('lead_time');?><?= /* @noEscape */  $escaper->escapeHtml(__('Days')) ?></td>          
+      </tr>
+      <tr>          
+          <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Payment Term')) ?></strong></td>
+          <td> : <?= /* @noEscape */  ($nonCatalogRfq->getData('payment_terms')!='Select Pay') ? $nonCatalogRfq->getData('payment_terms') : "N/A";?></td>          
+      </tr>      
+    </tbody>    
+</table>
+ 

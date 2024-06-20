@@ -1,0 +1,441 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$unsavedData =  $block->getUnsavedData();
+$isApproveCustomer = $block->isApproveCustomer();
+?> 
+<h2 class="rfq-title"><?= /* @noEscape */  $escaper->escapeHtml(__('Non Catalog Item - RFQ')) ?></h2>
+<div id="rfqformloader" data-mage-init='{"loader": { "icon": "<?= /* @noEscape */  $block->getMediaUrl()?>porto/web/images/loader-1.gif"}}'>
+<form class="form noncatalogrfq"
+      action="<?= /* @noEscape */  $block->getFormAction();?>"
+      id="noncatalogrfq-form"
+      name="noncatalogrfq-form"
+      method="post"
+      data-mage-init='{"validation":{}}'
+      enctype="multipart/form-data"       
+      data-hasrequired="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
+<!-- data-mage-init='{"validation":{}}'        -->
+<div class="orange-box-wrap">
+  <div class="non-catalog-rfq">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><?= /* @noEscape */  $escaper->escapeHtml(__('RFQ  Information')) ?></h3>
+            <?= /* @noEscape */   $block->getLayout()
+              ->createBlock('Matrix\NoncatalogueRfq\Block\NonRfqCreate')
+              ->setTemplate('Matrix_NoncatalogueRfq::rfq/rfq-template-info.phtml')
+              ->toHtml();
+?>
+        </div>    
+    </div>
+  </div>     
+  <!--Start Product Infomation-->
+  <div class="product_basic_info">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><?= /* @noEscape */  $escaper->escapeHtml(__('Product Basic Information')) ?></h3>
+            <?= /* @noEscape */   $block->getLayout()
+  ->createBlock('Matrix\NoncatalogueRfq\Block\NonRfqCreate')
+  ->setTemplate('Matrix_NoncatalogueRfq::rfq/product-info.phtml')
+  ->toHtml();
+?>
+        </div>    
+    </div>
+  </div>
+  <!--Start Supplier Infomation-->
+  <div class="non_catalogue_info_sec">
+      <div>        
+        <div class="row rfq-info rfq-info-supplier">
+            <div class="col-md-6">
+                <h3><?= /* @noEscape */  $escaper->escapeHtml(__('Supplier Requirements')) ?></h3>
+                <?= /* @noEscape */   $block->getLayout()
+    ->createBlock('Matrix\NoncatalogueRfq\Block\NonRfqCreate')
+    ->setTemplate('Matrix_NoncatalogueRfq::rfq/supplier-requirement.phtml')->toHtml();?>
+           </div>      
+            <div class="col-md-6">
+               <h3><?= /* @noEscape */  $escaper->escapeHtml(__('Shipping and Payment')) ?></h3>
+              <?= /* @noEscape */  $block->getLayout()->createBlock('Matrix\NoncatalogueRfq\Block\NonRfqCreate')
+    ->setTemplate('Matrix_NoncatalogueRfq::rfq/shippingpayment-info.phtml')
+    ->toHtml();?>
+           </div>
+        </div>
+      </div>    
+  </div>
+  <!--RfqEAV Additional  Fields-->
+  <div class="row">
+    <div class="col-sm-12">
+      <?= /* @noEscape */  $block->getChildHtml('form_additional_info') ?>
+    </div>
+  </div>
+  <div class="agree_onterms">
+    <div class="row">
+      <div class="col-sm-12">      
+        <div class="agreement_rfqrules-box">
+            <div class="field agree_rfqrules required">            
+              <div class="control" for="agree_rfqrules">               
+                   <input type="checkbox" name="agree_rfqrules" id="agree_rfqrules" class="" value="1" data-validate="{required:true}" name="agree_rfqrules" id="agree_rfqrules" /> 
+                   <label for="agree_rfqrules">
+                        <?= /* @noEscape */  __('I have read, understood and agreed to abide by the')?>
+                        <a href="javascript:void(0);" class="ref-termrules" data-name="agree_rfqrules"> <?= /* @noEscape */  __('Non-catalog RFQ Rules')?></a>
+                   </label>
+                </div>
+            </div>    
+            <div class="field agree_termsofuse required">            
+                    <div class="control" for="agree_termsofuse">               
+                      <input type="checkbox" class="" value="1" data-validate="{required:true}" name="agree_termsofuse" id="agree_termsofuse" />
+                      <label for="agree_termsofuse">
+                  <?= /* @noEscape */  __('I have read, understood and agreed to abide by')?>
+                  <a href="#" class="ref-termrules" data-name="agree_termsofuse"><?= /* @noEscape */  __('B2B Markets terms of use')?></a>
+                </label>
+                    </div>
+            </div> 
+            <div class="field agree_rfqcompanyinfo required">                     
+                    <div class="control" for="agree_rfqcompanyinfo">               
+                      <input type="checkbox" value="1" data-validate="{required:true}" name="agree_rfqcompanyinfo" id="agree_rfqcompanyinfo" />
+                      <label for="agree_rfqcompanyinfo"><?= /* @noEscape */  __('I agree to share my company information with the suppliers.')?></label>
+              </div>
+          </div>
+        </div>
+       </div>    
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+        <div class="text-center">   
+                <!--<button type="button"  name="btn-populate" id="btn-populate" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Populate Form')) ?>" class="btn btn-primary primary">
+                      <span><?= /* @noEscape */  $escaper->escapeHtml(__('Populate Form')) ?></span>
+                </button>-->
+               <button type="button"  name="btn-savelatter" id="btn-savelatter" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Save Later')) ?>" class="btn btn-primary primary">
+                      <span><?= /* @noEscape */  $escaper->escapeHtml(__('Save Later')) ?></span>
+                </button>              
+                <input type="hidden"   name="rfq_templateid" id="rfq_templateid" value="<?= /* @noEscape */  $unsavedData['template_id'];?>" />         
+               <input type="hidden" name="nonmarket_supplist_data" id="nonmarket_supplist_data" value="" />    
+                <button type="submit" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Submit')) ?>" id="noncatrfq-submit" class="btn btn-primary primary btn-submit">
+                      <span><?= /* @noEscape */  $escaper->escapeHtml(__('Submit')) ?></span>
+                </button>
+        </div>
+     </div> 
+  </div>      
+
+</div>
+
+<div id="rfqrules-popupmodal" style="display:none;">    
+    <?= /* @noEscape */   $block->getLayout()->createBlock('Magento\Cms\Block\Block')
+    ->setBlockId('non-catalog-rfq-rules')->toHtml();
+?>
+</div>
+<div id="rfqterms-popupmodal" style="display:none;">
+    <?= /* @noEscape */   $block->getLayout()->createBlock('Magento\Cms\Block\Block')
+->setBlockId('rfq-b2b-terms')->toHtml();
+?>
+</div>
+<div id="output"></div>
+</form>
+<div id="mktsupplierselect-popupmodal" style="display:none;">    
+    <?= /* @noEscape */   $block->getLayout()
+      ->createBlock('Magento\Framework\View\Element\Template')
+      ->setTemplate('Matrix_NoncatalogueRfq::rfq/selectsupplier-info.phtml')
+      ->toHtml();
+?>
+</div>
+</div>
+
+<script type="text/javascript">
+    require(["Magento_Ui/js/modal/alert",
+    "jquery",    
+    "Magento_Ui/js/modal/modal",
+    "mage/url",   
+    "mage/mage",
+    "loader",
+    "domReady!"],function(alert, $, modal, url) {
+       
+    function validateCustomComponent() {
+        var isvalidated = false;
+        var message = [];
+        var suppliertype = $('input[name="suppliertype"]:checked').val();
+    
+    if (typeof suppliertype === "undefined" || suppliertype === null) {
+        isvalidated = false;
+        message.push('Supplier Type.');
+    } else {
+        isvalidated = true;
+    }
+    
+    var marketplace_suppler_ids = $('input[name="marketplace_suppler_ids[]"]').val();
+    if (suppliertype == 2 && (typeof marketplace_suppler_ids === "undefined" || marketplace_suppler_ids === null)) {
+        isvalidated = false;
+        message.push('Marketplace Suppliers.');
+    } else {
+        isvalidated = true;
+    }
+    
+    var category_ids = $('input[name="category_ids[]"]').val();
+    if (typeof category_ids === "undefined" || category_ids === null) {
+        isvalidated = false;
+        message.push('Category.');
+    } else {
+        isvalidated = true;
+    }
+    /*if(isvalidated){
+             var productsourcingpurpose =  $('input[name="productsourcingpurpose[]"]').val();        
+             if( typeof productsourcingpurpose==="undefined" || productsourcingpurpose===null){
+                isvalidated =  false;
+                 message = 'Please Select Sourcing Purpose.';
+                 customFieldError(message);
+             } else {
+                 isvalidated =  true;              
+              }         
+         }*/
+    var tradeterms = $('input[name="tradeterms[]"]').val();
+    if (typeof tradeterms === "undefined" || tradeterms === null) {
+        isvalidated = false;
+        message.push('Trade Terms.');
+    } else {
+        isvalidated = true;
+    }
+    /*if(isvalidated){
+            var certifications =  $('input[name="splr_certifications[]"]').val();        
+            if( typeof certifications==="undefined" || certifications===null){
+                isvalidated =  false;
+                message = 'Please Select Supplier Certificates.';
+                customFieldError(message);
+             } else {
+               isvalidated =  true;             
+             }         
+          } */
+
+    if (!isvalidated) {
+        customFieldError(message);
+    }
+
+
+    return isvalidated;
+}
+       
+      function customFieldError(message){
+          if(message.length<=0) return;
+          var messageText = '';
+          
+          $.each(message, function( index, value ) {
+              messageText += '<span class="porto-icon-cancel-circled" style="color:#ff3300;padding-bottom:5px;font-weight:bold;">'+ value + '</span><br />';
+          });          
+          messageText += '<br /><br />';
+          
+          alert({
+                   title: 'Please populate the required fields',
+                   content: $.mage.__(messageText),
+                   actions: {
+                       always: function(){}
+                       },
+                  buttons:[]
+                 }); 
+      } 
+      
+       
+       /*var isApproveCustomer = <?= /* @noEscape */  $isApproveCustomer;?>;       
+       window.onbeforeunload = function (e) {
+       if(isApproveCustomer==0) {
+             var message = "Are you sure you want leave?";
+             e.returnValue = message;
+             return message;
+             }             
+             return;
+         };*/
+         
+       $('#rfqformloader').trigger('processStart');
+       $(document).ready(function() {            
+            const formId = "noncatalogrfq-form";
+            const url = location.href;
+            const formIdentifier = formId;
+             $('#noncatalogrfq-form').submit(function () {    
+                if(! validateCustomComponent()){
+                    return false;
+                }
+                
+                var suppliersList = 'testindexphtmlnoncatalogrfq';
+                $("#nonmarket_supplist_data").val(suppliersList);
+                return;
+            });
+                
+            const getFormData = () => {                                
+                let form = $('#'+formId); // select form
+                let formElements = document.getElementById(formId).elements; // get the elements in the form
+                let data = { [formIdentifier]: {} }; // create an empty object with the formIdentifier as the key and an empty object as its value
+                for (const element of formElements) {
+                    if (element.name.length > 0) {
+                        data[formIdentifier][element.name] = element.value;
+                    }
+                }
+              return data;
+            };
+            
+            const populateForm = () => {            
+             if (localStorage.key(formId)) {
+                 const savedData = JSON.parse(localStorage.getItem(formIdentifier)); // get and parse the saved data from localStorage
+                 let formElements = document.getElementById(formId).elements; // get the elements in the form                 
+                 //if(formElements.length){
+                    for (const element of formElements) {
+                      if( typeof savedData === 'object' && savedData!== null){
+                         if (element.name in savedData) {                           
+                            element.value = savedData[element.name];
+                         }
+                      }  
+                    }                
+                 //}    
+               const message = "Form has been refilled with saved data!";
+                 //alert(message);
+               }
+             };
+            
+            //populateForm();
+            
+            $("#btn-populate").click(function(){                
+                populateForm();
+            });
+            
+            $("#btn-savelatter").click(function(){                
+                var data = getFormData();
+                ajaxSaveLatter(data);//Save Data to backend
+                localStorage.setItem(formIdentifier, JSON.stringify(data[formIdentifier]));
+                const message = '<div style="color:#66a80f;">Form draft has been saved! <br /> <strong>Please Do remember to come back and fill up your Non-catalog RFQ.</strong></div><br />';                
+                 alert({
+                   title: null,
+                   content: $.mage.__(message),
+                   actions: {
+                       always: function(){}
+                       },
+                  buttons:[]
+                 });                
+            });
+            
+            
+            
+/*Start serializeObject function */
+        $.fn.serializeObject = function() {
+            var data = {};
+            function buildInputObject(arr, val) {
+                if (arr.length < 1) {
+                        return val;
+                }
+                var objkey = arr[0];
+                if (objkey.slice(-1) == "]") {
+                        objkey = objkey.slice(0, -1);
+                }
+                var result = {};
+                if (arr.length == 1) {
+                        result[objkey] = val;
+                } else {
+                        arr.shift();
+                        var nestedVal = buildInputObject(arr, val);
+                        result[objkey] = nestedVal;
+                }
+                return result;
+           }
+
+         function gatherMultipleValues(that) {
+                var final_array = [];
+                $.each(that.serializeArray(), function(key, field) {
+                        // Copy normal fields to final array without changes
+                        if (field.name.indexOf('[]') < 0) {
+                                final_array.push(field);
+                                return true; // That's it, jump to next iteration
+                        }
+
+                        // Remove "[]" from the field name
+                        var field_name = field.name.split('[]')[0];
+
+                        // Add the field value in its array of values
+                        var has_value = false;
+                        $.each(final_array, function(final_key, final_field) {
+                                if (final_field.name === field_name) {
+                                        has_value = true;
+                                        final_array[final_key]['value'].push(field.value);
+                                }
+                        });
+                        // If it doesn't exist yet, create the field's array of values
+                        if (!has_value) {
+                                final_array.push({
+                                        'name': field_name,
+                                        'value': [field.value]
+                                });
+                        }
+                });
+                return final_array;
+        }
+
+        // Manage fields allowing multiple values first (they contain "[]" in their name)
+        var final_array = gatherMultipleValues(this);
+
+        // Then, create the object
+        $.each(final_array, function() {
+                var val = this.value;
+                var c = this.name.split('[');
+                var a = buildInputObject(c, val);
+                $.extend(true, data, a);
+        });
+
+          return data;
+     };
+/*End serializeObject function */
+
+            
+            function ajaxSaveLatter(data){
+                var ajaxunsaverfqUrl = <?= /* @noEscape */  '"' . $block->getBaseUrl() . 'noncatalogrequesttoquote/rfqTemplate/index' . '"';?>;                
+                /*if($('#ispublicrfq').val()==1){
+                 $('<input>').attr({
+                         type: 'text',
+                         id: 'suppliertype_proxy',
+                         name: 'suppliertype',
+                         value:<?= /* @noEscape */  $_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PUBLIC;?>,
+                         }).appendTo('#noncatalogrfq-form');
+                }*/
+                         
+                
+                var formData = $('#'+formId).serializeObject();
+                if(formData.ispublicrfq == 1 ){
+                   formData.suppliertype = <?= /* @noEscape */  $_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PUBLIC;?>;
+                 }
+                
+                 //$("#output").html(JSON.stringify(formData));                
+                //var formData = data;
+                jQuery.ajax({
+                    type: 'POST',
+                    url: ajaxunsaverfqUrl,
+                    data: {'form_data':formData},
+                    success: function (data) {
+                                                
+                    }
+                })
+            }            
+            
+            
+            $('.ref-termrules').click(function(event){                
+                event.preventDefault();                
+                var name = $(this).data( "name" );
+                var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false,
+                //title:$.mage.__('Non-catalog RFQ Rules'),
+                buttons: [{
+                    text: $.mage.__('Close'),
+                    class: 'rfqagree-modal1',
+                    click: function () {
+                        this.closeModal();
+                    }
+                }]
+            };
+
+            if(name=='agree_rfqrules'){
+                options.title = $.mage.__('Non-catalog RFQ Rules');
+                var popup = modal(options, $('#rfqrules-popupmodal'));
+                $("#rfqrules-popupmodal").modal("openModal");
+             } else if(name=='agree_termsofuse') {
+                 options.title = $.mage.__('B2B Markets terms of use');
+                 var popup = modal(options, $('#rfqterms-popupmodal'));
+                 $("#rfqterms-popupmodal").modal("openModal");
+             }  
+
+        });
+    });    
+        
+});
+</script>        

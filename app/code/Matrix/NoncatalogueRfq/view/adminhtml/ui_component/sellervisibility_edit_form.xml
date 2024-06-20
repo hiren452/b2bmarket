@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">sellervisibility_edit_form.sellervisibility_form_data_source</item>
+            <item name="deps" xsi:type="string">sellervisibility_edit_form.sellervisibility_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Buyer Visibility Form</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">sellervisibility_edit_form</item>
+        </item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+        </item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Matrix\NoncatalogueRfq\Block\Adminhtml\SellerVisibility\Edit\BackButton</item>            
+            <item name="save" xsi:type="string">Matrix\NoncatalogueRfq\Block\Adminhtml\SellerVisibility\Edit\SaveButton</item>            
+        </item>
+    </argument>    
+    <settings>
+        <deps>
+            <dep>customer_form.customer_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="sellervisibility_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>            
+            <submitUrl path="noncatalogrfq/sellervisibility/save"/>           
+        </settings>
+        <dataProvider class="Matrix\NoncatalogueRfq\Model\Sellervisibility\DataProvider" name="sellervisibility_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+     <!--<htmlContent name="customer_edit_tab_view_content">
+        <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="Magento_Customer::tab/view.phtml">
+            <arguments>
+                <argument name="sort_order" xsi:type="number">10</argument>
+                <argument name="tab_label" xsi:type="string" translate="true">Customer View</argument>
+            </arguments>
+            <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="Magento_Customer::tab/view/personal_info.phtml"/>
+        </block>
+    </htmlContent>-->
+    <fieldset name="sellervisibility">
+        <settings>
+            <label translate="true">Seller RFQ  Visibility Information</label>
+        </settings>
+        <field name="entity_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>        
+     </fieldset>
+</form>

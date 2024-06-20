@@ -1,0 +1,268 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$isLoggedIn = $_noncatRfqHelper->isLoggedIn();
+$customerInfo = $_noncatRfqHelper->customerInfo();
+$unsavedData =  $block->getUnsavedData();
+$popupFormData = $block->getRfqPopupFormData();
+//Populatare templaeName filed
+$templaeName = '';
+/*if(is_array($popupFormData) && count($popupFormData)>0){
+    $templaeName = (isset($popupFormData['template_name']))? $popupFormData['template_name']:'';
+}*/
+$templaeName = (isset($unsavedData['rfqTemplate']['template_name'])) ? $unsavedData['rfqTemplate']['template_name'] : $templaeName;
+?>
+<div class="row rfq-info">
+<div class="col-md-4">
+ <fieldset class="fieldset">
+        <div class="field template_name required">
+            <label class="label" for="template_name"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Template Name')) ?></span></label>
+            <div class="control">
+                <input name="template_name" id="template_name"   title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Template Name')) ?>" value="<?= /* @noEscape */  $templaeName;?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        <div class="field saveastemplate">
+            <div class="control">
+                <input type="checkbox" name="saveastemplate" id="saveastemplate"  class="form-radio-input saveastemplate" value="1">
+
+                <label class="label" for="saveastemplate"><span><strong> <?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Save as Template')) ?></strong></span></label>
+            </div>
+        </div>
+         <div class="field name required">
+            <label class="label" for="name"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Name')) ?></span></label>
+            <div class="control">
+                <input name="name" id="name" readonly="false" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Name')) ?>" value="<?= /* @noEscape */  (isset($customerInfo['customerName'])) ? $customerInfo['customerName'] : '';?>" class="input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+         <div class="field companyname">
+            <label class="label" for="companyname"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Company Name')) ?></span></label>
+            <div class="control">
+                <input name="companyname" id="companyname" readonly="false" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Company Name')) ?>" value="<?= /* @noEscape */  isset($customerInfo['companyName']) ? $customerInfo['companyName'] : '';?>" class="input-text" type="text" data-validate="{required:false}"/>
+            </div>
+       </div>
+ </fieldset>
+ </div>
+ <div class="col-md-8">
+     <!--START Custom category-->
+     <div class="field required multi-se">
+                 <label class="label"><?= /* @noEscape */  __('Select Category') ?>:</label>
+                 <div data-bind="scope: 'customCategory'">
+                     <!-- ko template: getTemplate() -->
+                        <center>
+                           <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                        </center>
+                     <!-- /ko -->
+                 </div>
+                 <?php
+                     $selectedOptions = '';
+// if(is_array($unsavedData['rfqTemplate']['category_ids'])){
+if (array_key_exists('category_ids', $unsavedData['rfqTemplate'])) {
+    $selectedOptions =  implode(",", $unsavedData['rfqTemplate']['category_ids']);
+}
+?>
+                <script type="text/x-magento-init">
+                   {
+                       "*": {
+                           "Magento_Ui/js/core/app": {
+                               "components": {
+                                   "customCategory": {
+                                       "component": "Matrix_NoncatalogueRfq/js/ui-select-category",
+                                       "template" : "Matrix_NoncatalogueRfq/ui-select",
+                                       "filterOptions": true,
+                                       "levelsVisibility": false,
+                                       "multiple": false,
+                                       "showCheckbox": true,
+                                       "options":<?= /* @noEscape */  $block->getLayout()->createBlock('Matrix\NoncatalogueRfq\Block\Categories')->getCategoriesTree()?>,
+                                       "selectedvalues": <?= /* @noEscape */  '"' . $selectedOptions . '"';?>
+                                  }
+                              }
+                          }
+                      }
+                   }
+                </script>
+               </div>
+     <!--END Custom Category-->
+     <br/>
+     <div class="field supplier required">
+                  <?php
+$suppliertype = isset($unsavedData['rfqTemplate']['suppliertype']) ? $unsavedData['rfqTemplate']['suppliertype'] : 0;
+?>
+                  <h5 style="margin:0 auto 10px;font-weight:400;"><span><?= /* @noEscape */  $escaper->escapeHtml(__('RFQ Type')) ?></h5>
+                  <div class="control">
+                  <?php if ($_noncatRfqHelper->getConfigValue('noncatalogrfq_configuration/active/allow_private_noncatrfq')) {?>
+                        <?php
+    $selectedOptions = 'null';
+                      if (array_key_exists('marketplace_suppler_ids', $unsavedData['rfqTemplate'])) {
+                          $selectedOptions =  implode(",", $unsavedData['rfqTemplate']['marketplace_suppler_ids']);
+                      }
+                      ?>
+                      <div class="form-check-inline" id="mkt_suppliercontainer">
+                            <label class="form-check-label">
+                                    <input type="radio" name="suppliertype" id="mkt-supplierselect"  class="form-radio-input suppliertype" value="<?= /* @noEscape */  $_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PRIVATE;?>" /> <?= /* @noEscape */  $escaper->escapeHtml(__('Private RFQ Supplier [ Select Marketplace Suppliers ]')) ?>
+                            </label>
+                            <div id="mktsupplier-popupmodal" style="display:none;" >
+                                <div class="field productcategory required">
+                                        <div data-bind="scope: 'customMktVendor'">
+                                           <!-- ko template: getTemplate() -->
+                                           <center>
+                                               <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                                            </center>
+                                           <!-- /ko -->
+                                         </div>
+                                </div>
+                                <script type="text/x-magento-init">
+                                                {
+                                                    "*": {
+                                                        "Magento_Ui/js/core/app": {
+                                                            "components": {
+                                                                "customMktVendor": {
+                                                                    "component": "Matrix_NoncatalogueRfq/js/my-ui-select",
+                                                                    "template" : "Matrix_NoncatalogueRfq/ui-select-vendor",
+                                                                    "filterOptions": true,
+                                                                    "levelsVisibility": "1",
+                                                                    "multiple": true,
+                                                                    "closeBtn": true,
+                                                                    "showCheckbox": true,
+                                                                    "options": <?= /* @noEscape */  $block->getVendorJson();?>,
+                                                                    "selectedvalues":<?= /* @noEscape */  '"' . $selectedOptions . '"';?>
+
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                             }
+                                </script>
+
+                            </div>
+                      </div>
+                   <?php }?>
+                    <?php if ($_noncatRfqHelper->getConfigValue('noncatalogrfq_configuration/active/allow_public_noncatrfq')) {?>
+                    <div class="field publicrfq">
+                        <label class="label" for="publicrfq"> </span></label>
+                             <div class="control">
+                                 <div class="form-check-publicrfq">
+                                  <label class="form-check-label">
+                                      <input type="radio" name="suppliertype" id="ispublicrfq"  class="form-radio-input publicrfq" value="1"> <?= /* @noEscape */  $escaper->escapeHtml(__('Public RFQ Supplier')) ?></span>
+                                  </label>
+                                </div>
+                              </div>
+                   </div>
+                   <?php }?>
+                   <div>&nbsp;</div>
+                      <!--Start Invite Sellers-->
+                      <div class="form-check-inline">
+                           <div class="field splr_invite required">
+                               <?php
+                              $splr_invite  = 0;
+if (array_key_exists('invite_supplist_list', $unsavedData['rfqTemplate']) && array_key_exists('splr_invite', $unsavedData['rfqTemplate'])) {
+    $splr_invite = $unsavedData['rfqTemplate']['splr_invite'];
+}
+?>
+                               <input name="splr_invite" id="splr_invite"   <?= /* @noEscape */  ($splr_invite==1) ? 'checked="checked"' : '';?>   title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Invite non-marketplace suppliers')) ?>" value="1" class="input-chekbox" type="checkbox" /> <label for="splr_invite"><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Invite Non-marketplace Suppliers')) ?></strong></label>
+                          </div>
+                          <div  id="nonmkt-supplier-list" class="table-Non-marketplace">
+                                <div data-bind="scope: 'non-marketplacesuppliers'">
+                                  <!-- ko template: getTemplate() -->
+                                  <center>
+                                      <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                                  </center>
+                                  <!-- /ko -->
+                                </div>
+                           </div>
+                      </div>
+                      <?php
+                        $selectedOptions = '';
+if (array_key_exists('invite_supplist_list', $unsavedData['rfqTemplate'])) {
+    $selectedOptions =    $unsavedData['rfqTemplate']['invite_supplist_list'];
+}
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "non-marketplacesuppliers": {
+                    "component": "Matrix_NoncatalogueRfq/js/view/non-marketplacesuppliers",
+                     "selectedvalues":[<?= /* @noEscape */   $selectedOptions; ?>],
+                     "maxlimit":<?= /* @noEscape */  $_noncatRfqHelper->getNonMarketInviteLimit()?>
+                     }
+            }
+        }
+    }
+}
+</script>
+                    <!--End Invite Sellers-->
+          </div>
+    </div>
+ </div>
+</div>
+<script type="text/javascript">
+require([
+"jquery",
+"Magento_Ui/js/modal/modal",
+"Matrix_NoncatalogueRfq/js/view/non-marketplacesuppliers"],
+function($, modal, nonmarketplacesup) {
+$(document).ready(function() {
+    var selectedSupplierType = <?= /* @noEscape */  $suppliertype ?> ;
+    var supplierTypePrivate = <?= /* @noEscape */  $_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PRIVATE; ?> ;
+    var supplierTypePublic = <?= /* @noEscape */  $_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PUBLIC; ?> ;
+    if (selectedSupplierType == supplierTypePrivate) {
+        $('#mkt-supplierselect').prop("checked", true).trigger("change");
+
+    } else if (selectedSupplierType == supplierTypePublic) {
+        $('#ispublicrfq').prop("checked", true).trigger("change");
+    }
+    $('#ispublicrfq').change(function() {
+        var isPublicRfq = $(this).is(":checked");
+        if (isPublicRfq) {
+            $("#mktsupplier-popupmodal").hide();
+        } else {
+            $("#mkt-supplierselect").removeAttr("disabled");
+            var ischecked = $("#mkt-supplierselect").is(":checked");
+            if (ischecked) {
+                $("#mktsupplier-popupmodal").show();
+            }
+        }
+    });
+
+    $('#mkt-supplierselect').change(function() {
+        var isSupplierSelect = $(this).is(":checked");
+        if (isSupplierSelect) {
+            $('#ispublicrfq').prop("checked", false);
+            $("#mktsupplier-popupmodal").show('slow');
+        } else {
+            $("#mktsupplier-popupmodal").hide('slow');
+        }
+    });
+
+    $('#splr_invite').on('click', function() {
+        var maxlimit = <?= /* @noEscape */  $_noncatRfqHelper->getNonMarketInviteLimit()?>;
+        var totInvite = nonmarketplacesup.prototype.suppliersList().length;
+        var isInvite = $(this).is(":checked");
+        var options = {
+            type: 'popup',
+            responsive: true,
+            modalClass: 'supplierselect-popupmodal',
+            innerScroll: false,
+            clickableOverlay: false,
+            buttons: []
+        };
+        if (isInvite) {
+            if(maxlimit>0){
+                if( totInvite >= maxlimit){
+                    alert("No more Non-marketplace Suppliers allowed.");
+                    return;
+                }
+            }
+          var popup = modal(options, $('#mktsupplierselect-popupmodal'));
+          $("#supplierinfoadd-form").trigger("reset");
+          $("#mktsupplierselect-popupmodal").modal("openModal");
+        }
+
+      });
+
+    $('#mkt-supplierselect').trigger("change");
+
+  });
+
+});
+</script>

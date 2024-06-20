@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">categoryuom_edit_form.categoryuom_form_data_source</item>
+            <item name="deps" xsi:type="string">categoryuom_edit_form.categoryuom_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Sample Form</item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+        </item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Matrix\NoncatalogueRfq\Block\Adminhtml\CategroyUom\Edit\BackButton</item>
+            <item name="delete" xsi:type="string">Matrix\NoncatalogueRfq\Block\Adminhtml\CategroyUom\Edit\DeleteButton</item>
+            <item name="reset" xsi:type="string">Matrix\NoncatalogueRfq\Block\Adminhtml\CategroyUom\Edit\ResetButton</item>
+            <item name="save" xsi:type="string">Matrix\NoncatalogueRfq\Block\Adminhtml\CategroyUom\Edit\SaveButton</item>
+        </item>
+    </argument>
+    <dataSource name="categoryuom_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Matrix\NoncatalogueRfq\Model\CategroyUom\DataProvider</argument>
+            <argument name="name" xsi:type="string">categoryuom_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="noncatalogrfq/categoryuom/save"/>
+        </settings>
+    </dataSource>
+    <fieldset name="categroyuom">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Category Unit of Measure</item>
+            </item>
+        </argument>      
+        <field name="id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">categroyuom</item>
+                </item>
+            </argument>
+        </field>         
+    <field name="uom_options">
+    <argument name="data" xsi:type="array">
+        <item name="options" xsi:type="object">Matrix\NoncatalogueRfq\Ui\Component\Form\Uom\Options</item>
+        <item name="config" xsi:type="array">
+            <item name="label" xsi:type="string" translate="true">Unit Of Measure</item>
+            <item name="componentType" xsi:type="string">field</item>
+            <item name="formElement" xsi:type="string">select</item>
+            <item name="component" xsi:type="string">Magento_Ui/js/form/element/multiselect</item>
+            <item name="elementTmpl" xsi:type="string">ui/form/element/multiselect</item>
+            <item name="dataScope" xsi:type="string">uom_options</item>
+            <item name="filterOptions" xsi:type="boolean">true</item>
+            <item name="showCheckbox" xsi:type="boolean">true</item>
+            <item name="disableLabel" xsi:type="boolean">true</item>
+            <item name="multiple" xsi:type="boolean">false</item>
+            <item name="levelsVisibility" xsi:type="number">0</item>
+            <item name="sortOrder" xsi:type="number">20</item>
+            <item name="required" xsi:type="boolean">true</item>
+            <item name="source" xsi:type="string">sourceName</item>
+            <item name="validation" xsi:type="array">
+                <item name="required-entry" xsi:type="boolean">true</item>
+            </item>
+            <item name="listens" xsi:type="array">
+                <item name="${ $.namespace }.${ $.namespace }:responseData" xsi:type="string">setParsed</item>
+            </item>
+        </item>
+    </argument>
+</field>
+        <field name="category_id">
+            <argument name="data" xsi:type="array">
+                <!--<item name="options" xsi:type="object">Magento\Catalog\Ui\Component\Product\Form\Categories\Options</item>-->
+                <item name="options" xsi:type="object">Matrix\NoncatalogueRfq\Ui\Component\Form\Categories\Options</item>                
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Category</item>
+                    <item name="componentType" xsi:type="string">field</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/new-category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                    <item name="dataScope" xsi:type="string">category_id</item>
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="showCheckbox" xsi:type="boolean">false</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">false</item>
+                    <item name="levelsVisibility" xsi:type="number">2</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="listens" xsi:type="array">
+                        <item name="${ $.namespace }.${ $.namespace }:responseData" xsi:type="string">setParsed</item>
+                    </item>
+                </item>
+            </argument>
+        </field>    
+    </fieldset>
+</form>
+

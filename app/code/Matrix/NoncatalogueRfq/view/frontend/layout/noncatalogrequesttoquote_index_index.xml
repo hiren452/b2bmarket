@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <!--<update handle="csmarketplace_vendor"/>-->
+    <head>
+        <css src="extjs/resources/css/ext-all.css"/>
+        <css src="extjs/resources/css/ytheme-magento.css"/>
+        <!--<css src="Matrix_NoncatalogueRfq::css/jquery/jquery-ui.min.css"/>
+        <css src="Matrix_NoncatalogueRfq::css/jquery/jquery-ui.theme.css"/>
+        <css src="Matrix_NoncatalogueRfq::css/jquery/jquery-ui.structure.min.css"/>-->
+        <css src="Matrix_NoncatalogueRfq::css/styles.css"/>        
+        <link src="Ced_CsCategoryMap::css/cscategorymap.css"/>           
+        <css src="Ced_RequestToQuote::css/rfq.css" />          
+        <link src="Ced_CsCategoryMap::css/cscategorymap.css"/>
+    </head>
+    <referenceContainer name="content">
+        <block class="Matrix\NoncatalogueRfq\Block\NonRfqCreate"   name="noncatalogrequesttoquote_index_index" template="Matrix_NoncatalogueRfq::index.phtml">            
+            <container name="form.additional.info" as="form_additional_info"/>
+        </block>                
+        <!--<uiComponent name="noncatalog_rfq_create" />-->
+    </referenceContainer>
+</page>

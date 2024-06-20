@@ -1,0 +1,175 @@
+<?php
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+
+$po_info = $block->getPoInfo();
+
+$poData = $block->getPoData($po_info->getPoIncrementId(), $po_info->getRfqId());
+$subtotal = 0;
+$customer_id = $po_info->getPoCustomerId();
+$customer = $block->getCustomer($customer_id);
+$customer_email = $customer->getEmail();
+$customer_name = $customer->getName();
+$address = $block->getCustomerAddress();
+$pricingHelper = $block->helper('Magento\Framework\Pricing\Helper\Data');
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+
+$isShowSellerInfo = $_noncatRfqHelper->showSellerInfo($po_info->getVendorId(), $po_info->getId());
+//echo "<br / > getQuotePoId=" .$block->getQuotePoId();
+//echo "<br /> getId=". $po_info->getId();
+$vendor =  $block->getVendorbyId($po_info->getVendorId());
+$is_feespaid = $po_info->getIsFeespaid();
+$rfqFees = $po_info->getRfqFees();
+
+$uomOptions =  $_noncatRfqHelper->getUomOptions();
+try {
+    ?>
+<div class="form-quote-wrap">
+    <ul class="items order-links">
+        <li class="nav item current">
+            <strong><?= /* @noEscape */  __('Proposal Items');?></strong>
+        </li>
+        <?php if ($po_info->getStatus() == \Ced\RequestToQuote\Model\Po::PO_STATUS_PENDING ||
+                  $po_info->getStatus() == \Ced\RequestToQuote\Model\Po::PO_STATUS_CONFIRMED
+        ) { ?>
+                        <?php if ($block->getQuotePoId() == $po_info->getId()) { ?>
+                    <span class="order-status">
+                            <?php
+                    $url = $block->getUrl("noncatalogrequesttoquote/quotes/removeItemsFromCart");
+                            $data = ['id' => $po_info->getId()];
+                            $deleteData = json_encode(['action' => $url, 'data' => $data]);
+
+                            ?>
+                         <a href="#"
+                           title="<?= /* @noEscape */  $escaper->escapeHtml(__('Remove Item(s) From Cart')); ?>"
+                           class="action action-delete"
+                           data-post='<?= /* @noEscape */  $deleteData ?>'>
+                            <span>
+                                <?= /* @noEscape */  /* @escapeNotVerified */ __('Remove Item(s) From Cart')?>
+                            </span>
+                        </a>
+                    </span>
+                <?php } else { ?>
+                    <span class="order-status">
+                           <a href="<?= /* @noEscape */  $block->getUrl('noncatalogrequesttoquote/quotes/addtocart', ['id'=>$po_info->getQuoteId(), 'po_incId'=>$po_info->getPoIncrementId()])?>">
+                            <?php if ($is_feespaid) { ?>
+                                <?= /* @noEscape */  __('Add To Cart') ?>
+                            <?php } else { ?>
+                                <?= /* @noEscape */  __('Pay Fee') ?>
+                            <?php } ?>
+                      </a>
+                    </span>
+            <?php } ?>
+        <?php } else { ?>
+            <span class="order-status">
+                <?= /* @noEscape */  $block->getPoStatus() ?>
+            </span>
+        <?php }?>
+    </ul>
+    <div class="order-details-items ordered">
+    <div class="table-wrapper order-items">
+        <table class="data table table-order-items" id="my-orders-table" summary="Items Ordered">
+            <caption class="table-caption">PO Items</caption>
+            <thead>
+                <tr>
+                    <th class="col name"><?= /* @noEscape */  __('Name');?></th>
+                    <th class="col sku"><?= /* @noEscape */  __('SKU');?></th>
+                    <th class="col price"><?= /* @noEscape */  __('Price');?></th>
+                    <th class="col qty"><?= /* @noEscape */  __('Qty');?></th>
+                    <th class="col subtotal"><?= /* @noEscape */  __('Subtotal');?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($poData->getData() as $value) {
+                    $remainingQty = $value['remaining_qty'];
+                    $subtotal += $value['po_price'];
+
+                    $custom_option = $value['custom_option'];
+                    $custom_option = json_decode($custom_option);
+                    $umo = $custom_option->umo;
+                    $umoLabel = (isset($umo) && $umo>0) ? $uomOptions[$umo] : '';
+
+                    ?>
+                <tr id="order-item-row-48">
+                    <td class="col name" data-th="Product Name">
+                        <strong class="product name product-item-name"><?= /* @noEscape */  $value['name'];  ?></strong>
+                    </td>
+                    <td class="col sku" data-th="SKU"><?= /* @noEscape */  $value['sku'];  ?></td>
+                    <td class="col price" data-th="Price">
+                        <span class="price-excluding-tax" data-label="Excl. Tax">
+                            <span class="cart-price">
+                                <span class="price"><?= /* @noEscape */  $pricingHelper->currency($value['po_price']/$value['product_qty'], true, false);  ?></span>
+                            </span>
+                        </span>
+                    </td>
+                    <td class="col qty" data-th="Qty">
+                        <ul class="items-qty">
+                            <li class="item">
+                                <span class="content"><?= /* @noEscape */  $value['product_qty'] . ' ' . $umoLabel;  ?></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="col subtotal" data-th="Subtotal">
+                        <span class="price-excluding-tax" data-label="Excl. Tax">
+                            <span class="cart-price">
+                                <span class="price"><?= /* @noEscape */  $pricingHelper->currency($value['po_price'], true, false);  ?></span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                    <?php }?>
+            </tbody>
+            <tfoot>
+                <tr class="subtotal">
+                    <th colspan="4" class="mark" scope="row"><?= /* @noEscape */  __('Subtotal');?></th>
+                    <td class="amount" data-th="Subtotal">
+                        <span class="price">
+                                <?= /* @noEscape */  $pricingHelper->currency($subtotal, true, false);?>
+                        </span>
+                    </td>
+                </tr>
+                <tr class="grand_total">
+                    <th colspan="4" class="mark" scope="row">
+                        <strong><?= /* @noEscape */  __('Grand Total')?></strong>
+                    </th>
+                    <td class="amount" data-th="Grand Total">
+                        <strong><span class="price"><?= /* @noEscape */  $pricingHelper->currency($subtotal + $block->getShippingAmount(), true, false);?></span></strong>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="actions">
+        <div class="secondary">
+            <a class="action" href="<?= /* @noEscape */  $block->getUrl('noncatalogrequesttoquote/customer/editquote/', ['quoteId' => $po_info->getRfqId()]);?>">
+                <span><?= /* @noEscape */  __('Back to Quote')?></span>
+            </a>
+        </div>
+    </div>
+</div>
+    <div class="block block-order-details-view">
+    <div class="block-title">
+        <strong><?= /* @noEscape */  __('Vendor ')?></strong>
+    </div>
+    <div class="block-content">
+        <div class="box">
+            <strong class="box-title">
+                <span><?= /* @noEscape */  __('Vendor Information')?></span>
+            </strong>
+            <div class="box-content">
+                <?php if ($isShowSellerInfo) {?>
+                
+                    <?= /* @noEscape */   __('Vendor ') . ": " . $vendor->getData('public_name');?><br />
+                    <?= /* @noEscape */   __('Company ') . ": " . $vendor->getData('company_name');?><br />
+                    <?= /* @noEscape */   __('Email ') . ": " . $_noncatRfqHelper->obfuscate_email($vendor->getData('email'));?><br /><br />
+                 <a class="link" href="<?= /* @noEscape */  $block->getUrl('vendor_shop/' . $vendor->getData('shop_url') . '.html');?>" target="_blank"> <?= /* @noEscape */    __('View ');?> </a>
+                 <?php } else {?>
+                     <center><span style='color:#834e56;'><?= /* @noEscape */  __('Locked') ?></span></center>
+                 <?php }?>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<?php } catch (\Exception $e) {
+}?>

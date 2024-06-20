@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Matrix_NoncatalogueRfq::css/styles.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <referenceBlock name="customer_form_login">
+                <arguments>
+                    <argument name="custom_view_model" xsi:type="object">Matrix\NoncatalogueRfq\ViewModel\LoginHistory</argument>
+                </arguments>
+            </referenceBlock>
+        </referenceContainer>
+    </body>
+</page>

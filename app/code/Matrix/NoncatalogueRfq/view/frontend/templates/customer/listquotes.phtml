@@ -1,0 +1,176 @@
+<?php
+
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$rfqTypes = [$_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PUBLIC=>"<span style='background-color:#f8991d;padding:5px;color:#ffffff;    min-width:60px;display: inline-block;text-align: center;'>Public</span>",$_noncatRfqHelper::NONCATALOG_RFQ_TYPE_PRIVATE=>"<span style='background-color:#FD5E0F;padding:5px;color:#ffffff;min-width:60px;display:inline-block;text-align:center;'>Private</span>"];
+$rfqcollectionJson =  $block->getRfqTemplateCollectionJson();
+$rfqTemplateCollection = $block->getRfqTemplateCollection();
+$activeSubscription = $_noncatRfqHelper->getMembershipSubscriptionbyCustomerId($block->getCustomerId());
+?>
+<div class="dashboard-custom-container">
+<form class="form noncatalogrfq rfq-info"
+      action="<?= /* @noEscape */  $block->getFormAction();?>"
+      id="rfqtemplatelist-form"
+      name="rfqtemplatelist-form"
+      method="post"
+      data-hasrequired="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
+     data-mage-init='{"validation":{}}'>
+<div class="row">
+ <div class="col-sm-6">
+    <fieldset class="fieldset">
+    <div class="field ">
+        <label class="label" ><span><?= /* @noEscape */  $escaper->escapeHtml(__('Select Template')) ?></span></label>
+        <div class="control">
+             <div class="field productsourcingpurpose required">
+                <div data-bind="scope: 'rfqTemplates'">
+                       <!-- ko template: getTemplate() -->
+                        <center>
+                            <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                        </center>
+                       <!-- /ko -->
+                </div>
+           </div>
+         </div>
+     </div>
+  </fieldset>
+ </div>
+ <div class="col-sm-4">
+    <fieldset class="fieldset">
+        <div class="field">
+            <label class="label" ><span>&nbsp;</span></label>
+            <div class="control">
+                <button type="submit" name="rfqtemplate_submit" id="rfqtemplate_submit" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Go')) ?>" class="btn btn-primary primary"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Go')) ?></span></button>
+                <button type="button" name="rfqtemplate_create" id="rfqtemplate_create" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Create New')) ?>" class="btn btn-primary primary"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Create New')) ?></span></button>
+            </div>
+       </div>
+     </div>
+  </fieldset>
+</div>
+</form>
+<script type="text/x-magento-init">
+  {
+     "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                        "rfqTemplates": {
+                            "component": "Magento_Ui/js/form/element/ui-select",
+                            "template" : "Matrix_NoncatalogueRfq/ui-select-rfqtemplate",
+                            "filterOptions": true,
+                            "levelsVisibility": "1",
+                            "multiple": false,
+                            "closeBtn": true,
+                            "showCheckbox": true,
+                            "options": <?= /* @noEscape */  $rfqcollectionJson;?>
+                        }
+                }
+            }
+        }
+     }
+</script>
+<!--END Rfq Template Listing-->
+<?php
+$quoteModel = $block->getCollection();
+$pricingHelper = $block->helper('Magento\Framework\Pricing\Helper\Data');?>
+<?php
+if ($activeSubscription && $activeSubscription->getMembershipId()) {
+    $noncatrfq_limit = $activeSubscription->getData('noncatrfq_limit');
+    $remainRfq =  $noncatrfq_limit -  $quoteModel->count();
+    $remainRfqStyle = ($remainRfq>0) ? 'color:#fd5e0f' : 'color:#ff2500';
+    ?>
+<h4 style="border-bottom:1px solid #ccc;padding:0 0 10px 0px;margin:4px auto;">
+    <?= /* @noEscape */  $escaper->escapeHtmlAttr(__(' Remaining Non-Catalog RFQ Allowed')) ?> : <strong><label style="<?= /* @noEscape */  $remainRfqStyle;?>"><?= /* @noEscape */  $remainRfq;?></label></strong>
+ </h4>
+<?php  } ?>
+<?php if (isset($quoteModel) && $quoteModel->count()>0) {?>
+
+    <div class="table-responsive">
+    <table class="data-table table table-striped" id="my-orders-table">
+            <thead>
+                <tr>
+                    <th><?= /* @noEscape */  __('Quote Id ');?></th>
+                    <th><?= /* @noEscape */  __('Name ');?></th>
+                    <th><?= /* @noEscape */  __('RFQ Type');?></th>
+                    <th><?= /* @noEscape */  __('Quote Date');?></th>
+                    <th><?= /* @noEscape */  __('Quote Status');?></th>
+                    <th><?= /* @noEscape */  __('Action');?></th>
+                </tr>
+            </thead>
+            <tbody>
+        <?php
+        foreach ($quoteModel as $value) {
+            ?>
+                <tr>
+                        <td><?= /* @noEscape */  $value->getQuoteIncrementId(); ?></td>
+                        <td><?= /* @noEscape */  $value->getName(); ?></td>
+                        <td><?= /* @noEscape */  $rfqTypes[$value->getRfqType()]; ?></td>
+                        <td><?= /* @noEscape */  $value->getCreatedAt() ? date('d/m/Y', strtotime($value->getCreatedAt())) : ''; ?></td>
+                        <td><?php
+                            $status = $value->getStatus();
+            $title = __('Edit');
+            if (isset($status)) {
+                switch ($status) {
+                    case '0':
+                        /* @noEscape */  echo "<span style='color:#001f3f'>" . $block->getStatus($status) . "</span>";
+                        $title = __('Edit');
+                        break;
+                    case '1':
+                        /* @noEscape */  echo "<span style='color:#ff851b'>" . $block->getStatus($status) . "</span>";
+                        $title = __('Edit');
+                        break;
+                    case '2':
+                        /* @noEscape */  echo "<span style='color:#0074d9'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '3':
+                        /* @noEscape */  echo "<span style='color:#ff4136'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '4':
+                        /* @noEscape */   echo "<span style='color:#2ecc40'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '5':
+                        /* @noEscape */   echo "<span style='color:#01ff70'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '6':
+                        /* @noEscape */  echo "<span style='color:blue'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    case '7':
+                        /* @noEscape */  echo "<span style='color:#aaaaaa'>" . $block->getStatus($status) . "</span>";
+                        $title = __('View');
+                        break;
+                    default:
+                        /* @noEscape */  echo "<span style='color:#001f3f'>" . $block->getStatus(\Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING) . "</span>";
+                        break;
+                }
+            } ?>
+                        </td>
+                        <td>
+                            <?php $title = 'View';?>
+                            <a class="action action-edit" href="<?= /* @noEscape */  $block->getUrl('noncatalogrequesttoquote/customer/editquote/', ['quoteId'=>$value->getRfqId()]); ?>" /><span><?= /* @noEscape */  $title; ?> </span>
+                        </td>
+               </tr>
+            <?php }?>
+            </tbody>
+        </table>
+    </div>
+
+    <?php if ($block->getPagerHtml()): ?>
+<div class="order-products-toolbar toolbar bottom"><?= /* @noEscape */  $block->getPagerHtml(); ?></div>
+    <?php endif; ?>
+<?php } else {?>
+<h3><?= /* @noEscape */  __('No quotes available.');?></h3>
+<?php }?>
+<script type="text/javascript">
+    require(["jquery"],function($) {
+
+         $(document).ready(function() {
+
+             $("#rfqtemplate_create").click(function(){
+                 window.location.href=<?= /* @noEscape */  "'" . $block->getUrl('restrictprofile/index/index/') . "'"; ?>;
+             });
+         });
+    });
+</script>
+</div>

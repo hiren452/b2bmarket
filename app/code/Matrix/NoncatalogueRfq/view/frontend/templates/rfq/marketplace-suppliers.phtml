@@ -1,0 +1,34 @@
+<?php
+$collection = $block->getVendorCollection();
+foreach ($collection as $item) {
+
+}
+?>
+<div class="field productcategory required">           
+    <!--<label class="label"><?= /* @noEscape */  __('Select Vendor') ?>:</label>-->
+        <div data-bind="scope: 'customMktVendor'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>           
+</div>
+<script type="text/x-magento-init">
+                {
+                    "*": {
+                        "Magento_Ui/js/core/app": {
+                            "components": {
+                                "customMktVendor": {                                    
+                                    "component": "Magento_Ui/js/form/element/ui-select",
+                                    "template" : "Matrix_NoncatalogueRfq/ui-select-vendor",
+                                    "filterOptions": true,
+                                    "levelsVisibility": "1",
+                                    "multiple": true,
+                                    "closeBtn": false,
+                                    "showCheckbox": true,
+                                    "options": <?= /* @noEscape */  $block->getVendorJson();?>
+                                    
+                            }
+                        }
+                    }
+                }
+             }   
+</script>
+

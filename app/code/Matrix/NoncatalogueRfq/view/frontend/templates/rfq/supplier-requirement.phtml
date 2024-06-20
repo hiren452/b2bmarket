@@ -1,0 +1,104 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$swatchMediaUrl =   $_noncatRfqHelper->getMediaUrl() . 'attribute/swatch';
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$swatchOption = $_noncatRfqHelper->getCertificationsOptionSwatchs();
+$unsavedData =  $block->getUnsavedData();
+?>
+<fieldset class="fieldset">
+      <!--<legend class="legend"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Supplier Requirements')) ?></span></legend><br />-->
+      <div class="field splr_certifications">
+         <label class="label" for="splr_certifications"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Certifications')) ?></span></label>
+         <div class="control">
+                  <div class="field splr_certifications">
+                  <div id="suppliercertificates" data-bind="scope: 'splr_certifications'">
+                     <!-- ko template: getTemplate() -->
+                     <center>
+                        <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                     </center>
+                     <!-- /ko-->
+                  </div>
+               </div>
+               <?php
+                $selectedOptions = '';
+//if(is_array($unsavedData['rfqTemplate']['splr_certifications'])){
+if (array_key_exists('splr_certifications', $unsavedData['rfqTemplate'])) {
+    $selectedOptions =  implode(",", $unsavedData['rfqTemplate']['splr_certifications']);
+}
+?>
+                  <script type="text/x-magento-init">
+                           {
+                        "#suppliercertificates": {
+                           "Magento_Ui/js/core/app": {
+                              "components": {
+                                 "splr_certifications": {
+                                     "type":"form.select",
+                                     "name":"splr_certifications",
+                                     "config":{
+                                            "component": "Matrix_NoncatalogueRfq/js/my-ui-select",
+                                            "template" : "Matrix_NoncatalogueRfq/ui-select-cert",
+                                            "filterOptions": false,
+                                            "loading":true,
+                                            "levelsVisibility": "1",
+                                            "multiple": true,
+                                            "closeBtn": true,
+                                            "required": true,
+                                            "showCheckbox": true,
+                                            "options": <?= /* @noEscape */  $_noncatRfqHelper->getCertificationsJson();?>,
+                                            "selectedvalues":<?= /* @noEscape */  '"' . $selectedOptions . '"';?>,
+                                            "validation":{
+                                                "rule":{
+                                                   "required-entry":true
+                                                  }
+                                               },
+                                            "displayArea": "body"
+                                        }
+
+
+                                   }
+                               }
+                           }
+                         }
+                     }
+                  </script>
+         </div>
+      </div>
+      <div class="field splr_otherreq">
+         <label class="label" for="splr_otherreq"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Other requirements')) ?></span></label>
+         <div class="control">
+               <?php $splr_otherreq = (isset($unsavedData['rfqTemplate']['splr_otherreq'])) ? $unsavedData['rfqTemplate']['splr_otherreq'] : '';?>
+               <textarea style="min-height: 77px;" name="splr_otherreq" id="splr_otherreq"  placeholder="To receive fast and accurate quotations from suitable suppliers, please present your supplier requirements as specifically as possible. "  title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Other requirements')) ?>" class="input-text" cols="3" rows="2" ><?= /* @noEscape */  $splr_otherreq;?></textarea>
+         </div>
+      </div>
+      <div class="field respons_date required">
+         <label class="label" for="respons_date">
+             <span><?= /* @noEscape */  $escaper->escapeHtml(__('Respons Date')) ?></span>
+         </label>
+         <div class="control required required-entry">
+               <?php $respons_date = (isset($unsavedData['rfqTemplate']['respons_date'])) ? $unsavedData['rfqTemplate']['respons_date'] : '';?>
+               <input type="text" data-validate="{required:true}"
+                      value="<?= /* @noEscape */  $respons_date;?>"
+                      class="input-text required required-entry"
+                      name="respons_date" id="respons_date" style="width:120px !important;"  />
+         </div>
+      </div>
+</fieldset>
+<script type="text/javascript">
+    require(["jquery", "Magento_Ui/js/modal/modal", "mage/translate", "mage/calendar",],
+    function($, modal, $t) {
+        var d = new Date();
+        var year = d.getYear();
+        var month = d.getMonth();
+        var day = d.getDate()+2;
+
+        $('#respons_date').calendar({
+            changeMonth: true,
+            changeYear: true,
+            minDate:  new Date(),
+            showButtonPanel: true,
+            currentText: $t('Go Today'),
+            closeText: $t('Close'),
+            showWeek: false
+       });
+    });
+</script>

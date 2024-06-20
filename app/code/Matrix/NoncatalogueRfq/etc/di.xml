@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">     
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="categoryuom_grid_data_source" xsi:type="string">Matrix\NoncatalogueRfq\Model\ResourceModel\CategroyuomCollection</item>
+                <item name="noncatalogrfq_grid_data_source" xsi:type="string">Matrix\NoncatalogueRfq\Model\ResourceModel\NoncatalogRfqCollection</item>
+                <item name="noncatalogpo_grid_data_source" xsi:type="string">Matrix\NoncatalogueRfq\Model\ResourceModel\RfqPoCollection</item>
+                <item name="rfqmembershipfees_grid_data_source" xsi:type="string">Matrix\NoncatalogueRfq\Model\ResourceModel\MembershipFeesCollection</item>                
+                <item name="buyervisibility_grid_data_source" xsi:type="string">Matrix\NoncatalogueRfq\Model\ResourceModel\BuyervisibilityCollection</item>
+                <item name="sellervisibility_grid_data_source" xsi:type="string">Matrix\NoncatalogueRfq\Model\ResourceModel\SellervisibilityCollection</item>
+                <item name="employee_form_data_source" xsi:type="string">Magento\Catalog\Model\ResourceModel\Prouct\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--START Custom Session-->
+    <virtualType name="Matrix\NoncatalogueRfq\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">noncatrfq</argument>
+        </arguments>
+    </virtualType>
+    <type name="Matrix\NoncatalogueRfq\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Matrix\NoncatalogueRfq\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <!--End Custom Session-->
+     <!--Start Custom Logger-->
+      <type name="Matrix\NoncatalogueRfq\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Matrix\NoncatalogueRfq\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">Extension</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Matrix\NoncatalogueRfq\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--End Custom Logger-->
+</config>

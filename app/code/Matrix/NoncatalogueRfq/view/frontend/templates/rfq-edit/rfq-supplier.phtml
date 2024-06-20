@@ -1,0 +1,71 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$mktSuppliers = $block->getSelectedMarketPlaceSuppliers();
+$nonmktVendorCollection = $block->getnonMarketVendorCollection();
+?>
+<h2><?= /* @noEscape */  __('Supplier') ?></h2>
+<div class="m-supplier"> 
+       <h4><?= /* @noEscape */  __('Marketplace Supplier') ?> [ <?= /* @noEscape */  $mktSuppliers->getSize()?> ]</h4>   
+       <?php if ($mktSuppliers->getSize()<=0) {?>
+           <div class="mb-25"><?= /* @noEscape */  __('No Marketplace Supplier assigned'); ?></div>
+        <?php } else { ?>     
+            <div class="table-responsive mb-25">      
+            <table class="data-table table table-striped table-cus table-cus1">
+                <thead>
+                    <tr>
+                        <th><?= /* @noEscape */  __('SL No') ?></th>
+                        <th><?= /* @noEscape */  __('Public Name') ?></th>
+                        <th><?= /* @noEscape */  __('Email') ?></th>                        
+                    </tr>
+                </thead>
+                <tbody>
+             <?php $slNo = 1;?>
+              <?php foreach ($mktSuppliers as $supplier):?>            
+                
+                <tr>
+                    <td> <?= /* @noEscape */  $slNo++; ?> </td>
+                    <td> <?= /* @noEscape */  $supplier->getData('public_name'); ?> </td>
+                    <td> <?= /* @noEscape */   $_noncatRfqHelper->obfuscate_email($supplier->getData('email')); ?> </td>
+                </tr>
+                <?php endforeach;?>    
+                 </tbody>
+           </table>
+            </div>
+         <?php }?>    
+</div>   
+
+<div class="m-supplier">   
+       <h4><?= /* @noEscape */  __('Invited Non-marketplace Supplier') ?> [ <?= /* @noEscape */  $nonmktVendorCollection->getSize()?> ]</h4>   
+       <?php if ($nonmktVendorCollection->getSize()<=0) {?>
+           <div><?= /* @noEscape */  __('No Invitation found'); ?></div>
+        <?php } else { ?>       
+            <div class="table-responsive mb-25">
+            <table class="data-table table table-striped table-cus table-cus1">
+                <thead>
+                    <tr>
+                        <th><?= /* @noEscape */  __('SL No') ?></th>
+                        <th><?= /* @noEscape */  __('Name') ?></th>
+                        <th><?= /* @noEscape */  __('Email') ?></th>
+                        <th><?= /* @noEscape */  __('Phone') ?></th>
+                        <th><?= /* @noEscape */  __('URL') ?></th>
+                        <th><?= /* @noEscape */  __('Address') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+             <?php $slNo = 0;?>
+              <?php foreach ($nonmktVendorCollection as $supplier):?>            
+                <tr>
+                    <td> <?= /* @noEscape */  $slNo++; ?> </td>
+                    <td> <?= /* @noEscape */  $supplier->getData('company_name'); ?> </td>
+                    <td> <?= /* @noEscape */   $_noncatRfqHelper->obfuscate_email($supplier->getData('email')); ?> </td>
+                    <td> <?= /* @noEscape */  $supplier->getData('phone'); ?> </td>
+                    <td> <?= /* @noEscape */  $supplier->getData('url'); ?> </td>
+                    <td> <?= /* @noEscape */  $supplier->getData('address'); ?> </td>    
+                </tr>
+                <?php endforeach;?>    
+                 </tbody>
+           </table>
+            </div>
+         <?php }?>    
+</div>   

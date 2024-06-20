@@ -1,0 +1,66 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$countryCollection = $_noncatRfqHelper->getCountries();
+$unsavedData =  $block->getUnsavedData();
+?>
+<fieldset class="fieldset">
+     <!--<legend class="legend"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Shipping and Payment')) ?></span></legend><br />-->
+     <div class="field Shippingmethod">
+          <label class="label" for="Shippingmethod"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Shipping Method')) ?></span></label>
+          <div class="control">
+               <?php $shippingmethod = (isset($unsavedData['rfqTemplate']['shippingmethod'])) ? $unsavedData['rfqTemplate']['shippingmethod'] : '';?>
+                    <select name="shippingmethod" id="shippingmethod" class="">
+                         <option value=""> <?= /* @noEscape */  $escaper->escapeHtml(__('Select Shipping Method')) ?></option>
+                         <?php $options =  $_noncatRfqHelper->getShippingMethods();?>
+                         <?php if (count($options)) {?>
+                                <?php foreach ($options as $index => $option):?>
+                                   <option <?= /* @noEscape */  ($shippingmethod==$option['value']) ? 'selected="selected"' : '';?>  value="<?= /* @noEscape */  $option['value'];?>"> <?= /* @noEscape */  $option['label'];?> </option>
+                              <?php endforeach;?>
+                         <?php }?>
+               </select>
+          </div>
+     </div>
+     <div class="field destination required">
+          <label class="label" for="destination"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Destination')) ?></span></label>
+          <div class="control">
+               <?php $destination = (isset($unsavedData['rfqTemplate']['destination'])) ? $unsavedData['rfqTemplate']['destination'] : '';?>
+                    <select name="destination" id="destination" class="required-entry">
+                         <option value=""> <?= /* @noEscape */  $escaper->escapeHtml(__('Select Destination')) ?></option>
+                         <?php if (count($countryCollection)) {?>
+                                <?php foreach ($countryCollection as $index => $option):?>
+                                   <option  <?= /* @noEscape */  ($destination==$option['value']) ? 'selected="selected"' : '';?> value="<?= /* @noEscape */  $option['value'];?>"> <?= /* @noEscape */  $option['label'];?> </option>
+                              <?php endforeach;?>
+                         <?php }?>
+               </select>
+          </div>
+     </div>
+     <div class="field lead_time" style="dispplay:inline;">
+          <div class="control" style="dispplay:inline;">
+                <label class="label" for="lead_time" style="dispplay:inline;">
+                  <span><?= /* @noEscape */  $escaper->escapeHtml(__('Lead Time')) ?></span>
+                  <span style="padding-left:1px;"><?= /* @noEscape */  $escaper->escapeHtml(__('Ship In')) ?></span>
+               </label>
+               <input style="width:50px;height:30px;dispplay:inline" name="lead_time" id="lead_time" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Lead Time')) ?>"
+               value="<?= /* @noEscape */  (isset($unsavedData['rfqTemplate']['lead_time'])) ? $unsavedData['rfqTemplate']['lead_time'] : '';?>" class="input-text" type="number" data-validate="{required:true}"/>
+               <span><?= /* @noEscape */  $escaper->escapeHtml(__('day\'s after supplier receives initial payment')) ?></span>
+          </div>
+     </div>
+
+     <div class="field payment_terms required">
+          <label class="label" for="splr_certifications"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Payment Term')) ?></span></label>
+          <div class="control">
+               <?php $payment_terms = (isset($unsavedData['rfqTemplate']['payment_terms'])) ? $unsavedData['rfqTemplate']['payment_terms'] : '';?>
+                    <select name="payment_terms" id="payment_terms">
+                         <option> <?= /* @noEscape */  $escaper->escapeHtml(__('Select Payment Terms')) ?></option>
+                         <?php $options =  $_noncatRfqHelper->getPaymentTerms();?>
+                         <?php if (count($options)) {?>
+                                <?php foreach ($options as $index => $option):?>
+                                   <option <?= /* @noEscape */  ($payment_terms==$option['value']) ? 'selected="selected"' : '';?>   value="<?= /* @noEscape */  $option['value'];?>"> <?= /* @noEscape */  $option['label'];?> </option>
+                              <?php endforeach;?>
+                         <?php }?>
+               </select>
+          </div>
+     </div>
+
+
+</fieldset>

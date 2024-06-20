@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Matrix_NoncatalogueRfq::css/styles.css"/>
+    </head>
+    <body>
+        <!--<referenceBlock name="header.links">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="noncatalogrfq-link" ifconfig="noncatalogrfq_configuration/active/enable">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Create RFQ Template</argument>
+                    <argument name="path" xsi:type="string" translate="true">noncatalogrequesttoquote/index/index</argument>
+                </arguments>
+           </block>                   
+        </referenceBlock>--> 
+         <referenceContainer name="after.body.start">
+            <block class="Magento\Framework\View\Element\Template" name="noncatalog_rfqpost_popup" cacheable="false" template="Matrix_NoncatalogueRfq::html/noncatrfq-form-popup.phtml" before="-"/>            
+        </referenceContainer>         
+    </body>
+</page>
+

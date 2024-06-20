@@ -1,0 +1,589 @@
+<?php
+$quote = $block->getQuoteData();
+$quoteItems = $block->getItems();
+$chatshistory = $block->getMessages();
+$customer = $block->getCustomer($quote->getCustomerId());
+
+$default_billing = $customer->getData('default_billing');
+$default_shipping = $customer->getData('default_shipping');
+
+$chatDate = '';
+$status = $quote->getStatus();
+$productJson = $block->getNonCatalogQuoteProductJson();
+//echo $productJson ;
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$rfqTypes = $_noncatRfqHelper->getRFQuoteTypes();
+$uomOptions =  $_noncatRfqHelper->getUomOptions();
+$shippintMethodOptions = $_noncatRfqHelper->getShippingMethods();
+
+foreach ($shippintMethodOptions as $index => $option) {
+    $arrShippingMethods[$option['value']] = $option['label'];
+}
+$paymentTermsOptions = $_noncatRfqHelper->getPaymentTerms();
+$arrpaymentTerm = [];
+if (is_array($paymentTermsOptions) && count($paymentTermsOptions)) {
+    foreach ($paymentTermsOptions as $index => $option) {
+        $arrpaymentTerm[$option['value']] = $option['label'];
+    }
+}
+$supplierCertifications = $_noncatRfqHelper->getCertifications();
+$supplierCertificationsSwatch = $_noncatRfqHelper->getCertificationsOptionSwatchs();
+?>
+<main id="anchor-content" class="page-content">
+    <div class="page-main-actions">    
+        <div class="page-actions-placeholder"></div>
+        <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+            <div class="page-actions-inner" data-title="New Invoice">
+                <div class="page-actions-buttons">                    
+                    <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?= /* @noEscape */  $block->getBackUrl(); ?>')">                   
+                        <span><?= /* @noEscape */  __("Back to Grid");?></span>
+                    </button>
+                    <?php if ($quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING
+                    ) {
+                        ?>
+                        <!--<button id="approve" title="Approve" type="button" class="action-default scalable approve">
+                            <span><?= /* @noEscape */  __("Approve");?></span>
+                        </button>
+                        <button id="reject" title="Reject" type="button" class="action-default scalable reject">
+                            <span><?= /* @noEscape */  __("Reject");?></span>
+                        </button>-->
+                    <?php }?>
+                    <?php if ($quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PENDING ||
+                              $quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_APPROVED ||
+                              $quote->getStatus() == \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_PARTIAL_PO
+                    ) { ?>
+                        <!--<button id="reset" title="Create Proposal" type="button" class="action-default scalable reset" onclick="setLocation('<?= /* @noEscape */  $block->getPOUrl(); ?>')">
+                            <span><?= /* @noEscape */  __("Create Proposal");?></span>
+                        </button>-->
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page:main-container" class="page-columns">
+        <div class="admin__old">
+            <div id="container" class="main-col">
+                <form id="edit_form" class="order-invoice-edit" method="post" action="<?= /* @noEscape */  $block->getSaveUrl(); ?>" novalidate="novalidate">                
+                    <div>
+                        <input name="form_key" value="<?= /* @noEscape */  $block->getFormkey()?>" type="hidden">
+                        <input name="status" type="hidden" value="<?= /* @noEscape */  $quote->getStatus() ?>"/>
+                        <!--START Section 1-->
+                           <section class="admin__page-section order-view-account-information">
+                            <div class="admin__page-section-title">
+                                <span class="title"><?= /* @noEscape */  __("Quote & Account Information");?></span>
+                            </div>
+                            <div class="admin__page-section-content">
+                                <div class="admin__page-section-item order-information">
+                                    <div class="admin__page-section-item-title">
+                                        <span class="title">
+                                            <span><?= /* @noEscape */  __("Quote #");?><?= /* @noEscape */  $quote->getQuoteIncrementId();?></span>
+                                            <input type="hidden" name="id" value="<?= /* @noEscape */  $quote->getQuoteId();?>" />
+                                        </span>
+                                    </div>
+                                    <div class="admin__page-section-item-content">
+                                        <table class="admin__table-secondary order-information-table">
+                                            <tbody>
+                                                <tr>
+                                                    <th><?= /* @noEscape */  __("RFQ Type");?></th>
+                                                    <?php
+                                                $rfqtype = $quote->getData('rfq_type');
+$rfqTypeColor = ($rfqtype==1) ? '#f8991d' : '#FD5E0F';
+?>
+                                                    <td><span style="padding:10px;font-size:12;background-color:<?= /* @noEscape */  $rfqTypeColor;?>;color:#ffffff;font-weight:bold;text-transform:uppercase"><?= /* @noEscape */  $rfqTypes[$quote->getData('rfq_type')];?></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <th><?= /* @noEscape */  __("Company Name");?></th>
+                                                    <td><?= /* @noEscape */  $quote->getData('company_name');?></td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                     <th><?= /* @noEscape */  __("Subtotal");?></th>
+                                                     <td><?= /* @noEscape */  $block->getCurrencyCode() . number_format($quote->getData('rfq_total_price'), 2);?></td>
+                                                </tr>
+                                                <tr>
+                                                     <th><?= /* @noEscape */  __("Subtotal");?></th>
+                                                     <td><?= /* @noEscape */  $quote->getData('company_name');?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th><?= /* @noEscape */  __("Total Qty");?></th>
+                                                    <td><?= /* @noEscape */  $quote->getData('rfq_total_qty');?></td>
+                                                </tr>
+                                                 <tr>
+                                                    <th><?= /* @noEscape */  __("Response Date");?></th>
+                                                    <td><?= /* @noEscape */  $block->getFormatedDate($quote->getData('respons_date'));?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th><?= /* @noEscape */  __("Quote Date");?></th>
+                                                    <td><?= /* @noEscape */  $quote->getCreatedAt();?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th><?= /* @noEscape */  __("Current Quote Status");?></th>
+                                                    <td>
+                                                        <strong>
+                                                            <span id="order_status"><?= /* @noEscape */  $block->getQuoteStatus($quote->getStatus());?></span>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                        <th><?= /* @noEscape */  __("Quote Created From");?></th>
+                                                        <td><?= /* @noEscape */  $block->getStoreDetails();?></td>
+                                                </tr>                                                
+                                                
+                                            </tbody>
+                                        </table>
+                                        <br /><br />
+                                        <?= /* @noEscape */  $block->getChildHtml('adminhtmlnoncatalogrfq_additional_info'); ?>
+                                        <?= /* @noEscape */   $block->getLayout()
+                                        ->createBlock('Matrix\NoncatalogRfqfrom\Block\Adminhtml\View\Additional')
+                                        ->setTemplate('Matrix_NoncatalogRfqfrom::view/additional.phtml')->toHtml();?>                                                                                
+                                    </div>
+                                </div>                               
+                                <div class="admin__page-section-item order-account-information">
+                                    <div class="admin__page-section-item-title">
+                                        <span class="title"><?= /* @noEscape */  __("Account Information");?></span>
+                                        <div class="actions"></div>
+                                    </div>
+                                    <div class="admin__page-section-item-content">
+                                        <table class="admin__table-secondary order-account-information-table">
+                                            <tbody><tr>
+                                                <th><?= /* @noEscape */  __("Customer Name");?></th>
+                                                <td>
+                                                    <a href="<?= /* @noEscape */  $block->getUrl('customer/index/edit', ['id' => $quote->getCustomerId()]);?>" target="_blank">
+                                                        <span><?= /* @noEscape */  $customer->getName();?></span>
+                                                    </a>
+                                                    <input type="hidden"
+                                                           name="customer_id"
+                                                           value="<?= /* @noEscape */  $quote->getCustomerId();?>"
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */  __("Customer Email");?></th>
+                                                <td><a href="mailto:<?= /* @noEscape */  $customer->getEmail();?>"><?= /* @noEscape */  $customer->getEmail();?></a></td>
+                                                <input type="hidden"
+                                                       name="customer_email"
+                                                       value="<?= /* @noEscape */  $customer->getEmail();?>"
+                                                />
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */  __("Customer Group");?></th>
+                                                <td><?= /* @noEscape */  $block->getCustomerGroup($quote->getCustomerId());?></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                                 <!--STARt Shiping and Payent-->
+                                
+                                 <div class="admin__page-section-item order-account-information">
+                                    <div>&nbsp;</div>
+                                    <div class="admin__page-section-item-title">
+                                        <span class="title"><?= /* @noEscape */  __("Shipping & Payment Information");?></span>
+                                        <div class="actions"></div>
+                                    </div>
+                                    <div class="admin__page-section-item-content">
+                                        <table class="admin__table-secondary order-account-information-table">
+                                            <tr>
+                                                <th><?= /* @noEscape */  __("Shipping Method");?></th>
+                                                <td>
+                                                     <?= /* @noEscape */  $arrShippingMethods[$quote->getData('shipment_method')];?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */  __("Destination");?></th>
+                                                <td>
+                                                     <?= /* @noEscape */  $quote->getData('shipment_destination');?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */  __("Lead Time");?></th>
+                                                <td>
+                                                     <?= /* @noEscape */  $quote->getData('lead_time');?> <?= /* @noEscape */  __("Days");?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><?= /* @noEscape */  __("Payment Term");?></th>
+                                                <td>                                                    
+                                                    <?php if (is_array($arrpaymentTerm) && count($arrpaymentTerm)) {?>
+                                                        <?= /* @noEscape */  $arrpaymentTerm[$quote->getData('payment_terms')];?>
+                                                    <?php }?> 
+                                                </td>
+                                            </tr>
+                                        </table>
+                                     </div>   
+                                 </div>   
+                                <!--End Shiping and Payent-->                                 
+                                <div class="admin__page-section-item order-account-information">
+                                    <div>&nbsp;</div>
+                                    <div class="admin__page-section-item-title">
+                                        <span class="title"><?= /* @noEscape */  __("Supplier Requirements Information");?></span>
+                                        <div class="actions"></div>
+                                    </div>
+                                    <div class="admin__page-section-item-content">
+                                        <table class="admin__table-secondary order-account-information-table">
+                                            <tr>
+                                               <th><?= /* @noEscape */  __("Certifications");?></th>
+                                              <td>
+                                              <?php
+                                                $vendor_certificationsArr = explode(',', $quote->getData('vendor_certifications'));
+$mediaUrl = $block->getMediaUrl() . 'attribute/swatch/';
+if (count($vendor_certificationsArr)) {
+    foreach ($vendor_certificationsArr as $index => $optionId) {
+        //echo '<div style="">'.$supplierCertificationsSwatch[$optionId]['label'].'</div>';
+        //echo '<img alt="'.$supplierCertificationsSwatch[$optionId]['label'].'" src="'. $mediaUrl.$supplierCertificationsSwatch[$optionId]['value'].'" alt="'.$supplierCertificationsSwatch[$optionId]['label'].'" style="display: inline ;width: 80px;  height: 100px;padding: 5px;border: 1px solid #2e3440; " />';
+    }
+}
+?>
+                                              </td>
+                                             </tr>
+                                        </table>
+                                   </div>     
+                               </div>         
+                        </div>
+                      </section>
+                     <!--END Section 1-->
+                     <!--Start venords section-->
+                     <section class="admin__page-section order-addresses">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */  __("vendors Information");?></span>
+                        </div>
+                        <div class="admin__page-section-content">
+                            <div id="rfqvendors_tabs">
+                                <ul>
+                                    <li><a href="#mkt-vendor"><span><?= /* @noEscape */  __("Marketplace Vendors");?></span></a></li>
+                                    <li><a href="#notmkt-vendor"><span><?= /* @noEscape */  __("Non-Marketplace Vendors");?></span></a></li>
+                                </ul>
+                                 <div id="mkt-vendor">
+                                     <table id="tbl_rfqvendors" class="admin__table-secondary order-information-table">
+                                         <thead>
+                                             <tr>
+                                                 <td>ID</td>
+                                                 <td>Name</td>
+                                                 <!--<td>Public Name</td>-->
+                                                 <td>Email</td>
+                                                 <td>Contact</td>
+                                                 <td>Business ID</td>
+                                                 <td>Company Address</td>
+                                             </tr>
+                                         </thead>
+                                         
+                                     </table>
+                                </div>
+                                <div id="notmkt-vendor">
+                                    <table id="tbl_nonmarketrfqvendors" class="admin__table-secondary order-information-table">
+                                         <thead>
+                                             <tr>
+                                                 <td>Name</td>                                                 
+                                                 <td>Email</td>
+                                                 <td>Phone</td>
+                                                 <td>URL</td>
+                                                 <td>Company Address</td>
+                                             </tr>
+                                         </thead>
+                                         
+                                     </table>
+                                </div>
+                            </div>
+                        </div>
+                     </section>   
+                     <!--End Vendor Sectction-->
+                     <!--START Section 2-->
+                     <section class="admin__page-section order-addresses">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */  __("Address Information");?></span>
+                        </div>
+                        <div class="admin__page-section-content">
+                            <div class="admin__page-section-item order-billing-address">
+                                <div class="admin__page-section-item-title">
+                                    <span class="title"><?= /* @noEscape */  __("Shipping Address");?></span>
+                                </div>
+                                <?php if ($default_billing>0) {?>                                
+                                    <?= /* @noEscape */  $block->getFormattedAddress($default_billing);?>
+                                 <?php }?>   
+                                </address>
+                            </div>
+                            <div class="admin__page-section-item order-billing-address">
+                                <div class="admin__page-section-item-title">
+                                    <span class="title"><?= /* @noEscape */  __("Billing Address");?></span>
+                                </div>
+                                <?php if ($default_shipping>0) {?>                                                                
+                                    <?= /* @noEscape */  $block->getFormattedAddress($default_shipping);?>
+                                </address>
+                                <?php }?>
+                            </div>
+                        </div>
+                    </section>
+                     <!--END Section 2-->
+                     <!--Start Quote Item Section-->
+                     <section class="admin__page-section">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */  __("Product Informtation:");?></span>
+                        </div>                         
+                        <div>
+                                 <div data-bind="scope: 'toProductList'">
+                                      <!-- ko template: getTemplate() --><!-- /ko -->
+                                 </div>
+                        </div>                         
+                    <script type="text/x-magento-init">
+                        {    
+                           "*": {        
+                            "Magento_Ui/js/core/app": {            
+                                  "components": {                
+                                      "toProductList": {
+                                      "component": "Matrix_NoncatalogueRfq/js/view/toProductList",
+                                      "data": <?= /* @noEscape */  $productJson;?>
+                                     }                
+                                  }
+                               }
+                            } 
+                      }
+                    </script>
+                    </section>    
+                        <!--Start Product-->
+                        <!--START Message Section-->
+                        <section class="admin__page-section">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */  __("Messaging section"); ?> </span>
+                        </div>
+                        <div class="admin__page-section-content">
+                            <div class="admin__page-section-item order-comments-history">
+                                <div class="admin__page-section-item-title">
+                                    <span class="title"><?= /* @noEscape */  __("Chat History"); ?></span>
+                                </div>
+                                <div id="history_form" class="admin__page-section-item-content order-history-form">
+                                    <div class="admin__field">
+                                        <div class="message_history">
+                                            <?php if ($chatshistory && count($chatshistory)>0 && !empty($chatshistory->getData())) {
+                                                ?>
+                                                <ul class="note-list">
+                                                    <?php foreach ($chatshistory as $_chathistory) {?>
+                                                        <?php if ($chatDate != date('Y-m-d', strtotime($_chathistory->getCreatedAt()))) {
+                                                            $chatDate = date('Y-m-d', strtotime($_chathistory->getCreatedAt()));
+                                                            ?>
+                                                        <li class="purchaseorder-middle-chat-column aaaaa">
+                                                            <div class="chat-date"><?= /* @noEscape */  $chatDate; ?></div>
+                                                        </li>
+                                                    <?php } ?>
+                                                        <?php if ($_chathistory->getSentBy()=='Admin') { ?>
+                                                            <li class="purchaseorder-right-chat-column">
+                                                                <?php if ($_chathistory->getMessage()) { ?>
+                                                                    <div class="purchaseorder-right-chat-column-chat"><?= /* @noEscape */  $escaper->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </li>
+                                                        <?php } elseif ($_chathistory->getSentBy()=='Vendor') {?>
+                                                                <li class="purchaseorder-left-chat-column">
+                                                                    <div class="purchaseorder-left-chat-column-chat">
+                                                                        <strong><?= /* @noEscape */  __('Vendor')?></strong>
+                                                                        <?php if ($_chathistory->getMessage()) { ?>
+                                                                            <div class="purchaseorder-left-chat-column-chat"><?= /* @noEscape */  $escaper->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+
+                                                                            </div>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                </li>
+
+                                                            <?php } else {  ?>
+                                                            <li class="purchaseorder-left-chat-column" >
+                                                                <div class="purchaseorder-left-chat-column-chat">
+                                                                    <strong><?= /* @noEscape */  __('Customer')?></strong>
+                                                                    <?php if ($_chathistory->getMessage()) { ?>
+                                                                        <div class="note-list-comment"><?= /* @noEscape */  $escaper->escapeHtml($_chathistory->getMessage(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+
+                                                                        </div>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            </li>
+
+                                                        <?php } ?>
+                                                    <?php } ?>
+                                                </ul>
+                                            <?php } ?>
+                                        </div>
+
+                                        <label for="invoice_comment_text" class="admin__field-label">
+                                            <span><?= /* @noEscape */  __("Message"); ?></span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <textarea id="invoice_comment_text" name="message" class="admin__control-textarea" rows="5" cols="5"></textarea>
+                                        </div>
+                                        <?php if ($status != \Ced\RequestToQuote\Model\Quote::QUOTE_STATUS_CANCELLED) {?>
+                                        <div>&nbsp;</div>     
+                                        <div class="actions">
+                                           <button id="submit" title="Send Message" type="submit" class="action-default scalable save submit-button primary" >
+                                               <span><?= /* @noEscape */  __("Send Message"); ?></span>
+                                           </button>
+                                        </div>
+                                    <?php }?>
+                                    </div>
+                                </div>
+                            </div>
+                        <!--END Message Section-->
+                        <!--ENd Product-->
+                        <!--<div class="admin__page-section-content grid">
+                            <div class="admin__table-wrapper">
+                                <table class="data-table admin__table-primary order-invoice-tables" id ="edit-order-table">
+                                     <thead>
+                                        <tr class="headings">
+                                            <th class="col-product"><span><?= /* @noEscape */  __("Product:");?></span></th>                                            
+                                            <th class="col-status"><span><?= /* @noEscape */  __("Target Price:");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */  __("Requested Qty:");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */  __("Sourcing Purpose");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */  __("Uploaded");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */  __("Sourcing Purpose");?></span></th>
+                                            <th class="col-price"><span><?= /* @noEscape */  __("Trade Terms");?></span></th>
+                                            <th class="col-total last"><span><?= /* @noEscape */  __("Row Total");?></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="even">
+                                        <?php foreach ($quoteItems as $item) {
+                                            ?>
+                                            <tr>
+                                                 <td class="col-product">
+                                                  <div id="order_item_2_title" class="product-title"><?= /* @noEscape */  $item->getName();  ?></div>
+                                                 </td>
+                                                 <td><?= /* @noEscape */  $block->getCurrencyCode() . $item->getData('target_price');?></td>
+                                                 <td><?= /* @noEscape */  $item->getData('qty');?></td>
+                                                 <td><?= /* @noEscape */  $item->getData('sourcingpurpose');?></td>
+                                                 <td><?= /* @noEscape */  $item->getData('uploads');?></td>
+                                                 <td><?= /* @noEscape */  $item->getData('sourcingpurpose');?></td>
+                                                 <td><?= /* @noEscape */  $item->getData('tradeterms');?></td>
+                                                 <td>as</td>
+                                            </tr>
+                                        <?php   } ?>
+                                    </tbody>
+                                </table>
+                            <div>
+                        </div>-->
+                        </section>    
+                      </section>
+                    <!--End Quote Item Section-->
+                    <!--START Negotiation Section-->
+                     <section class="admin__page-section">
+                        <div class="admin__page-section-title">
+                            <span class="title"><?= /* @noEscape */  __("Requested Price and Qty Information:");?></span>
+                        </div>                         
+                        <div>
+                            <?= /* @noEscape */   $block->getLayout()
+                            ->createBlock('Matrix\NoncatalogueRfq\Block\Adminhtml\Quotes\Form')
+                            ->setTemplate('Matrix_NoncatalogueRfq::quote/negotiation.phtml')->toHtml();?>
+                                 
+                        </div>                                            
+                    </section>    
+                    <!--ENd Negotiotion Section-->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    
+</main>
+$('#tabs, #fragment-1').tabs({
+  select: function(event, ui){
+    // Do stuff here
+  }
+});
+<script>
+    require([
+     'jquery',
+     'jquery/ui'
+     ],
+     
+     function($, tabs) {
+          $("#rfqvendors_tabs").tabs({
+              active: false,
+              collapsible: true,
+              select: function(event, ui){
+                if(ui.index==0){
+                    var tds = $("#tbl_rfqvendors").children('tbody').children('tr').children('td').length;               
+                     if(tds==0){
+                       loadVendorsAjax();
+                     }
+                } else if(ui.index==1){
+                    var tds = $("#tbl_nonmarketrfqvendors").children('tbody').children('tr').children('td').length;               
+                     if(tds==0){
+                       loadNonmarketplaceVendorsAjax();
+                     }
+                }
+               }
+           });
+           
+            
+    function loadNonmarketplaceVendorsAjax(){
+            ajaxRequest = $.ajax({
+            url:<?= /* @noEscape */  '"' . $block->getUrl('noncatalogrfq/ajax/invitedvendors') . '"'; ?>,
+            type: 'GET',
+            data: {id : <?= /* @noEscape */  $quote->getRfqId();?>}, //exemple
+            dataType: 'json',
+            showLoader:true,
+            beforeSend: function () {                
+            },
+            success: function (response) {                
+                var collection =  response.data;
+                if(response.status){
+                 if(collection!==null){    
+                  $.each(collection, function(index,item){
+                        var vendorinfo ='<tr>';
+                        vendorinfo += '<td>' + item.company_name + '</td>';
+                        vendorinfo += '<td>' + item.email + '</td>';                       
+                        vendorinfo += '<td>' + item.phone + '</td>';
+                        vendorinfo += '<td>' + item.url + '</td>';                        
+                        vendorinfo += '<td>' + item.address + '</td>';                                                                    
+                        vendorinfo += '</tr>';                    
+                        $("#tbl_nonmarketrfqvendors").append(vendorinfo);
+                    });
+                  } else {
+                      var vendorinfo ='<tr>';
+                      vendorinfo += '<td colspan="5"><center><span  style="color:red">No Marketplace Vendors found.</span></center></td>';
+                      vendorinfo += '</tr>';                    
+                      $("#tbl_nonmarketrfqvendors").append(vendorinfo);
+                  } 
+                } 
+                
+            }
+        });         
+    }        
+    function loadVendorsAjax(){
+            ajaxRequest = $.ajax({
+            url:<?= /* @noEscape */  '"' . $block->getUrl('noncatalogrfq/ajax/vendors') . '"'; ?>,
+            type: 'GET',
+            data: {id : <?= /* @noEscape */  $quote->getRfqId();?>}, //exemple
+            dataType: 'json',
+            showLoader:true,
+            beforeSend: function () {                
+            },
+            success: function (response) {                
+                var collection =  response.data;
+                if(response.status){
+                 if(collection!==null){    
+                  $.each(collection, function(index,item){
+                        var vendorinfo ='<tr>';
+                        vendorinfo += '<td>' + item.entity_id + '</td>';
+                        vendorinfo += '<td>' + item.name + '</td>';
+                       // vendorinfo += '<td>' + item.public_name + '</td>';
+                        vendorinfo += '<td>' + item.email + '</td>';
+                        vendorinfo += '<td>' + item.contact_number + '</td>';                        
+                        vendorinfo += '<td>' + item.businessid + '</td>';                                            
+                        vendorinfo += '<td>' + item.company_address + '</td>';    
+                        vendorinfo += '</tr>';                    
+                       $("#tbl_rfqvendors").append(vendorinfo);
+                    });
+                  } else {
+                      var vendorinfo ='<tr>';
+                      vendorinfo += '<td colspan="6"><center><span  style="color:red">No Marketplace Vendors found.</span></center></td>';
+                      vendorinfo += '</tr>';                    
+                      $("#tbl_rfqvendors").append(vendorinfo);
+                  } 
+                } 
+                
+            }
+        });         
+    } 
+           
+           
+           
+     }
+     
+    
+);
+</script>
+

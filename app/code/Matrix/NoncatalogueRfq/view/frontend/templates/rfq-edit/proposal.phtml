@@ -1,0 +1,114 @@
+<?php
+$poCollection =  $block->getProposal();
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$array_feespaid =  [0=>__('Not Paid'),1=>__('Paid')];
+
+?>
+<div class="back_wrapper">
+<h2><?=  /* @noEscape */  __('Proposal ') ?></h2>
+<div class="table-responsive mb-25">
+<table class="data-table table table-striped table-cus table-cus1">
+     <thead>
+     <tr>
+        <th scope="col" class="col item col-border"><span><?= /* @escapeNotVerified */ __('Proposal #') ?></span></th>
+        <th scope="col" class="col item col-border"><span><?= /* @escapeNotVerified */ __('Vedor') ?></span></th>
+        <th scope="col" class="col price col-border"><span><?= /* @escapeNotVerified */ __('Created At') ?></span></th>
+        <th scope="col" class="col price col-border"><span><?= /* @escapeNotVerified */ __('RFQ Fees') ?></span></th>
+        <th scope="col" class="col item col-border"><span><?= /* @escapeNotVerified */ __('Status') ?></span></th>
+        <th scope="col" class="col item col-border"><span><?= /* @escapeNotVerified */ __('Action') ?></span></th>                                
+     </tr>
+     </thead>
+     <tbody>
+     <?php if ($poCollection->getSize()) {?>
+            <?php foreach ($poCollection as $po) {
+                $is_feespaid = $po->getIsFeespaid();
+                $rfqFees = $po->getRfqFees();
+                $isShowSellerInfo = $_noncatRfqHelper->showSellerInfo($po->getVendorId(), $po->getId());
+                ?>
+             <tr>
+                 <td><?= /* @noEscape */  $po->getPoIncrementId(); ?></td>
+                 <td>
+                     <?php
+                        $vendor =  $block->getVendorbyId($po->getVendorId());
+
+                ?>
+                     <?php if ($isShowSellerInfo) {?>                      
+                            <?= /* @noEscape */  $vendor->getData('public_name') . " [" . $vendor->getData('email') . "]"; ?>                      
+                     <?php } else {?>                          
+                           <?= /* @noEscape */  $vendor->getData('public_name') . " [" . $_noncatRfqHelper->obfuscate_email($vendor->getData('email')) . "]"; ?>                       
+                    <?php }?>                          
+                 </td>
+                 <td><?=  /* @noEscape */  $po->getCreatedAt() ? date('d/m/Y', strtotime($po->getCreatedAt())) : ''; ?></td>
+                 <td>
+                 <?php
+                    switch ($is_feespaid) {
+                        case '0':
+                            /* @noEscape */   echo "<span style='color:red'>Due</span>";
+                            break;
+                        case '1':
+                            /* @noEscape */   echo "<span style='color:green'>Paid</span>";
+                            break;
+                    }
+                ?>
+                 </td>
+                 <td>
+                                    <?php
+                                    $status = $po->getStatus();
+                switch ($status) {
+                    case '1':
+                        /* @noEscape */   echo "<span style='color:red'>" . $block->getPoStatus($po->getStatus()) . "</span>";
+                        break;
+                    case '3':
+                        /* @noEscape */   echo "<span style='color:green'>" . $block->getPoStatus($po->getStatus()) . "</span>";
+                        break;
+                }
+                ?>
+                 </td>
+                 <td>
+                     <a class="action action-edit" href="<?= /* @noEscape */  $block->getUrl('noncatalogrequesttoquote/customer/editpo/', ['poId'=>$po->getId()]); ?>" >
+                                        <span><?=  /* @noEscape */   __('View') ?> </span>
+                      </a>
+                 </td>
+             </tr>
+            
+                 <tr>
+                     <td>&nbsp;</td>
+                     <td>
+                         <table  style="border:1px solid #868e96;" class="data-table">
+                             <tr><td colspan="2"><center><span style='color:#834e56;'><strong><?= /* @noEscape */  __('Vendor Details') ?></strong></span></center></td></tr>
+                              <?php if ($isShowSellerInfo) {?>
+                                    <tr>
+                                      <td width="30%">&nbsp;</td>
+                                       <td style="text-align:right;">
+                                         <a class="link" href="<?= /* @noEscape */  $block->getUrl('vendor_shop/' . $vendor->getData('shop_url') . '.html');?>" target="_blank">
+                                           <?=  /* @noEscape */   __('View Shop') ?> 
+                                          </a>
+                                       </td>
+                                    </tr>      
+                                  <tr>
+                                     <td><strong><?= /* @noEscape */  __('Name') ?></strong> : </td> <td> <?= /* @noEscape */  $vendor->getData('name');?></td>
+                                   </tr>     
+                                  <tr>     
+                                      <td><strong><?= /* @noEscape */  __('Email') ?></strong> : </td> <td> <?= /* @noEscape */  $vendor->getData('email');?></td>
+                                  </tr>          
+                                  <tr>     
+                                      <td><strong><?= /* @noEscape */  __('Contact') ?></strong> : </td> <td> <?= /* @noEscape */  $vendor->getData('contact_number');?></td>
+                                  </tr>     
+                                  <tr>      
+                                      <td><strong><?= /* @noEscape */   __('Address') ?></strong> : </td> <td> <?= /* @noEscape */  $vendor->getData('company_address');?></td>                                                                  
+                                    </tr>                               
+                            <?php } else {?>      
+                                    <tr><td colspan="5"><center><span style='color:#834e56;'><?= /* @noEscape */  __('Locked') ?></span></center></td></tr>     
+                            <?php }?>
+                         </table>
+                         
+                     </td>
+                    <td  colspan="5">&nbsp;</td>  
+                 </tr>
+            
+        <?php }?>
+     <?php }?>
+     </tbody>
+</table>
+</div>
+</div>

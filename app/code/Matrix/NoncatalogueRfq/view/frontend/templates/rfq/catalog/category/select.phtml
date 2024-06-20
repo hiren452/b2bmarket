@@ -1,0 +1,246 @@
+<?php
+$block->session->unsCategoryData();
+$types = $block->getTypes();
+$value = $block->session->getCategoryData();
+$Ptype = "";
+$cats = "";
+if (!empty($value)) {
+    $Ptype = $value['type'];
+    $cats = $value['cats'];
+}
+if ($block->getRequest()->getParams('product_id')) {
+    $details = $block->getProductDetails($block->getRequest()->getParams('product_id'));
+    if (!empty($details)) {
+        $Ptype = $details['type'];
+    }
+}
+?>
+<div id="msg" class="selected-category" style="display: none">
+    <span><?= /* @noEscape */  __('Category Selected'); ?></span>
+    <div id="selected_category" class="selected-category-inner"></div>
+</div>
+<div id="category-panel" class="selected-category-mapping">
+    <div class="clearfix">
+        
+        <?php
+        $categories = $block->getCategories();
+$count = count($categories);
+if (count($categories) > 0) {
+    ?>
+        <div class="entry-edit selected-cate-sub">
+            <div id="category_container" class="fieldset form-list ced_formlist_container">
+                <span class="move-to-left" title="Prev">
+                    <i class="fa fa-caret-left" aria-hidden="true"></i>
+                </span>
+                <ul class="form-list">
+                    <div class="hor-scroll" id="category_container_new">
+                        <div>
+                            <label for='select_category'><?= /* @noEscape */  __("Select Category") ?></label>
+                        </div>
+                        <ul id="category-listing-wrapper" class="category-listing-wrapper" shiftright="0">
+                            <li id='li_category_1' class="wide ced-col-select-cat item">
+                                <div style="clear:both"></div>
+                                <div class="input-box">
+                                    <ul class="select_category" id="select_category_1" size="6" class='category_select'
+                                        level="1">
+                                        <?php
+                                foreach ($categories as $category) { ?>
+                                            <li class="level-category"
+                                                value='<?= /* @noEscape */  $category['value']; ?> '>
+                                                <?= /* @noEscape */  $category['label'] ?>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </ul>
+                <span class="move-to-right" title="Next">
+                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+        <input type="hidden" id="last-selectedcat" name="last-selectedcat" value="">
+        <input type="hidden" id="cat-tree" name="last-selectedcat[]" value="">
+    </div>
+</div>
+
+            <?php
+}
+?>
+<script type="text/javascript">
+
+    var total_width = 0;
+    require(['jquery'], function ($) {
+        jQuery("#selectcategory-popupmodal").on("click", ".level-category", function () {
+
+
+            var parentul = jQuery(this).parent().attr('id');
+            id = jQuery(this).val();
+            jQuery('#' + parentul + ' .level-category').not($(this)).removeClass('selected');
+            jQuery(this).addClass('selected');
+            level = parseInt(jQuery(this).parent().attr('level'));
+
+
+            jQuery('#last-selectedcat').val(id);
+
+
+            var url = '<?= /* @noEscape */  $block->getUrl('cscategorymap/category/getchildcategories')?>';
+            jQuery.ajax({
+
+                type: 'POST',
+                url: url,
+                data: {
+                    'id': id,
+                    'level': level,
+                },
+                showLoader: true,
+                success: function (data, textStatus, jQxhr) {
+
+
+                    var json = data;
+                    var children = jQuery("#category_container .select_category").length;
+                    if (jQuery("#li_category_continue").length) {
+                        jQuery("#li_category_continue").remove();
+                    }
+                    for (var i = level + 1; i <= children; i++) {
+                        jQuery("#li_category_" + i).remove();
+                    }
+                    if (json.message == 'error') {
+
+
+                        jQuery("#li_category_" + level).addClass('last');
+                        if (!jQuery("#li_category_continue").length) {
+                            var continuclass = "li_category_continue";
+                            var html = "<li id='" + continuclass + "' class='wide ced-col-select-cat item'>" +
+                                "<div class='buttonset continubutton'><button onclick='setRedirect()'><?= /* @noEscape */  __("Ok")?></button></div></li>";
+                            jQuery("#li_category_" + level).after(html);
+                        }
+                    } else {
+                        jQuery('#category-listing-wrapper').append(json.html);
+                        var children = jQuery("#category_container .select_category").length;
+                    }
+                    // set values of selected categories
+
+                    var selectedCats = '';
+                    jQuery(".select_category .selected").each(function (e) {
+                        selectedCats = selectedCats + "," + jQuery(this).val();
+                    });
+                    document.getElementById('cat-tree').value = selectedCats;
+
+                    var text = "";
+                    for (var i = 1; i <= children; i++) {
+                        if (i != 1) {
+                            if (jQuery("#select_category_" + i + " .selected").text() != "")
+                                text += "<i class='fa fa-angle-right' aria-hidden='true'></i>" + jQuery("#select_category_" + i + " .selected").text();
+                        } else {
+                            text += " " + jQuery("#select_category_1 .selected").text();
+                        }
+                    }
+                    text += "";
+                    jQuery('.selected-category').show();
+                    jQuery('#selected_category').empty();
+                    jQuery('#selected_category').html(text);
+                    text = "";
+
+
+                    var set = $('.category-listing-wrapper .ced-col-select-cat');
+                    var length = set.length;
+                    var flag = true;
+                    $('.category-listing-wrapper .ced-col-select-cat').each(function (e, v) {
+
+                        if (flag) {
+                            total_width = 0;
+                            flag = false;
+                        }
+                        var $this = $(this);
+
+
+                        total_width = 10 + total_width + $this.outerWidth();
+
+                        if (e === (length - 1)) {
+
+
+                            $('#category-listing-wrapper').css('width', total_width);
+                            if (total_width > jQuery('#category_container_new').width()) {
+                                //alert('enter');
+
+                                var onewidth = total_width - jQuery('#category_container_new').width();
+                                $('#category-listing-wrapper').css('left', -onewidth);
+                                $('.move-to-left').addClass('active');
+
+                                //alert('out');
+                            } else {
+                                $('#category-listing-wrapper').css('left', 0);
+                                $('#move-to-right').removeClass('active');
+
+                            }
+
+                        }
+
+                    });
+
+
+                }
+            });
+        });
+    });
+
+    function setRedirect() {
+        require(['jquery'], function ($) {
+            var select_cat = jQuery('#last-selectedcat').val();
+            alert(select_cat);
+            cat_tree = jQuery('#cat-tree').val();
+
+        });
+    }
+
+</script>
+<script type="text/javascript">
+    require(['jquery'], function ($) {
+        var wd = jQuery('#category_container_new').width();
+
+
+        jQuery('#category_container_new').css('width', wd);
+
+
+        jQuery('.move-to-left').on('click', function () {
+            var nextmove = $("#category-listing-wrapper")[0].style.left;
+            var intnextmove = parseInt(nextmove);
+
+            if (intnextmove < 0) {
+
+                $('#category-listing-wrapper').css('left', intnextmove + 253)
+
+                var intnextmove1 = intnextmove + 253;
+
+                var shiftrightinival = $('#category-listing-wrapper').attr('shiftright');
+                $('#category-listing-wrapper').attr('shiftright', shiftrightinival - 253);
+                $('.move-to-right').addClass('active');
+            } else {
+
+                $('#category-listing-wrapper').css('left', 0);
+                $('.move-to-left').removeClass('active');
+            }
+        });
+        jQuery('.move-to-right').on('click', function () {
+            var licount = jQuery('#category-listing-wrapper').children().length;
+            var elementmove = jQuery("#category-listing-wrapper")[0].style.left;
+            var elementmove = parseInt(elementmove);
+
+            jQuery('#category-listing-wrapper').css('left', elementmove - 253);
+            var shiftleft = $('#category-listing-wrapper').attr('shiftright');
+            var shiftleftnew = parseInt(shiftleft) + parseInt(253);
+            jQuery('#category-listing-wrapper').attr('shiftright', shiftleftnew);
+            if (shiftleftnew == 0) {
+                $('.move-to-right ').removeClass('active');
+            }
+
+            var ritpositio = jQuery('#category-listing-wrapper').position().left;
+
+        });
+    });
+
+</script>

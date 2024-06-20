@@ -1,0 +1,6 @@
+body .page-wrapper {
+	width: calc(100% - 9.800000000000001rem) !important;
+}
+.admin__menu .level-0.item-noncatalogrfq > a:before {
+    content: url('../images/noncat-rfq.png');
+}

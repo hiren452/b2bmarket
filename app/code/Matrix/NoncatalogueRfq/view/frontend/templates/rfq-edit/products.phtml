@@ -1,0 +1,61 @@
+<?php
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$productJson = $block->getNonCatalogQuoteProductJson();
+?>
+<div class="row">    
+ <div class="col-sm-12">    
+ <div class="back_wrapper"> 
+     <div class="table-responsive mb-25 view-table" data-bind="scope: 'toProductList'">
+        <!-- ko template: getTemplate() -->
+        <center>
+          <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+        </center>    
+        <!-- /ko -->
+     </div>
+ </div>
+  </div>
+</div>
+<script type="text/x-magento-init">
+{    
+    "*": {        
+        "Magento_Ui/js/core/app": {            
+            "components": {                
+                "toProductList": {
+                    "component": "Matrix_NoncatalogueRfq/js/view/toProductList",
+                     "data": <?= /* @noEscape */  $productJson;?>
+                }
+                
+            }
+        }
+    }
+}
+</script>
+<!--<script type="text/javascript">
+        require([
+            'jquery',
+            'owl.carousel/owl.carousel.min'
+        ], function ($) {
+        $(document).ready(function() {
+            $("#owl-rfqproducts").owlCarousel({
+                margin: 0,
+                nav: false,
+                navText: ["<em class='porto-icon-left-open-huge'></em>","<em class='porto-icon-right-open-huge'></em>"],
+                dots: true,
+                responsive: {
+                    0: {
+                        items:2
+                    },
+                    768: {
+                        items:3
+                    },
+                    992: {
+                        items:4
+                    },
+                    1200: {
+                        items:6
+                    }
+                }
+            });
+        });    
+    });
+</script>-->

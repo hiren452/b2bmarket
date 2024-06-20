@@ -1,0 +1,174 @@
+<?php
+$po = $block->getPo();
+$priceHelper = $block->helper('Magento\Framework\Pricing\Helper\Data');
+$currentPo = $block->getPo();
+$poId = $currentPo->getPoIncrementId();
+$created = $currentPo->getCreatedAt();
+$customer_id = $currentPo->getPoCustomerId();
+$poCustomer = $block->getCustomer($customer_id);
+$customer_email = $poCustomer->getEmail();
+$customer_name = $poCustomer->getName();
+$address = $block->getCustomerAddress($currentPo->getQuoteId());
+$po = $block->getItems();
+$poData = $block->getPoData($poId, $currentPo->getRfqId());
+$vendor_id = $block->getVendorId();
+$subtotal = 0;
+?>
+<div class="page-main-actions">
+    <div class="page-actions-placeholder"></div>
+    <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+        <div class="page-actions-inner" data-title="New Invoice">
+            <div class="page-actions-buttons">
+                <button id="back" title="Back to Grid" type="button" class="action-default scalable back" onclick="setLocation('<?= /* @noEscape */  $block->getBackUrl(); ?>')">
+                    <span><?= /* @noEscape */  __("Back to Grid");?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container" class="main-col">
+    <section class="admin__page-section order-view-account-information">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */  __("Proposal Information");?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= /* @noEscape */  '# ' . $poId; ?></span>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-information-table">
+                        <tbody><tr>
+                            <th><?= /* @noEscape */  __("Proposal Date");?></th>
+                            <td><?= /* @noEscape */  $created;?></td>
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */  __("Proposal Status");?></th>
+                            <td><span id="order_status"><?= /* @noEscape */  $block->getStatus(); ?></span></td>
+                        </tr>
+
+                        </tbody></table>
+                </div>
+            </div>
+
+            <div class="admin__page-section-item order-account-information">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= /* @noEscape */  __("Account Information");?></span>
+                    <div class="actions"></div>
+                </div>
+                <div class="admin__page-section-item-content">
+                    <table class="admin__table-secondary order-account-information-table">
+                        <tbody><tr>
+                            <th><?= /* @noEscape */  __("Customer Name");?></th>
+                            <td>
+                                <span><?= /* @noEscape */  $customer_name;?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */  __("Email Id");?></th>
+                            <td><?= /* @noEscape */  $customer_email;?></td>
+
+                        </tr>
+                        <tr>
+                            <th><?= /* @noEscape */  __("Customer Group");?></th>
+                            <td><?= /* @noEscape */  $block->getCustomerGroup($poCustomer)?></td>
+                        </tr>
+                        </tbody></table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */  __('Item(s) Information')?></span>
+        </div>
+
+        <div id="invoice_item_container" class="admin__page-section-content">
+            <div class="admin__table-wrapper">
+                <table class="data-table admin__table-primary order-invoice-tables">
+                    <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?= /* @noEscape */  __("Product ");?></span></th>
+                        <th class="col-price"><span><?= /* @noEscape */  __("Requested Price ");?></span></th>
+                        <th class="col-qty"><span><?= /* @noEscape */  __("Requested Qty ");?></span></th>
+                        <th class="col-qty"><span><?= /* @noEscape */  __("Proposed Qty");?></span></th>
+                        <th class="col-qty"><span><?= /* @noEscape */  __("Remaining Qty ");?></span></th>
+                        <th class="col-total last"><span><?= /* @noEscape */  __("Row Total");?></span></th>
+                    </tr>
+                    </thead>
+                    <tbody class="even">
+                    <?php foreach ($poData->getData() as $value) {
+                        $remainingQty = $value['remaining_qty'];
+                        if (!$remainingQty) {
+                            $remainingQty = 0;
+                        }
+                        $subtotal += $value['po_price'];
+                        ?>
+                    <tr>
+                        <td class="col-product">
+                            <div id="order_item_1_title" class="product-title"><?= /* @noEscape */  $value['name'];  ?>
+                                    </div>
+
+                            <div class="product-sku-block">
+                                <span><?= /* @noEscape */  __('SKU')?>:</span> <?= /* @noEscape */  $value['sku'];  ?>
+                            </div>
+                            <?php if ($value['product_type'] == 'configurable' && $customOption = $value['custom_option']) { ?>
+                                <?php $options = json_decode($customOption, true); ?>
+                                <?php if (isset($options['attributes_info']) && is_array($options['attributes_info'])) { ?>
+                                    <?php foreach ($options['attributes_info'] as $option): ?>
+                                        <div class="product-sku-block">
+                                            <span><?= /* @noEscape */  ucfirst($option['label'])?>:</span> <?= /* @noEscape */  $option['value'];  ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php } ?>
+                            <?php } ?>
+                        </td>
+                        <td class="col-price">
+                            <div class="price-excl-tax">
+                                <span class="price"><span><?= /* @noEscape */  $block->getCurrencyCode();  ?></span><span class="price"><?= /* @noEscape */  $value['quoted_price'];  ?></span></span>
+                            </div>
+                        </td>
+                        <td class="col-qty"><?= /* @noEscape */  $value['quoted_qty'];  ?></td>
+                        <td class="col-qty"><?= /* @noEscape */  $value['product_qty'];  ?></td>
+                        <td class="col-qty"><?= /* @noEscape */  $remainingQty;  ?></td>
+                        <td class="col-qty"><?= /* @noEscape */  $priceHelper->currency($value['po_price'], true, false);  ?></td>
+                    </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?= /* @noEscape */  __('Proposal Total') ?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-totals">
+                <div class="admin__page-section-item-title">
+                    <span class="title"><?= /* @noEscape */  __('Proposal Total') ?></span>
+                </div>
+                <table class="data-table admin__table-secondary order-subtotal-table">
+                <tfoot>
+                    <tr class="col-0">
+                        <td class="label">
+                            <strong><?= /* @noEscape */  __('Grand Total');?></strong>
+                        </td>
+                        <td>
+                            <strong><span class="price"><?= /* @noEscape */  $priceHelper->currency($subtotal, true, false);  ?></span></strong>
+                        </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr class="col-0">
+                        <td class="label"><?= /* @noEscape */  __('Subtotal');?></td>
+                        <td>
+                            <span><span class="price"><?= /* @noEscape */  $priceHelper->currency($subtotal, true, false);?></span></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</div>

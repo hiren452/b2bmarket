@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="noncatalogrfq" translate="label" sortOrder="100">
+            <label>Non Catalog RFQ Management</label>
+        </tab>
+        <section id="noncatalogrfq_configuration" showInStore="0" showInWebsite="1" showInDefault="1">
+            <tab>noncatalogrfq</tab>
+            <label>Non-Catalog RFQ Management</label>
+            <resource>Matrix_NoncatalogueRfq::noncatalogrfq</resource>
+            <group id="active" translate="label" type="text" sortOrder="1" showInStore="0" showInWebsite="1" showInDefault="1">
+                <label>Non-Catalog RFQ Configuration Options</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>               
+                <field id="allow_private_noncatrfq" translate="label" type="select" sortOrder="2" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Allow Private Non-Catalog RFQ</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>   
+                <field id="allow_public_noncatrfq" translate="label" type="select" sortOrder="4" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Allow Public Non-Catalog RFQ</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>  
+                <field id="allow_buyer_visibilty" translate="label" type="select" sortOrder="5" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Allow Buyer Visibility to Seller</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="allow_seller_visibilty" translate="label" type="select" sortOrder="6" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Allow Seller/Vendor Visibility to Buyer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>              
+                <field id="admin_mail" translate="label" type="text" sortOrder="7" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Admin Email</label>
+                    <validate>required-entry validate-email</validate>                    
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <comment> Admin Email for recieving all Non-Catalog RFQ mails</comment>
+                </field>   
+                <field id="maxnonmkt_vendorinvite" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Max vendor Invitation</label>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <validate>required-entry validate-number</validate>                    
+                    <comment>Max Number of Non-Marketplace vendor per RFQ</comment>
+                </field>                
+                <field id="debugmode" translate="label" type="select" sortOrder="9" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Debug Mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <comment>Log File will be created</comment>
+                </field>                
+                 <!--<field id="rfq_fees" translate="label" type="text" sortOrder="7" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Buyer RFQ Fees</label>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="rfqform" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Customized Non-catalog RFQ Form</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>-->
+            </group>
+            <group id="email" translate="label" type="text" sortOrder="2" showInStore="0" showInWebsite="1" showInDefault="1">
+               <label>Non-Catalog RFQ Email Templates</label>
+               <field id="quote_submit_vendor_email_template" translate="label" type="select" sortOrder="1" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Vendor New Non-Catalog RFQ</label>
+                    <comment>Markerplace  Vendor Email for New Non-Catalog RFQ (public/Private)</comment>                    
+                    <source_model>Matrix\NoncatalogueRfq\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field> 
+                <field id="new_nonmarketplacevendor_email" translate="label" type="select" sortOrder="2" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Non-Marketpalce Vendor New Non-Catalog RFQ</label>
+                    <comment>Non-Marketpalce Vendor Email for New Non-Catalog RFQ (public/Private)</comment>                    
+                    <source_model>Matrix\NoncatalogueRfq\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field> 
+                <field id="noncatalog_rfqsubmit_success_email_template" translate="label" type="select" sortOrder="3" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Customer New Non-Catalog RFQ Sucess</label>
+                    <comment>Customer New Non-Catalog RFQ Sucess</comment>                    
+                    <source_model>Matrix\NoncatalogueRfq\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>              
+            </group>    
+            <group id="smsnotification" translate="label" type="text" sortOrder="2" showInStore="0" showInWebsite="1" showInDefault="1">            
+               <label>Non-Catalog RFQ Notifications [Email and SMS]</label>
+               <field id="vendor_new_noncatalogrfq_sms" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Vendor New Private Non-Catalog RFQ SMS</label>
+                    <comment>Markerplace Vendor SMS Content for New Non-Catalog RFQ (public/Private).
+                      NOTE: Do Not change the word wrapped by  '{{ }}'
+                    </comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field> 
+                 <!--<field id="vendor_new_publivnoncatalogrfq_sms" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Vendor New Public Non-Catalog RFQ SMS (public/Private)</label>
+                    <comment>Markerplace Vendor SMS Content for New Public Non-Catalog RFQ (public/Private).
+                      NOTE: Do Not change the word wrapped by  '{{ }}'
+                    </comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field> -->
+                <field id="admin_noncatalogrfq_mobile" translate="label" type="text" sortOrder="30" showInStore="0" showInWebsite="1" showInDefault="1">
+                    <label>Admin Mobile Number</label>                    
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <comment> Admin Mobile Number  for recieving all Non-Catalog RFQ SMS. Note: Please provide Mobile numer with +countrycode [example: +0116434774000]</comment>
+                </field> 
+                <field id="admin_noncatalogrfq_sms" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin Non-Catalog RFQ SMS ()</label>
+                    <comment>Admin SMS Content for  Non-Catalog RFQ (public/Private).
+                      NOTE: Do Not change the word wrapped by  {{ }}
+                    </comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field> 
+           </group>
+        </section>               
+    </system>
+</config>
+

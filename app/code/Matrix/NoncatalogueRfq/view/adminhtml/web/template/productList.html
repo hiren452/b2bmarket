@@ -1,0 +1,57 @@
+<table class="admin__table-secondary order-account-information-table">   
+  <tbody data-bind="foreach: productList">
+	  <tr>
+		  <th width="30%"><strong>Name:</strong></th>
+		  <td data-bind="text: $data.item.name"></td>
+      </tr>	
+      <tr>
+		  <th><strong>Item Identifier:</strong></th>
+		  <td data-bind="text: $data.item.item_identifier"></td>		  		  
+      </tr>		  
+      <tr>
+		  <th><strong>Target Price:</strong></th>
+		  <td data-bind="text: $data.item.target_price"></td>	
+      </tr>		  
+       <tr>
+		  <th><strong>Qty:</strong></th>
+		  <td data-bind="text: $data.item.qty"</td>
+	  </tr>
+	   <tr>
+		  <th><strong>Units of Measure:</strong></th>
+		  <td data-bind="text: $data.item.uom"></td>
+	  </tr>
+	   <tr>
+		  <th><strong>Categories:</strong></th>
+		  <td data-bind="text: $data.item.categories"></td>
+	  </tr>
+	  <tr>
+		  <th><strong>Attachments:</strong></th>
+		  <td>
+			   <div  id="owl-rfqproducts"  data-bind="foreach: $data.item.uploadsFiles">				
+				   <div class="item">
+					   <a data-bind="attr: { href: filePath, alt:fileName,title:fileName }" target="_blank"><img width="120" data-bind="attr: { src: fileThumb, alt:fileName,title:fileName }"></a>					  
+				    </div>
+			  </div>			  
+		  </td>
+	  </tr>
+	  <tr>
+		  <th><strong>Description:</strong></th>
+		  <td>			  
+			  <div data-bind="text: $data.item.desc"></div>
+		  </td>
+	  </tr>
+	  <tr>
+		  <th><strong>Payment term/instructions:</strong></th>
+		  <td>			  
+			  <div data-bind="text: $data.item.payment_instruct"></div>
+		  </td>
+	  </tr>
+	  <tr>
+		  <th><strong>Memo:</strong></th>
+		  <td>			  
+			  <div data-bind="text: $data.item.memo"></div>
+		  </td>
+	  </tr>	  
+  </tbody>
+</table>
+

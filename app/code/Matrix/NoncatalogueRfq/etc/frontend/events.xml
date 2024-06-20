@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">    
+    <event name="controller_action_predispatch_checkout_cart_add">
+        <observer name="controller_action_pretdispatch_checkout_cart_add_for_noncatalogrfq"
+                  instance="Matrix\NoncatalogueRfq\Observer\AddToCartBefore" />
+    </event>    
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="matrix_quote_success" instance="Matrix\NoncatalogueRfq\Observer\Success"  />
+        <observer name="matrix_quote_rfqfeessuccess" instance="Matrix\NoncatalogueRfq\Observer\RfqFeesSuccess"  />
+    </event>    
+    <event name="sales_order_place_after">
+        <observer name="matrix_rfq_quote_success_frontend" instance="Matrix\NoncatalogueRfq\Observer\OrderPlaceAfter"  />
+        <observer name="matrix_rfq_rfqfees_success_frontend" instance="Matrix\NoncatalogueRfq\Observer\RfqFeesOrderPlaceAfter"  />
+    </event>
+</config>

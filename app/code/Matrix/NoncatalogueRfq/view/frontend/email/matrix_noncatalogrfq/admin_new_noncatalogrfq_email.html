@@ -1,0 +1,48 @@
+<!--@subject {{var quote_id|raw }} New Non-Catalog RFQ Created  @-->
+{{template config_path="design/email/header_template"}}
+<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+        <tr>
+            <td align="center" valign="top" style="padding:20px 0 20px 0">
+                <!-- [ header starts here] -->
+                <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                    <!-- [ middle starts here] -->
+                    <tr>
+					   <td valign="top">
+                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Hello <strong> Admin </strong> .</p>
+                        </td>                        
+                  </tr>	
+                    <tr>
+                        <td valign="top">
+                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;"><strong>{{var name}} ( {{var customer_email}} )</strong> {{trans 'has created a new Non-Catalog Quote Request'}}.</p>
+                        </td>                        
+                    </tr>
+                    <tr>
+                       <td>
+                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;"><strong>Company Name </strong> : {{var company_name}}  </p>
+                       </td>
+                    </tr> 
+                    <tr>
+                        <td>
+                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;"><strong>  RFQ ID </strong> :  {{var quote_id}}  .</p>
+                        </td>                        
+                    </tr>
+                     <tr>
+                       <td>
+                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;"><strong>Type </strong> : {{var rfqtype}}  </p>
+                       </td>
+                    </tr> 
+                    <tr>
+						<td>
+							<table class="email-items">
+								{{layout handle="email_rfqproduct_list" items=$items area="frontend"}}
+						   </table>
+						</td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">{{trans 'Thank you'}}, <strong>{{trans "%store_frontname" store_frontname=$store.getFrontendName() }}</strong></p></center></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+{{template config_path="design/email/header_template"}}

@@ -1,0 +1,32 @@
+<?php $_items = $block->getItems() ?>
+<table class="email-items">
+    <thead>
+        <tr>
+            <th class="item-info">
+                <?= /* @escapeNotVerified */  __('Identifier'); ?>
+            </th>
+            <th class="item-info">
+                <?= /* @escapeNotVerified */  __('Name'); ?>
+            </th>
+            <th class="item-qty">
+                <?= /* @escapeNotVerified */  __('Qty'); ?>
+            </th>
+            <th class="item-price">
+                <?= /* @escapeNotVerified */  __('Price'); ?>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if (is_array($_items)):?>    
+        <?php foreach ($_items as $_item): ?>
+        <tr>
+            
+            <td><?= /* @escapeNotVerified */ $_item['item_identifier']; ?></td>
+            <td><?= /* @escapeNotVerified */ $_item['name']; ?></td>
+            <td><?= /* @escapeNotVerified */ $_item['qty']; ?></td>
+            <td><?= /* @escapeNotVerified */ $_item['price']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    <?php endif;?>
+    </tbody>
+</table>

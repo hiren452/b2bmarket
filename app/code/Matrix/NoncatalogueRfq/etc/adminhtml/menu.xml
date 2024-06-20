@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>        
+        <add id="Matrix_NoncatalogueRfq::noncatalogrfq" title="Non-Catalog RFQ" module="Matrix_NoncatalogueRfq" sortOrder="30" resource="Matrix_NoncatalogueRfq::noncatalogrfq" dependsOnConfig="noncatalogrfq_configuration/active/enable"/>
+        <add id="Matrix_NoncatalogueRfq::manage_noncatalogrfq" title="Manage Non-Catalog RFQ" module="Matrix_NoncatalogueRfq" sortOrder="10" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="noncatalogrfq/rfq/index" resource="Matrix_NoncatalogueRfq::manage_noncatalogrfq" />
+        <add id="Matrix_NoncatalogueRfq::manage_noncatalogpo" title="Manage Non-Catalog PO" module="Matrix_NoncatalogueRfq" sortOrder="20" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="noncatalogrfq/po/index" resource="Matrix_NoncatalogueRfq::manage_noncatalogpo" />                
+        <!--<add id="Matrix_NoncatalogueRfq::noncatalogrfq_membershipfees" title="Non-Catalog RFQ Fees" module="Matrix_NoncatalogueRfq" sortOrder="30" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="noncatalogrfq/membershipfees/index" resource="Matrix_NoncatalogueRfq::rfqmembershipfees" dependsOnConfig="noncatalogrfq_configuration/active/enable"/>-->
+        <add id="Matrix_NoncatalogueRfq::noncatalogrfq_buyervisibility" title="Manage Buyer Visibility" module="Matrix_NoncatalogueRfq" sortOrder="40" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="noncatalogrfq/buyervisibility/index" resource="Matrix_NoncatalogueRfq::buyervisibility" dependsOnConfig="noncatalogrfq_configuration/active/enable"/>
+        <add id="Matrix_NoncatalogueRfq::noncatalogrfq_sellervisibility" title="Manage Seller Visibility" module="Matrix_NoncatalogueRfq" sortOrder="50" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="noncatalogrfq/sellervisibility/index" resource="Matrix_NoncatalogueRfq::sellervisibility" dependsOnConfig="noncatalogrfq_configuration/active/enable"/>
+        <add id="Matrix_NoncatalogueRfq::noncatalogrfq_cattouom" title="Assign UOM to Categories" translate="title" module="Matrix_NoncatalogueRfq" sortOrder="100" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="noncatalogrfq/categoryuom/index" resource="Matrix_NoncatalogueRfq::assignuom" dependsOnConfig="noncatalogrfq_configuration/active/enable"/>
+        <add id="Matrix_NoncatalogueRfq::config" title="Configurations" module="Matrix_NoncatalogueRfq" sortOrder="500" parent="Matrix_NoncatalogueRfq::noncatalogrfq" action="adminhtml/system_config/edit/section/noncatalogrfq_configuration" resource="Matrix_NoncatalogueRfq::config"/>                
+    </menu>
+</config>

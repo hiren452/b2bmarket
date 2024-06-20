@@ -1,0 +1,339 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+/*$isLoggedIn = $_noncatRfqHelper->isLoggedIn();
+$customerInfo = $_noncatRfqHelper->customerInfo();*/
+$unsavedData =  $block->getUnsavedData();
+$popupFormData = $block->getRfqPopupFormData();
+$uploaedAttachments = 'null';
+if (array_key_exists('uploadattachement', $unsavedData['rfqTemplate'])) {
+    $uploaedAttachments =  json_encode($unsavedData['rfqTemplate']['uploadattachement']);
+}
+
+$productName = '';
+if (is_array($popupFormData) && count($popupFormData)>0) {
+    $productName = (isset($popupFormData['rfqproductname'])) ? $popupFormData['rfqproductname'] : '';
+}
+$productName =   (isset($unsavedData['rfqTemplate']['productname'])) ? $unsavedData['rfqTemplate']['productname'] : $productName;
+
+$productQty = '';
+if (is_array($popupFormData) && count($popupFormData)>0) {
+    $productQty = (isset($popupFormData['qty'])) ? $popupFormData['qty'] : '';
+}
+$productQty = (isset($unsavedData['rfqTemplate']['productqty'])) ? $unsavedData['rfqTemplate']['productqty'] : $productQty;
+?>
+<br />    
+<!--<div>
+  <label class="label"><?= /* @noEscape */  __('Select Category') ?>:</label>
+  <div>
+      <?= /* @noEscape */   $block->getLayout()->createBlock('Matrix\NoncatalogueRfq\Block\Category\Select')
+        ->setTemplate('Matrix_NoncatalogueRfq::category/select.phtml')->toHtml();?>
+</div>
+</div>-->
+<br />
+<div class="row rfq-product-basic-information rfq-info">     
+ <!--START Product Line-->
+<div class="col-sm-4">    
+    
+     <fieldset class="fieldset">
+         <!--<legend class="legend"><span><?= /* @noEscape */  $escaper->escapeHtml(__('RFQ Product Line')) ?></span></legend><br />         -->
+            <div class="field productname required">
+                  <label class="label" for="productname"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Product Name')) ?></span></label>
+                  <div class="control">
+                      <input name="productname" id="productname" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Product Name')) ?>" 
+                      value="<?= /* @noEscape */  $productName;?>" class="input-text" type="text" data-validate="{required:true}"/>
+                  </div>
+             </div>       
+            <div class="field productdesc required">
+                  <label class="label" for="productdesc"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Description')) ?></span></label>
+                  <div class="control">
+                      <textarea style="min-height:110px" name="productdesc" id="productdesc" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Description')) ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"><?= /* @noEscape */  (isset($unsavedData['rfqTemplate']['productdesc'])) ? $unsavedData['rfqTemplate']['productdesc'] : '';?></textarea>
+                  </div>
+            </div>           
+            <div class="field productidentifier">
+                  <label class="label" for="productidentifier"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Product code/ID #')) ?></span></label>
+                  <div class="control">
+                      <input name="productidentifier" id="productidentifier" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Supplier item Identifier')) ?>" 
+                      value="<?= /* @noEscape */  (isset($unsavedData['rfqTemplate']['productidentifier'])) ? $unsavedData['rfqTemplate']['productidentifier'] : '';?>" class="input-text" type="text" />
+                  </div>
+            </div>
+            <div class="field productsourcingpurpose">                
+                  <label class="label" for="productsourcingpurpose"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Sourcing Purpose')) ?></span></label>
+                  <div class="control">                      
+                      <div class="field productsourcingpurpose required">                          
+                           <div data-bind="scope: 'productsourcingpurpose'">
+                               <!-- ko template: getTemplate() -->
+                                <center>
+                                    <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                                </center>    
+                               <!-- /ko -->
+                            </div>
+                     </div>
+                     <?php
+                        $selectedOptions = 'null';
+//if(is_array($unsavedData['rfqTemplate']['productsourcingpurpose'])){
+if (array_key_exists('productsourcingpurpose', $unsavedData['rfqTemplate'])) {
+    $selectedOptions =  implode(",", $unsavedData['rfqTemplate']['productsourcingpurpose']);
+}
+?>     
+                       <script type="text/x-magento-init">
+                                  {
+                                "*": {
+                                    "Magento_Ui/js/core/app": {
+                                        "components": {
+                                            "productsourcingpurpose": {                                    
+                                                "component": "Matrix_NoncatalogueRfq/js/my-ui-select",
+                                                "template" : "Matrix_NoncatalogueRfq/ui-select-source",
+                                                "filterOptions": false,
+                                                "levelsVisibility": "1",
+                                                "multiple": true,
+                                                "closeBtn": true,
+                                                "showCheckbox": true,
+                                                "options": <?= /* @noEscape */  $_noncatRfqHelper->getSourcePurposeJson();?>,
+                                                "selectedvalues":<?= /* @noEscape */  '"' . $selectedOptions . '"';?>
+                                                
+                                                
+                                        }
+                                    }
+                                }
+                            }
+                         }   
+                      </script>
+                      
+                  </div>
+            </div>
+    </fieldset>        
+</div>                  
+
+<div class="col-sm-4">            
+    <fieldset class="fieldset">
+        <!--START Custom category-->
+              <div class="field required multi-se">
+                 <label class="label"><?= /* @noEscape */  __('Select Category') ?>:</label>
+                 <div data-bind="scope: 'customCategory'">
+                     <!-- ko template: getTemplate() -->
+                        <center>
+                           <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                        </center>                                
+                     <!-- /ko -->
+                 </div>
+                 <?php
+                     $selectedOptions = '';
+// if(is_array($unsavedData['rfqTemplate']['category_ids'])){
+if (array_key_exists('category_ids', $unsavedData['rfqTemplate'])) {
+    $selectedOptions =  implode(",", $unsavedData['rfqTemplate']['category_ids']);
+}
+?>     
+                <script type="text/x-magento-init">
+                   {
+                       "*": {
+                           "Magento_Ui/js/core/app": {
+                               "components": {
+                                   "customCategory": {                                       
+                                       "component": "Matrix_NoncatalogueRfq/js/ui-select-category",
+                                       "template" : "Matrix_NoncatalogueRfq/ui-select",
+                                       "filterOptions": true,
+                                       "levelsVisibility": false,
+                                       "multiple": false,
+                                       "showCheckbox": false,                                      
+                                       "options": <?= /* @noEscape */  $block->getLayout()->createBlock('Matrix\NoncatalogueRfq\Block\Categories')->getCategoriesTree()?>,
+                                       "selectedvalues": <?= /* @noEscape */  '"' . $selectedOptions . '"';?>
+                                  }
+                              }
+                          }
+                      }
+                   }
+                </script>
+               </div>
+        <!--END Custom Category-->
+            <div class="field productqty required">
+                  <label class="label" for="productqty"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Quantity')) ?></span></label>
+                  <div class="control">
+                       <input name="productqty"   id="productqty" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Quantity')) ?>" 
+                       value="<?= /* @noEscape */  $productQty;?>" class="input-text" type="text" data-validate="{required:true}"/>                  
+                  </div>
+            </div>
+            <div class="field unitsofmeasure required">
+                  <label class="label" for="unitsofmeasure"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Units of Measure')) ?></span></label>
+                  <div class="control">    
+                    <?php
+  $uom = '';
+if (is_array($popupFormData) && count($popupFormData)>0) {
+    $uom = (isset($popupFormData['uom'])) ? $popupFormData['uom'] : '';
+}
+?>                 
+                     
+                     <select name="umo" id="umo" class="required-entry">
+                        <option value=""><?= /* @noEscape */  $escaper->escapeHtml(__('Select')) ?></option>
+                        <?php if ($uom!='') {?>
+                            <?php $options =  $_noncatRfqHelper->getUnitsofMeasures();?>
+                            <?php if (count($options)) {?>
+                                <?php foreach ($options as $index => $option):?>
+                                    <option <?= /* @noEscape */  ($option['value']==$uom) ? 'selected="selected"' : '';?> value="<?= /* @noEscape */  $option['value'];?>"> <?= /* @noEscape */  $option['label'];?> </option>
+                           <?php endforeach;?>     
+                           <?php }?>
+                         <?php }?>  
+                     </select>                    
+                  </div>                               
+            </div>
+            
+            <div class="field uomothers required" style="display:none" id="uomothers_container">
+                  <label class="label" for="uomothers"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Enter Other Unit of Measure')) ?></span></label>
+                  <div class="control">                         
+                      <input name="uom_others" id="uom_others" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Unit of Measure')) ?>" 
+                    value="" class="input-text" type="text" data-validate="{required:true}"/>
+                  </div>                               
+            </div>
+            
+            <div class="field targetprice  required">
+                <label class="label" for="targetprice"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Target Price')) ?></span></label>
+                <div class="control">
+                    <input name="targetprice" id="targetprice" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Target Price')) ?>" 
+                    value="<?= /* @noEscape */  (isset($unsavedData['rfqTemplate']['targetprice'])) ? $unsavedData['rfqTemplate']['targetprice'] : '';?>" class="input-text" type="text" data-validate="{required:true}"/>
+                </div>
+            </div>           
+            <div class="field tradeterms required">
+                <label class="label" for="tradeterms"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Trade Terms')) ?></span></label>
+                <div class="control">                                   
+                    <div class="field tradeterms required">                          
+                           <div data-bind="scope: 'tradeterms'">
+                               <!-- ko template: getTemplate() -->
+                                <center>
+                                   <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                                </center>                                
+                               <!-- /ko -->
+                            </div>
+                     </div>
+                     <?php
+    $selectedOptions = 'null';
+if (array_key_exists('tradeterms', $unsavedData['rfqTemplate'])) {
+    $selectedOptions =  implode(",", $unsavedData['rfqTemplate']['tradeterms']);
+}
+?>     
+                           <script type="text/x-magento-init">
+                                      {
+                                    "*": {
+                                        "Magento_Ui/js/core/app": {
+                                            "components": {
+                                                "tradeterms": {                                    
+                                                    "component": "Matrix_NoncatalogueRfq/js/my-ui-select",
+                                                    "template" : "Matrix_NoncatalogueRfq/ui-select-tradeterms",
+                                                    "filterOptions": false,
+                                                    "levelsVisibility": "1",
+                                                    "multiple": true,
+                                                    "closeBtn": true,
+                                                    "showCheckbox": true,
+                                                    "options": <?= /* @noEscape */  $_noncatRfqHelper->getTradeTermsJson();?>,
+                                                    "selectedvalues":<?= /* @noEscape */  '"' . $selectedOptions . '"';?>
+                                            }
+                                        }
+                                    }
+                                }
+                             }   
+                          </script>
+                </div>
+            </div>             
+    </fieldset>        
+</div>            
+<div class="col-sm-4">            
+    <fieldset class="fieldset">
+            
+            <!--START another uploader-->
+            <div class="field productupload">
+                <label class="label" for="productupload">
+                    <span><?= /* @noEscape */  $escaper->escapeHtml(__('Attachment')) ?>: </span>
+                    <span>[ <strong>Product Specifications</strong>, <strong>Diagrams</strong>, <strong>Features</strong>, <strong>Sizes</strong>, <strong>materail</strong> etc... ]</span>
+                </label>
+                <!--<label class="label">
+                    <span>[ <strong>Product Specifications</strong>, <strong>Diagrams</strong>, <strong>Features</strong>, <strong>Sizes</strong>, <strong>materail</strong> etc... ]</span>
+                </label>-->
+                
+                <div class="control">
+                    <div class="upload-wrapper" data-bind="scope: 'rfquploader'">
+                        <!-- ko template: getTemplate() -->
+                        <center>
+                           <img alt="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" title="<?= /* @noEscape */  $escaper->escapeHtml(__('Loading...')) ?>" src="<?= /* @noEscape */   $block->getMediaUrl() . 'images/custom-loader.gif';?>" />
+                        </center>                                
+                        <!-- /ko -->
+                     </div>                
+                </div>
+                <!--<label class="label">[Allowd File Types:"png", "jpg", "jpeg", "gif", "pdf", "doc", "docx"]</label>-->
+             </div>
+             <!--END another uploader-->                 
+            <div class="field paymentterms required">
+                <label class="label" for="paymentterms"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Payment term/instructions')) ?></span></label>
+                <div class="control">
+                    <textarea style="min-height:38px;" name="paymentterms" id="paymentterms" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Payment term/instructions')) ?>" class="input-text" cols="3" rows="1" data-validate="{required:true}"><?= /* @noEscape */  (isset($unsavedData['rfqTemplate']['paymentterms'])) ? $unsavedData['rfqTemplate']['paymentterms'] : '';?></textarea>
+                </div>
+            </div> 
+            <div class="field memo">
+                <label class="label" for="memo"><span><?= /* @noEscape */  $escaper->escapeHtml(__('Memo')) ?></span></label>
+                <div class="control">
+                    <textarea style="min-height:38px;" name="memo" id="memo" title="<?= /* @noEscape */  $escaper->escapeHtmlAttr(__('Memo')) ?>" class="input-text" cols="3" rows="1"><?= /* @noEscape */  (isset($unsavedData['rfqTemplate']['memo'])) ? $unsavedData['rfqTemplate']['memo'] : '';?></textarea>
+                </div>
+            </div>          
+          
+     </fieldset>
+<!--End Product Grid-->
+</div>
+</div>
+<script type="text/javascript">
+    require(["jquery", "Magento_Ui/js/modal/modal"],function($, modal) {
+        $(document).ready(function() {
+            $('#addSelectCat').click(function(){
+                var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false,
+                buttons: [{
+                    text: $.mage.__('Close'),
+                    class: '',
+                    click: function () {
+                        this.closeModal();
+                    }
+                  }]
+               };               
+               var popup = modal(options, $('#selectcategory-popupmodal'));
+               $("#selectcategory-popupmodal").modal("openModal");
+            });
+            
+            var uomOtherOptionId = <?= /* @noEscape */  $_noncatRfqHelper::UOM_OPTION_OTHER_ID;?>;
+            $("#umo").change(function(){
+                //alert($(this).val() + ' and ' + uomOtherOptionId);
+                if($(this).val()==uomOtherOptionId){
+                    $("#uomothers_container").show();
+                    $("#uom_others").focus();
+                } else {
+                    $("#uomothers_container").hide();
+                }
+                
+            });
+            
+            
+       });    
+        
+    });
+</script>        
+<script type="text/x-magento-init">
+{
+".upload-wrapper": {
+   "Magento_Ui/js/core/app": {
+       "components": {
+           "rfquploader": {
+               "dataScope": "custom.noncatrfqimage",
+               "component": "Matrix_NoncatalogueRfq/js/custom-file-uploader",
+               "template" : "Matrix_NoncatalogueRfq/uploader",               
+                "previewTmpl":"Matrix_NoncatalogueRfq/uploader/preview",
+                "allowedExtensions": ["png", "jpg", "jpeg", "gif","pdf","doc","docx","zip"],
+                "notice":"[Allowd Files :png, jpg, jpeg, gif, pdf, doc, docx]",
+               "isMultipleFiles":true,               
+               "uploaderConfig": {
+                    "url": "<?= /* @noEscape */  $block->getUrl('noncatalogrequesttoquote/uploader/ajax/'); ?>"
+               },
+               "savedFiles":<?= /* @noEscape */  $uploaedAttachments;?>
+               
+            }
+        }
+   }
+ }
+}
+</script>

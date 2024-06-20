@@ -1,0 +1,75 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$rfqTypes = $_noncatRfqHelper->getRFQuoteTypes();
+
+$pricingHelper = $block->helper('Magento\Framework\Pricing\Helper\Data');
+
+$rfProduct =  $block->getRfqProducts();
+$uomOptions =  $_noncatRfqHelper->getUomOptions();
+$uomlabel = '';
+if ($rfProduct->getData('umo')>0) {
+    $uomlabel = $uomOptions[$rfProduct->getData('umo')];
+}
+?>
+<div class="row">
+    <div class="col-sm-6">    
+        <div class="back_wrapper">
+            <h2><?= /* @noEscape */  __('RFQ Information') ?></h2>
+            <div class="table-responsive mb-25">    
+              <table class="data-table table table-striped table-cus">
+                <tbody>
+                  <tr>
+                      <td width="40%"><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Name')) ?></strong>  </td>          
+                      <td>: <?= /* @noEscape */  $nonCatalogRfq->getData('name');?></td>
+                  </tr>      
+                  <tr>
+                      <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Company Name')) ?></strong></td>          
+                      <td>: <?= /* @noEscape */  $nonCatalogRfq->getData('company_name');?></td>
+                  </tr>
+                  <tr>
+                      <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('RFQ Type')) ?></strong></td>          
+                      <td>: <?= /* @noEscape */  $rfqTypes[$nonCatalogRfq->getData('rfq_type')];?></td>
+                  </tr>
+                  <tr>
+                      <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Subtotal')) ?></strong>: </td>          
+                      <td>: <?= /* @noEscape */  $pricingHelper->currency($nonCatalogRfq->getData('rfq_total_price'), true, false);?></td>
+                  </tr>
+                  <tr>
+                      <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Total Qty')) ?></strong></td>          
+                      <td>: <?= /* @noEscape */  $nonCatalogRfq->getData('rfq_total_qty') . ' ' . $uomlabel;?></td>
+                  </tr>
+                  <tr>
+                      <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Response Date')) ?></strong></td>          
+                      <td>: <?= /* @noEscape */  $block->getFormatedDate($nonCatalogRfq->getData('respons_date'));?></td>
+                  </tr>
+                </tbody>    
+              </table>
+            </div>
+        </div>
+        </div>  
+    <div class="col-sm-6">
+        <div class="back_wrapper">
+            <h2><?= /* @noEscape */  __('Shipping and Payment') ?></h2>
+            <?= /* @noEscape */   $block->getLayout()
+                  ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+                  ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/shipping-payment.phtml')
+                  ->toHtml();
+?>
+        </div>
+    </div>
+</div>  
+<div class="row">
+    <div class="col-sm-12">
+        <div class="back_wrapper">
+        <h2><?= /* @noEscape */  __('Supplier Requirements') ?></h2>    
+        <div>
+            <?= /* @noEscape */   $block->getLayout()
+      ->createBlock('Matrix\NoncatalogueRfq\Block\Customer\EditQuote')
+      ->setTemplate('Matrix_NoncatalogueRfq::rfq-edit/supplier-requirements.phtml')
+      ->toHtml();
+?>
+        </div>
+    </div>
+</div>
+</div>

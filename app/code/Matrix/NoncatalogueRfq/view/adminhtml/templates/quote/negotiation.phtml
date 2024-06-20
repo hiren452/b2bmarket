@@ -1,0 +1,142 @@
+<?php
+$nonCatalogRfq = $block->getQuoteData();
+$rfProduct =  $block->getRfqProducts();
+$negotistionHistory =  $block->getNegotistionHistory($nonCatalogRfq->getRfqId());
+$arr_isaccpected = [0=>'No',1=>'Yes'];
+$pricingHelper = $block->helper('Magento\Framework\Pricing\Helper\Data');
+
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$uomOptions =  $_noncatRfqHelper->getUomOptions();
+$uomlabel = '';
+if ($rfProduct->getData('umo')>0) {
+    $uomlabel = $uomOptions[$rfProduct->getData('umo')];
+}
+
+$rfqProductCollection = $block->getRfqAllProducts();
+
+?>
+<div class="row">
+        <div class="data-table-wrapper">    
+            
+            <table class="data-table admin__table-primary edit-order-table">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?= /* @noEscape */  __("Product"); ?></span></th>
+                        <th class="col-price"><span><?= /* @noEscape */  __("Proposed Unit Price"); ?></span></th>                        
+                        <th class="col-ordered-qty"><span><?= /* @noEscape */  __("Proposed Qty"); ?></span></th>                        
+                        <th class="col-total last"><span><?= /* @noEscape */  __("Row Total"); ?></span></th>
+                    </tr>
+                    <?php foreach ($rfqProductCollection as $rfqProduct) {?>                        
+                        <tr>
+                           <td><?= /* @noEscape */  $rfqProduct->getData('name');?></td>
+                           <td><?= /* @noEscape */  $pricingHelper->currency($rfqProduct->getData('target_price'), true, false);?></td>
+                           <td><?= /* @noEscape */  $rfqProduct->getData('qty') . ' ' . $uomlabel;?></td>                           
+                           <td>
+                               <?php $rowTotal = $rfqProduct->getData('target_price') * $rfProduct->getData('qty');?>
+                               
+                               <?= /* @noEscape */  $pricingHelper->currency($rowTotal, true, false);?></td>
+                        </tr>
+                    
+                    <?php }?>
+                    
+                </thead>
+                <tbody>                
+                </tbody>
+            </table>
+        </div>        
+</div>
+<div>
+        <div class="data-table-wrapper">                
+            <h2><?= /* @noEscape */  __('Negotiation Hisory')?></h2>            
+            <table class="data-table"  style="width:100%;>
+                <thead>
+                    <tr class="headings">
+                        <th class="col-price"><span><?= /* @noEscape */  __("Unit Price"); ?></span></th>                        
+                        <th class="col-ordered-qty"><span><?= /* @noEscape */  __("Qty") . '  ( <span style="font-weight:normal;color:#ff004c">' . $uomlabel . '</span>)'; ?></span></th>                         
+                        <th class="col-ordered-qty"><span><?= /* @noEscape */  __("Lead Time") . '  ( <span style="font-weight:normal;color:#ff004c">Days</span>)'; ?></span></th>
+                        <th class="col-ordered-qty"><span><?= /* @noEscape */  __("Send By"); ?></span></th> 
+                        <th class="col-ordered-qty"><span><?= /* @noEscape */  __("Coment"); ?></span></th> 
+                        <th><span><?= /* @noEscape */  __("Accepected"); ?></span></th> 
+                        <th class="col-ordered-qty"><span><?= /* @noEscape */  __("Date"); ?></span></th>                         
+                    </tr>
+                    <?php if ($negotistionHistory->getSize()) {
+                        foreach ($negotistionHistory as $nhistory) {
+                            ?>
+                      <tr>
+                          <td>
+                            <center>
+                            <span style="color:#3b4252;padding:2px;"><del><?= /* @noEscape */  $pricingHelper->currency($rfProduct->getData('target_price'), true, false);?><del></span> |
+                            <span style="color:#3b4252;padding:2px;">                                
+                                <?= /* @noEscape */  $pricingHelper->currency($nhistory->getData('negotiotion_price'), true, false);?>
+                                </span>
+                            </center>  
+                          </td>
+                          <td>
+                              <center>
+                              <span style="color:#3b4252;padding:2px;"><del><?= /* @noEscape */  $rfProduct->getData('qty');?></del></span> |
+                              <span style="color:#3b4252;padding:2px;"><?= /* @noEscape */  $nhistory->getData('negotiotion_qty');?></span>
+                              </center>
+                          </td>
+                          <td>
+                              <center>
+                              <span style="color:#3b4252;padding:2px;"><del><?= /* @noEscape */  $nonCatalogRfq->getData('lead_time');?></del></span> |
+                              <span style="color:#3b4252;padding:2px;"><?= /* @noEscape */  $nhistory->getData('negotiotion_leadtime');?></span> 
+                              </center>
+                          </td>
+                          <td>
+                              <?php if ($nhistory->getData('sent_by') == 'Customer') { ?>                                            
+                                      <span style="background:#a3be8c;color:#ffffff;padding:5px;" class="purchaseorder-right-chat-column-chat">Buyer</span>
+                                    <?php } elseif ($nhistory->getData('sent_by') == 'Vendor') {?>
+                                        <?php
+                                            $vendorModel = $block->getVendorbyId($nhistory->getVendorId());
+                                        ?>
+                                       <center>
+                                        <span style="background:#b48ead;color:#ffffff;padding:2px;" class="note-list-comment">
+                                            <?= /* @noEscape */  $vendorModel->getData('public_name') . " | " . $vendorModel->getData('email');?> [ <?= /* @noEscape */  __('Vendor')?> ]
+                                        </span>
+                                       </center>            
+                               <?php }?>
+                          </td>                          
+                          <td width="10%"><center><span><a data-comment="<?= /* @noEscape */  $nhistory->getData('message');?>" title="<?= /* @noEscape */  __("Read more comment"); ?>" class="comment-readmore" href="javascript:void(0);"> Read</a></span></center></td>
+                          <td><center><?= /* @noEscape */  $arr_isaccpected[$nhistory->getData('is_accpected')];?></center></td>
+                          <td><center><?= /* @noEscape */  $block->getFormatedDate($nhistory->getData('created_at'));?></center></td>
+                         
+                      </tr>
+                    <?php }
+                        } else {?>
+                          <tr>
+                              <td colspan="5"><span style="color:#ff2500;"><?= /* @noEscape */  __('No Negotiation Hisory found.')?></span></td>
+                          </tr>
+                    <?php }?>      
+                    
+                </thead>
+                <tbody>                
+                </tbody>
+            </table>
+             
+        </div>        
+</div>
+<!--<div id="negotiateaccepet-popup" style="display:none;">
+<form class="form noncatrfq"
+      action="<?= /* @noEscape */  /* @escapeNotVerified */ $block->getNegotiateAccepetPostUrl(); ?>"
+      name="form-negotiatecccept"
+      id="form-negotiatecccept"
+      method="POST"
+      data-hasrequired="<?php /* @escapeNotVerified */ //echo __('* Required Fields')?>"
+      data-mage-init='{"validation":{}}'>
+      <input type="hidden" name="accepected_negotiate_id" id="accepected_negotiate_id" value="" />
+</form>      
+</div>-->
+
+<!--Start Add Negotiate Form-->
+<script type="text/javascript">
+    require(["jquery"],function($) {
+         $(document).ready(function() {             
+              $(".comment-readmore").click(function(){
+                 var comment =    $(this).data("comment");
+                 alert(comment);
+             });
+        });
+             
+});
+</script>

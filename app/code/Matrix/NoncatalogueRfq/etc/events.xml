@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="ced_csmarketplace_vendor_save_after">
+        <observer name="csmarketplace_vendor_save_after_event" instance="Matrix\NoncatalogueRfq\Observer\VendorRegisterSuccess"  />
+    </event>
+    <event name="noncatalogrequesttoquote_submit_success">
+        <observer name="noncatalogrequesttoquote_success_smsnotification" instance="Matrix\NoncatalogueRfq\Observer\SmsNotification" />
+        <observer name="noncatalogrequesttoquote_success_invitemails" instance="Matrix\NoncatalogueRfq\Observer\NonMarketplaceRfqInvite" />
+        <observer name="noncatalogrequesttoquote_success_vendormails" instance="Matrix\NoncatalogueRfq\Observer\MarketplaceRfqVendorEmail" />
+    </event>
+</config>

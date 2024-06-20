@@ -1,0 +1,36 @@
+<?php
+$_noncatRfqHelper = $block->helper('Matrix\NoncatalogueRfq\Helper\Data');
+$nonCatalogRfq =  $block->getNonCatalogQuote();
+$supplierCertifications = $_noncatRfqHelper->getCertifications();
+$supplierCertificationsSwatch = $_noncatRfqHelper->getCertificationsOptionSwatchs();
+?> 
+<div class="table-responsive mb-25">    
+<table class="data-table data-table table table-striped table-cus">
+    <tbody>
+      <tr>
+          <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Certifications')) ?></strong></td>
+          <td style="vert">  
+          <?php //echo  $nonCatalogRfq->getData('vendor_certifications');?>          
+          <?php
+            if ($nonCatalogRfq->getData('vendor_certifications')!='') {
+                $vendor_certificationsArr = explode(',', $nonCatalogRfq->getData('vendor_certifications'));
+                $mediaUrl = $block->getMediaUrl() . 'attribute/swatch/';
+                foreach ($vendor_certificationsArr as $index => $optionId) {
+                    /* @noEscape */   echo '<span style="display:inline-block;">: ' . $supplierCertificationsSwatch[$optionId]['label'] . '</span>';
+                    /* @noEscape */   echo '<img src="' . $mediaUrl . $supplierCertificationsSwatch[$optionId]['value'] . '" alt="' . $supplierCertificationsSwatch[$optionId]['label'] . '" style="display:inline-block;width:80px;height:auto;padding:5px;border:1px solid #d6d6d6;				vertical-align:middle;margin:0 0 0 5px" />';
+                }
+            } else {
+                /* @noEscape */  echo ": N/A";
+            }?>
+          </td>          
+      </tr>      
+      <tr>
+          <td><strong><?= /* @noEscape */  $escaper->escapeHtml(__('Other Requirements')) ?></strong></td>
+          <td>: 
+              <?= /* @noEscape */  ($nonCatalogRfq->getData('vendor_oth_requirement')!='') ? $nonCatalogRfq->getData('vendor_oth_requirement') : "N/A";?>
+          </td>          
+      </tr>      
+    </tbody>    
+</table>
+</div>
+ 

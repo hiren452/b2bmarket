@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job instance="Matrix\NoncatalogueRfq\Cron\NonmktVendorRfqMail" method="execute" name="matrix_noncataloguerfq_nonmktvendormail">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job instance="Matrix\NoncatalogueRfq\Cron\VendorNewRfqMail" method="execute" name="matrix_noncataloguerfq_vendormail">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job instance="Matrix\NoncatalogueRfq\Cron\VendorNewPublicRfqMail" method="execute" name="matrix_noncataloguerfqpublic_vendormail">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
+</config>
+
