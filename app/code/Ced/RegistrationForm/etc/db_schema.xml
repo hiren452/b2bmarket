@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_regformfields" resource="default" engine="innodb" comment="Custom Registration Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="text" name="attribute_code" nullable="false" comment="Attribute Code"/>
+        <column xsi:type="int" name="attribute_id" padding="10" unsigned="true" nullable="false" default="0" comment="attribute id"/>
+        <column xsi:type="text" name="attribute_label" nullable="false" comment="Attribute Label"/>
+        <column xsi:type="text" name="values" nullable="false" comment="values"/>
+        <column xsi:type="int" name="show_in_order" padding="10" unsigned="true" nullable="false" default="0" comment="Show in order"/>
+        <column xsi:type="int" name="is_dependent" padding="10" unsigned="true" nullable="false" default="0" comment="is_dependent"/>
+        <column xsi:type="text" name="dependable_attribute" nullable="false" comment="dependable_attribute"/>
+        <column xsi:type="int" name="sortorder" padding="10" unsigned="true" nullable="false" default="0" comment="sortorder"/>
+        <column xsi:type="int" name="is_time" padding="10" unsigned="true" nullable="false" default="0" comment="is_time"/>
+        <column xsi:type="int" name="status" padding="10" unsigned="true" nullable="false" default="0" comment="Status"/>
+        <column xsi:type="int" name="has_parent" padding="10" unsigned="true" nullable="false" default="0" comment="Parent Check"/>
+        <column xsi:type="int" name="show_in_registration_form" padding="10" unsigned="true" nullable="false" default="0" comment="Show in registration form"/>
+        <column xsi:type="int" name="show_in_customer_account" padding="10" unsigned="true" nullable="false" default="0" comment="Show in customer account"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+</schema>

@@ -1,0 +1,161 @@
+<?php
+$orderHelper = $this->helper('Ced\RegistrationForm\Helper\Order');
+$att_code = [];
+$datas = $orderHelper->getAttributeCollection()->AddFieldToFilter('is_time', 1)->getData();
+foreach ($datas as $data) {
+    $att_code[] = $data['attribute_code'];
+}
+$arr = [];
+$models = $orderHelper->getAttributeCollection()->addFieldToFilter('values', 'yes,no')->getData();
+foreach ($models as $k => $v) {
+    $arr[]= $v['attribute_code'];
+}
+$attribute = $orderHelper->getAttributesByEntityTypeId(1);
+$attribute->addFieldToFilter('attribute_code', [
+    ['in' => $arr]
+]);
+$attribute->getData();
+$attCode = [];
+foreach ($attribute as $att) {
+    $attCode[] = $att['attribute_code'];
+}
+?>
+<script type="text/javascript">
+    //<![CDATA[
+    require(["jquery"], function ($) {
+        checkContainer();
+    });
+    function checkContainer () {
+        require(["jquery"], function ($) {
+            if($('#tab_customer').is(':visible')){
+                if( jQuery('*[name="customer[franchisee_layers]"]').is(':visible')){
+                    var name = '*[name="customer[franchisee_layers]"]';
+                    var selectedText = jQuery(name+" option:selected").text();
+                    if(selectedText == "Master Franchisee"){
+                        jQuery('*[data-index="master_franchisee"]').hide();
+                        jQuery('*[data-index="district_franchisee"]').hide();
+                        jQuery('*[data-index="franchisee_outlet"]').hide();
+                    }else if(selectedText == "District Franchisee"){
+                        jQuery('*[data-index="master_franchisee"]').show();
+                        jQuery('*[data-index="district_franchisee"]').hide();
+                        jQuery('*[data-index="franchisee_outlet"]').hide();
+                    }else if(selectedText == "Franchisee Outlet"){
+                        jQuery('*[data-index="district_franchisee"]').show();
+                        jQuery('*[data-index="master_franchisee"]').hide();
+                        jQuery('*[data-index="franchisee_outlet"]').hide();
+                    } else if(selectedText == "Co-Planner"){
+                        jQuery('*[data-index="district_franchisee"]').hide();
+                        jQuery('*[data-index="master_franchisee"]').hide();
+                        jQuery('*[data-index="franchisee_outlet"]').show();
+                    }else{
+                        jQuery('*[data-index="master_franchisee"]').hide();
+                        jQuery('*[data-index="district_franchisee"]').hide();
+                        jQuery('*[data-index="franchisee_outlet"]').hide();
+                    }
+
+                    jQuery('*[name="customer[franchisee_layers]"]').change(function(){
+                        var name = '*[name="customer[franchisee_layers]"]';
+                        var selectedText = jQuery(name+" option:selected").text();
+                        if(selectedText == "Master Franchisee"){
+                            jQuery('*[data-index="master_franchisee"]').hide();
+                            jQuery('*[data-index="district_franchisee"]').hide();
+                            jQuery('*[data-index="franchisee_outlet"]').hide();
+                        }else if(selectedText == "District Franchisee"){
+                            jQuery('*[data-index="master_franchisee"]').show();
+                            jQuery('*[data-index="district_franchisee"]').hide();
+                            jQuery('*[data-index="franchisee_outlet"]').hide();
+                        }else if(selectedText == "Franchisee Outlet"){
+                            jQuery('*[data-index="district_franchisee"]').show();
+                            jQuery('*[data-index="master_franchisee"]').hide();
+                            jQuery('*[data-index="franchisee_outlet"]').hide();
+                        } else if(selectedText == "Co-Planner"){
+                            jQuery('*[data-index="district_franchisee"]').hide();
+                            jQuery('*[data-index="master_franchisee"]').hide();
+                            jQuery('*[data-index="franchisee_outlet"]').show();
+                        } else{
+                            jQuery('*[data-index="master_franchisee"]').hide();
+                            jQuery('*[data-index="district_franchisee"]').hide();
+                            jQuery('*[data-index="franchisee_outlet"]').hide();
+                        }
+
+                    });
+
+                    jQuery('*[data-index="master_franchisee"]').attr('required',true);
+                    // jQuery('#tab_address').trigger( "click" );
+                    //  jQuery('.address-list-actions').trigger( "click" );
+                }else{
+                    setTimeout(checkContainer, 50);
+                }
+                var myJavascriptData = <?= /* @noEscape */ json_encode($att_code) ?>;
+                // alert(myJavascriptData);
+                var dependable = <?=  /* @noEscape */ json_encode($attCode) ?>;
+                //  alert(dependable);
+                var arrayLength = myJavascriptData.length;
+                for (var i = 0; i < arrayLength; i++) {
+                    //  alert(myJavascriptData[i]);
+                    //   $('input[name="customer['myJavascriptData[i]']"]').addClass("timepicker");
+                    var js_name = 'input[name="customer['+myJavascriptData[i]+']"]';
+                    if(!$(js_name).is(':visible')){
+                        setTimeout(checkContainer, 50);
+                    }
+
+                    $(js_name).addClass("timepicker");
+                    time();
+                }
+            } else {
+                setTimeout(checkContainer, 50);
+            }
+        });
+    }
+    function time(){
+        require([
+            "jquery",
+            "jquery/jquery-ui-timepicker-addon",
+        ], function ($){
+            $.each($('.timepicker'),function(i,v){
+                $(this).timepicker({showsTime: true});
+            });
+        });
+    }
+    /* require(['jquery', 'jquery/ui'], function($){
+     alert('ccd');
+     $("select[name=customer[franchisee_layers]]").change(function(){
+     alert(this.value());
+     alert('ccd');
+     });
+     }); */
+    //]]>
+</script>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

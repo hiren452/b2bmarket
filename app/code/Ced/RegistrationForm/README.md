@@ -1,0 +1,1 @@
+# m2-customized-customer-sign-up-form
