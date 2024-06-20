@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ced\CsVendorAttribute\Block\Adminhtml\Attributes" type="Ced\CsMultistepreg\Block\Adminhtml\Rewrites\CsVattribute\Attributes" />
+    <preference for="Ced\CsVendorAttribute\Block\Adminhtml\Attributes\Grid" type="Ced\CsMultistepreg\Block\Adminhtml\Rewrites\CsVattribute\Grid" />
+    <preference for="Ced\CsVendorAttribute\Block\Adminhtml\Attributes\Edit\Tab\Main" type="Ced\CsMultistepreg\Block\Adminhtml\Rewrites\CsVattribute\Edit\Tab\Main" />
+    <preference for="Ced\CsVendorAttribute\Model\Rewrite\CsMarketplace\Vendor\Attribute" type="Ced\CsMultistepreg\Model\Rewrite\CsMarketplace\Vendor\Attribute" />
+    <preference for="Ced\CsMarketplace\Controller\Account\CreatePost" type="Ced\CsMultistepreg\Controller\Rewrite\Account\CreatePost" />
+    <preference for="Ced\CsMarketplace\Controller\Account\Approval" type="Ced\CsMultistepreg\Controller\Rewrite\Account\Approval" />
+    <preference for="Ced\CsMarketplace\Controller\Vendor\Index" type="Ced\CsMultistepreg\Controller\Rewrite\Vendor\Index" />
+</config>

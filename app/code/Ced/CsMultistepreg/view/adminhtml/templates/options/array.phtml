@@ -1,0 +1,94 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMultistepregistration
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+
+$_htmlId      = $block->getElement()->getHtmlId();
+$_htmlClass   = $block->getElement()->getClass();
+$_htmlName    = $block->getElement()->getName();
+$_readonly    = $block->getElement()->getReadonly();
+$collection   = $block->getSteps();
+
+$_counter = 0;
+?>
+<tr>
+    <td class="label"><?= /* @noEscape */  $block->getElement()->getValue() ?></td>
+    <td colspan="10" class="grid questions">
+        <table id="attribute-options-table" class="data border custominsight-options" cellspacing="0" cellpadding="0"><tbody>
+            <tr class="headings">
+                <th><?= /* @noEscape */  $block->__('Step Number') ?></th>
+                <th><?= /* @noEscape */  $block->__('Step Label') ?></th>
+                <th class="last"><button id="add_new_option_button" title="Add Option" type="button" class="scalable add" ><span><span><span><?= /* @noEscape */  $block->__('Add Option') ?></span></span></span></button></th>
+            </tr>
+
+<?php if (!empty($collection)) {
+
+    foreach ($collection->getData() as $_item):?>
+
+<tr class="option-row custominsight-options-row" id="options-row-<?= /* @noEscape */  $_counter?>">
+    <td>
+        <input name="<?= /* @noEscape */  $_htmlName; ?>[label][option_<?= /* @noEscape */  $_counter ?>][step_number]" value="<?= /* @noEscape */  $_item['step_number'] ?>" class="input-text" type="text">
+    </td>
+
+    <td>
+        <input name="<?= /* @noEscape */  $_htmlName; ?>[label][option_<?= /* @noEscape */  $_counter ?>][step_label]" value="<?= /* @noEscape */  $_item['step_label'] ?>" class="input-text" type="text">
+    </td>
+    <td class="a-left" id="delete_button_container_option_<?= /* @noEscape */  $_counter ?>'">
+        <input name="<?= /* @noEscape */  $_htmlName; ?>[label][option_<?= /* @noEscape */  $_counter ?>][id]" value="<?= /* @noEscape */  $_item['id'] ?>" type="hidden">
+        <input id="delete-row-<?= /* @noEscape */  $_counter ?>" type="hidden" class="delete-flag" name="<?= /* @noEscape */  $_htmlName; ?>[delete][option_<?= /* @noEscape */  $_counter ?>]" value=""/>
+        <button id='<?= /* @noEscape */  "btnDeleteRow-" . $_counter?>' class='btnDeleteRow' title="Delete" type="button" class="scalable delete delete-option"><span><span><span>Delete</span></span></span></button>
+    </td>
+</tr>
+        <?php
+        $_counter++;
+    endforeach;
+}
+?>
+</tbody></table>
+
+<script type="text/javascript">
+
+//<![CDATA[
+var _form_html_row = '<tr class="option-row [module]-options-row" id="options-row-{{id}}"><td><input name="<?= /* @noEscape */  $_htmlName; ?>[label][option_{{id}}][step_number]" value="" class="input-text" type="text"></td><td><input name="<?= /* @noEscape */  $_htmlName; ?>[label][option_{{id}}][step_label]" value="" class="input-text" type="text"></td><td class="a-left" id="delete_button_container_option_{{id}}"><input id="delete-row-{{id}}" type="hidden" class="delete-flag" name="<?= /* @noEscape */  $_htmlName; ?>[delete][option_{{id}}]" value=""/><button id="btnDeleteRow-{{id}}" class="btnDeleteRow" onclick="remove({{id}})" title="Delete" type="button" class="scalable delete delete-option"><span><span><span>Delete</span></span></span></button></td></tr>';
+
+var _options_counter = <?= /* @noEscape */  $_counter?>;
+require(['jquery'], function($){
+    $('#add_new_option_button').on('click', function(){
+        $('#attribute-options-table').append(_form_html_row.replace(/\{\{id\}\}/ig, _options_counter));
+        _options_counter++;
+    });
+
+    $(document).on("click", ".btnDeleteRow", function(){
+        var btnId = this.id; // button ID
+        var count =  btnId.split('-')[1];
+        var userConfirmation = confirm('<?= /* @noEscape */  __("This Action Will Delete The Attribute On Saving"); ?>');
+        if(!userConfirmation)
+            return;
+        if(count !== null && typeof count != undefined){
+
+            $('#options-row-'+count).remove();
+            //$(this).closest("#options-row-"+count).remove();
+
+        }
+    });
+});
+
+
+//]]>
+</script>
+    </td>
+</tr>
+

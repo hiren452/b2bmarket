@@ -1,0 +1,17 @@
+{
+    "ced_csmarketplace_vendor_form_attribute": {
+        "column": {
+            "registration_step_no": true
+        }
+    },
+    "ced_csmultistepreg_multisteps": {
+        "column": {
+            "id": true,
+            "step_number": true,
+            "step_label": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

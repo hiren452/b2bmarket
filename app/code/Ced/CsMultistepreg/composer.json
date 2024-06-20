@@ -1,0 +1,19 @@
+{
+  "name": "ced/module-csmultistepreg",
+  "description": "Enable Admin to Add New Vendor Registration Steps",
+  "require": {
+   "php": "~7.3.0|~7.4.0",
+   "magento/magento-composer-installer": "*"
+  },
+  "type": "magento2-module",
+  "version": "1.0.15",
+  "license": [
+   "EULA"
+  ],
+  "autoload": {
+   "files": [ "registration.php" ],
+   "psr-4": {
+    "Ced\\CsMultistepreg\\": ""
+   }
+  }
+ }

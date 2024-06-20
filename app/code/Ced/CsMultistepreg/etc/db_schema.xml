@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="ced_csmarketplace_vendor_form_attribute" resource="default">
+    <column xsi:type="int" name="registration_step_no" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
+  <table name="ced_csmultistepreg_multisteps" resource="default" engine="innodb" comment="ced_csmultistepreg_multisteps">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="int" name="step_number" padding="11" unsigned="false" nullable="true" identity="false" comment="Step Number"/>
+    <column xsi:type="varchar" name="step_label" nullable="true" length="255" comment="Step Label"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+</schema>

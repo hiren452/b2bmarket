@@ -1,0 +1,352 @@
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMultistepregistration
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ */
+
+/* fixed layout */
+.csmultistep-multistep-index .page-wrapper{
+  margin-left: 0px !important;
+  width: 100%;
+  padding-bottom: 85px;
+  padding-top: 95px;
+  background-color: #C1BDBA;
+}
+.csmultistep-multistep-index .page-title-wrapper {
+  display: none;
+}
+.multistep-wrapper .ced_vendor_before_wrap {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.multistep-wrapper fieldset {
+  border: medium none;
+}
+.multistep-wrapper .ced_vendor_before_wrap {
+  background: #24323c none repeat scroll 0 0;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+  margin: 0 auto;
+  padding: 15px;
+  width: 450px;
+  box-sizing: border-box;
+}
+
+/* progress */
+.multistep-progress-bar {
+  counter-reset: i 0;
+  font-size: 0;
+  margin-bottom: 30px;
+  margin-top: 15px;
+  text-align: center;
+}
+.multistep-progress-bar {
+  padding-bottom: 30px;
+  position: relative;
+}
+.multistep-progress-bar > li {
+  display: inline-block;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  width: 100px;
+}
+.multistep-progress-bar > li .li-inner{
+  box-sizing: content-box;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100px;
+}
+.multistep-progress-bar > li .li-inner::before {
+  background: #ebebeb none repeat scroll 0 0;
+  content: "";
+  height: 7px;
+  position: absolute;
+  right: 0;
+  top: 9px;
+  width: calc(50% - 8px);
+}
+.multistep-progress-bar > li:last-child .li-inner::before,
+.multistep-progress-bar > li:first-child .li-inner::after {
+  display: none;
+}
+.multistep-progress-bar > li .li-inner::after {
+  background: #ebebeb none repeat scroll 0 0;
+  content: "";
+  height: 7px;
+  left: 0;
+  position: absolute;
+  top: 9px;
+  width: calc(50% - 12px);
+}
+.multistep-progress-bar > li.active .li-inner::before, 
+.multistep-progress-bar > li.active .li-inner::after {
+  background: #333 none repeat scroll 0 0;
+}
+.multistep-progress-bar > li.active span::after {
+  background: #333 none repeat scroll 0 0;
+  color: #fff;
+}
+
+.multistep-progress-bar > li.done .li-inner::before, 
+.multistep-progress-bar > li.done .li-inner::after {
+  background: #4D9A26 none repeat scroll 0 0;
+}
+.multistep-progress-bar > li.done span::after {
+  background-color: #4d9a26;
+  background-image: url("../images/greencheck.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: #fff;
+  content: "";
+}
+.multistep-progress-bar > li span::after {
+  background-color: #ebebeb;
+  border-radius: 100%;
+  color: #333;
+  content: counter(i, decimal);
+  counter-increment: i 1;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  height: 25px;
+  line-height: 25px;
+  width: 25px;
+}
+.multistep-progress-bar > li strong {
+  display: block;
+  font-size: 12px;
+  margin-top: 6px;
+}
+/* form element */
+.multistep-wrapper .input-box label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+/*.multistep-wrapper .input-box > label {
+  display: none;
+}*/
+.input-box input,
+.input-box input[type="textarea"],
+.input-box input[type="boolean"],
+.input-box select[multiple="multiple"] ,
+.input-box select,
+input[type="file"]{
+  color: #ffffff !important;
+  font-size: 13px;
+  background-color: transparent;
+}
+
+
+input[type="text"]::-moz-placeholder, 
+input[type="password"]::-moz-placeholder, 
+input[type="url"]::-moz-placeholder, 
+input[type="tel"]::-moz-placeholder, 
+input[type="search"]::-moz-placeholder, 
+input[type="number"]::-moz-placeholder, 
+input[type="datetime"]::-moz-placeholder, 
+input[type="email"]::-moz-placeholder,
+input[type="boolean"]::-moz-placeholder,
+input[type="email"]::-moz-placeholder,
+{
+  color: #fff !important;
+}
+
+
+.multistep-wrapper .input-box > label[class=""] {
+  display: none;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box{
+  margin-bottom: 25px;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box input {
+  background: transparent none repeat scroll 0 0;
+  font-size: 13px;
+  height: 44px;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box input.calendarInput {
+  background-image: url("../images/callendor-input.png");
+  background-position: calc(100% - 7px) center;
+  background-repeat: no-repeat;
+  background-size: 19px auto;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box input[type="textarea"],
+.multistep-wrapper .ced_vendor_before_wrap .input-box input[type="boolean"] {
+  background: transparent none repeat scroll 0 0;
+  border: 1px solid #c2c2c2;
+  box-sizing: border-box;
+  padding: 7px;
+  width: 100%;
+}
+
+.multistep-wrapper .ced_vendor_before_wrap .input-box select {
+  height: 40px;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box select[multiple="multiple"] {
+  height: 150px;
+  padding: 0;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box textarea {
+  background: transparent none repeat scroll 0 0;
+  color: #fff;
+  height: 100px;
+}
+.multistep-wrapper .ced_vendor_before_wrap .input-box input[type="file"] {
+  border: 1px solid #c6c6c6;
+  height: 1px;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.multistep-wrapper .panel-default .buttons-set::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.multistep-wrapper .panel-default .buttons-set {
+  border-top: 1px solid #e3e3e3;
+  padding-top: 15px;
+  text-align: right;
+}
+.multistep-wrapper .panel-default .buttons-set button {
+  float: left;
+  font-size: 12px !important;
+  margin: 0 !important;
+  padding: 5px 15px;
+  text-transform: capitalize !important;
+  background: #9ab87c none repeat scroll 0 0;
+  color: #fff;
+  border-radius: 0px;
+  border-color: #9ab87c;
+  font-weight: normal;
+}
+.multistep-wrapper .panel-default .buttons-set input {
+  background: #9ab87c none repeat scroll 0 0;
+  border: 1px solid #9ab87c;
+  color: #fff;
+  padding: 5px 15px;
+}
+
+
+.multistep-wrapper .input-box .img-div {
+  position: relative;
+}
+.ced_vendor_before_wrap .input-box .img-div input + label {
+  background: transparent none repeat scroll 0 0;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  color: #8a8a8a;
+  display: block;
+  font-size: 13px;
+  font-weight: normal;
+  height: 45px;
+  left: 0;
+  line-height: 45px;
+  margin: 0;
+  overflow: hidden;
+  padding-left: 90px;
+  padding-right: 5px;
+  top: 0;
+  width: 100%;
+  z-index: 9;
+}
+.ced_vendor_before_wrap .input-box .img-div input + label.active{
+  color: #fff;
+}
+.ced_vendor_before_wrap .input-box .img-div input + label::after {
+  background: #fff none repeat scroll 0 0;
+  content: "Browse";
+  font-weight: normal;
+  height: 45px;
+  left: 0;
+  line-height: 43px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 80px;
+  color: #333;
+}
+
+
+.input-box label.addafter .afterelment.note {
+  background-image: url("../images/arrow.png");
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: 5px auto;
+  color: #777777;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: normal;
+  margin: 4px 0 0;
+  padding-left: 10px;
+}
+
+.input-box label.addafter .afterelment.note::before {
+  /*content: '\f0da';
+  display: inline-block;
+  font-family: FontAwesome;
+  font-weight: bold;
+  margin-right: 5px;*/
+}
+
+
+
+@media (max-width: 991px){
+  .multistep-wrapper .panel-default .buttons-set{
+    text-align: right !important;
+  }
+}
+@media (max-width: 767px){
+  h3.ced_vendor_from_title{
+    font-size: 20px !important;
+  }
+  .multistep-progress-bar > li strong {
+    display: none;
+  }
+  .multistep-progress-bar > li .li-inner,
+  .multistep-progress-bar > li {
+    width: 45px;
+  }
+
+  .multistep-progress-bar > li.active strong {
+    bottom: -3px;
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+  }
+}
+@media (max-width: 530px){
+  .multistep-wrapper .ced_vendor_before_wrap{
+    width: 100%;
+  }
+}
+@media (max-width: 650px){
+
+}
+@media (max-width: 450px){
+  .multistep-wrapper .ced_vendor_before_wrap{
+    width: 100%;
+  }
+}
+
+
+/************************* Place module based css *************************/
+
+.csmultistep-multistep-index .page-wrapper { width: 100% !important; }
+
+.csmultistep-multistep-index .page-title-wrapper { text-align: center; }
