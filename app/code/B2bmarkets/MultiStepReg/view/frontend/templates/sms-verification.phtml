@@ -1,0 +1,121 @@
+<?php
+$twilioHelper = $block->helper('Ced\CsTwiliosmsnotification\Helper\Data');
+$select_country = $twilioHelper->getAllCountryCodes();
+?>
+<div style="margin:10px 0;">
+     <div class="send_otp_box primary" style="margin-bottom: 5px;">
+     <button type="button" id="send_otp" title="<?= /* @noEscape */  __('Send Verification Code') ?>"
+            class="action submit primary"><span><span><?= /* @noEscape */  __('Send Verification Code') ?></span></span>
+     </button>
+     </div>
+     <div class="otp_box">
+         <div style="float:left; margin-right:10px;" class="field">
+             <input type="text" name="otp" id="otp" placeholder="<?= /* @noEscape */  __('Verification Code') ?>" class="input-text form-control">
+         </div>
+         <div style="float:left;">
+         <button type="button" id="verify_otp" title="<?= /* @noEscape */  __('Verify')?>"
+                class="button btn btn-primary"><span><span><?= /* @noEscape */  __('Verify')?></span></span>
+         </button>
+         </div>
+         <div style="clear:both;"></div>
+         <div><span class="note"><small style="font-size: 10px;"><?= /* @noEscape */  __('Valid for 10 minutes')?></small></span></div>
+     </div>
+     <div class="clearfix"></div>
+     <div class="otp_success" generated="true"></div>
+     <div class="otp_error mage-error" generated="true"></div>
+</div>
+<script>
+    require([
+        'jquery',
+    ], function ($) {
+        $(document).ready(function(){
+            if(document.getElementById('telephone')){
+                $('button[type="submit"]').attr('disabled', true);
+                $('#telephone').parent('div').prepend('<?= /* @noEscape */  $select_country ?>');
+                $('#telephone').after('<div class="clearfix"></div>');
+            }
+        });
+
+        $(document).on('click','#send_otp', function(){
+            var mobile = $('#telephone').val();
+            var is_valid_mobile = validateMobile(mobile);
+            
+            if( $('#country_dial_code').val() == '' ){
+                $('.otp_error').show().html('<?= /* @noEscape */  __('Please select country.') ?>');
+                $('#country_dial_code').val('').focus(); 
+                return false;
+            }
+            if( is_valid_mobile ) {
+                mobile = $('#country_dial_code').val()+mobile;
+                $.ajax({
+                    method: "POST",
+                    url: "<?= /* @noEscape */   $block->getUrl('csmarketplace/account/sendotp'); ?>",
+                    data: { mobile: mobile },
+                    dataType: "json",
+                    showLoader: true,
+                })
+                .done(function( response ) {
+                    if( response.success ){
+                        $('.otp_success').show().html('<?= /* @noEscape */  __('We have sent you an OTP to this number.') ?>');
+                        $('.otp_error').hide().html('');
+                        $('.otp_box').show();
+                        $('#otp').val('').focus();
+                        setCookie("otp", response.otp, 10);
+                    }
+                    
+                });
+            }else{
+                $('.otp_error').show().html('<?= /* @noEscape */  __('Please enter 10 digit mobile number.') ?>');
+                $('#ced-mobile-field').val('').focus(); 
+                return false;
+            }            
+        });
+        $(document).on('click','#verify_otp', function(){
+            var otp = $('#otp').val();
+            var otp_from_cookie = getCookie('otp');
+            if( otp_from_cookie == otp ){
+                $('#telephone').attr('readonly', true);
+                $('button[type="submit"]').attr('disabled', false);
+                $('.otp_success').show().html('<?= /* @noEscape */  __('Mobile number verified successfully.') ?>');
+                $('.otp_error').hide().html('');
+                $('.otp_box').hide();
+                $('.send_otp_box').hide();
+                eraseCookie('otp');
+            }else{
+                $('.otp_error').show().html('<?= /* @noEscape */  __('OTP does not match.') ?>');
+            }
+        });
+    });
+    function setCookie(name,value,minutes) {
+        var expires = "";
+        if (minutes) {
+            var date = new Date();
+            date.setTime(date.getTime() + (minutes*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {   
+        document.cookie = name+'=; Max-Age=-99999999;';  
+    }
+
+    function validateMobile(mobile)
+    {
+        var pattern = /^\d{10}$/;
+        if(mobile.match(pattern)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>

@@ -1,0 +1,16 @@
+
+.otp_box { display: none; }
+
+.otp_success { color: green; font-size: 11px; display: none; font-weight: normal !important; }
+
+.send_otp_box { float: left; margin-right: 10px; }
+
+.otp_box { float: left; margin-right: 10px; }
+
+#country_dial_code { width: 20% !important; float: left; height: 38px; }
+
+#telephone { width: 80% !important; float: left; }
+
+.otp_error { display: none; font-weight: normal !important; }
+
+.multistepreg-index-index .form-create-account .fieldset .field.required .control  input#telephone { float: none; }
