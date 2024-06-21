@@ -1,0 +1,118 @@
+<?php //echo $this->session->getCustomerId().'-'.$this->session->getVendorId();
+$membershipHelper = $block->helper('Ced\CsMembership\Helper\Data');
+$customerMembershipHelper = $block->helper('Ced\CustomerMembership\Helper\Data');
+$existing_subscription = $membershipHelper->getExistingSubcription($block->session->getVendorId());
+$membership_subscription = $customerMembershipHelper->getExistingSubcription($block->session->getCustomerId());
+?>
+<div class="vendor-dashboard">
+    <div class="row">
+        <div class="col-md-12" style="margin-top:10px;">
+            <div class="panel panel-default">
+                <div class="panel-heading col-md-12 uptransform"
+                     style="line-height:31px;font-weight:bold;padding:4px 15px;font-size:17px;">
+                    <?= /* @noEscape */ __('Vendor Resources'); ?>
+                </div>
+                <div style="clear:both"></div>
+                <div class="panel-body">
+                    <?php $collection = $block->getCollection();
+?>
+                    <table cellpadding="10%" width="100%" align="center" class="table table-bordered custom-table">
+                        <tr>
+                            <td><span><b><?= /* @noEscape */ __('Product Limit:'); ?></b></span></td>
+                            <td><?= /* @noEscape */ $limit = $block->_scopeConfig->getValue('ced_vproducts/general/limit', \Magento\Store\Model\ScopeInterface::SCOPE_STORE); ?></td>
+                            <td><b><span><?= /* @noEscape */ __('Remaining Product:'); ?></span></b></td>
+                            <td>
+                                <span><?= /* @noEscape */ $limit - count($block->vproductsFactory->create()->getVendorProductIds($block->session->getVendorId())); ?></span>
+                            </td>
+                        </tr>
+                        <?php if (!empty($existing_subscription)): ?>
+                        <tr>
+                            <td><span><b><?= /* @noEscape */ __('Auction Limit:'); ?></b></span></td>
+                            <td><?= /* @noEscape */ $existing_subscription[0]['auction_limit'];  ?></td>
+                            <td><b><span><?= /* @noEscape */ __('Remaining Auction:'); ?></span></b></td>
+                            <td>
+                                <span><?= /* @noEscape */ $existing_subscription[0]['auction_limit'] - $membershipHelper->getRemainingAuction(); ?></span>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if (!empty($membership_subscription)): ?>
+                        <tr>
+                            <td><span><b><?= /* @noEscape */ __('RFQ Limit:'); ?></b></span></td>
+                            <td><?= /* @noEscape */ $membership_subscription[0]['rfq_limit'];  ?></td>
+                            <td><b><span><?= /* @noEscape */ __('Remaining RFQ:'); ?></span></b></td>
+                            <td>
+                                <span><?= /* @noEscape */ $membership_subscription[0]['rfq_limit'] - $customerMembershipHelper->getRemainingRfq(); ?></span>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading col-md-12 uptransform" style="line-height:31px;font-weight:bold;padding:4px 15px;font-size:17px;">
+                    <?= /* @noEscape */ __('Your Subscription History'); ?>
+                </div>
+                <div style="clear:both"></div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div style="clear:both"></div>
+                        <div class="order-items order-details table-responsive">
+                            <?= /* @noEscape */  $block->getPagerHtml();
+?>
+                            <table class="table table-bordered table-hover table-striped" id="my-orders-table">
+
+                                <thead>
+                                <tr class="first">
+                                    <th class="head"><?= /* @noEscape */ __('Subscription ID') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Name') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Start Date') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Expire Date') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Order Id') ?></th>
+                                    <?php /*?><th class="head"><?php echo __('Payment Method') ?></th><?php */?>
+                                    <th class="head"><?= /* @noEscape */ __('Status') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Transaction Id') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Private Auction') ?></th>
+                                    <th class="head"><?= /* @noEscape */ __('Public Auction') ?></th>
+                                </tr>
+
+                                </thead>
+
+                                <?php if (count($collection) > 0): ?>
+                                    <tbody>
+                                    <?php $_odd = ''; ?>
+                                    <?php foreach ($collection as $_report):
+                                        ?>
+                                        <tr>
+                                            <td class="number"><?= /* @noEscape */ __($_report->getSubscriptionId()); ?></td>
+                                            <td class="number"><?= /* @noEscape */ __($_report->getName()); ?></td>
+                                            <td class="date"><?= /* @noEscape */ __($_report->getStartDate()); ?></td>
+                                            <td class="date"><?= /* @noEscape */ __($_report->getEndDate()); ?></td>
+                                            <td class="status"><?= /* @noEscape */ __($_report->getOrderId()); ?></td>
+                                            <?php /*?><td class="status"><?php echo __($_report->getPaymentName()); ?></td><?php */?>
+                                            <td class="number"><?= /* @noEscape */ __($_report->getStatus()); ?></td>
+                                            <td class="number"><?= /* @noEscape */ __($_report->getTransactionId()); ?></td>
+                                             <td class="number"><?= /* @noEscape */ $_report->getPrivateAuction() == 1 ? __('Yes') : __('No'); ?></td>
+                                            <td class="number"><?= /* @noEscape */ $_report->getPublicAuction()==1 ? __('Yes') : __('No'); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                <?php else: ?>
+                                    <tbody>
+                                    <tr class="first last odd">
+                                        <td colspan="9" class="last">
+                                            <div>
+                                                <p><?= /* @noEscape */ __('No Membership Subscription records found'); ?></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                <?php endif ?>
+                            </table>
+                            <?= /* @noEscape */  $block->getPagerHtml();
+?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ced\CsMembership\Helper\Data"
+                type="Matrix\CsMembership\Preference\Helper\CustomizedDataHelper"/>
+    <preference for="Ced\CsMembership\Model\Status"
+                type="Matrix\CsMembership\Preference\Model\CustomizedStatus"/>
+
+    <type name="Ced\CsProduct\Block\Product\Edit\Button\Save">
+        <plugin name="restrict_product_duplicate"
+                type="Matrix\CsMembership\Plugin\RestrictProductDuplicate" disabled="false"/>
+    </type>
+    <preference for="Ced\CsMembership\App\Config"
+                type="Matrix\CsMembership\Preference\App\Config"/>
+</config>

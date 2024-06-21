@@ -1,0 +1,60 @@
+<?php $collection = $block->getCollection();
+?>
+<div class="panel-heading col-md-12 uptransform"
+     style="line-height:31px;font-weight:bold;padding:4px 15px;font-size:17px;">
+    <?= /* @noEscape */ __('Transactions'); ?>
+</div>
+<div style="clear:both"></div>
+<div class="panel-body">
+    <div class="order-items order-details table-responsive">
+        <?= /* @noEscape */  $block->getPagerHtml();
+?>
+        <table class="table table-bordered table-hover table-striped" id="my-orders-table">
+            <thead>
+            <tr>
+                <th class="head"><?= /* @noEscape */ __('Product Qty') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Auction Qty') ?></th>
+                <th class="head"><?= /* @noEscape */ __('RFQ Qty') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Non Catalog RFQ Qty') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Subscription Id') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Order Id') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Created') ?></th>
+            </tr>
+            </thead>
+
+            <?php if (count($collection) > 0): ?>
+                <tbody>
+                <?php $_odd = ''; ?>
+                <?php foreach ($collection as $_report):
+
+                    ?>
+                    <tr>
+                        <td class="number"><?= /* @noEscape */ __($_report->getProductQty()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getAuctionQty()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getRfqQty()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getNonCatalogRfqQty()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getSubscriptionId()); ?></td>
+                        <td class="date"><?= /* @noEscape */ __($_report->getOrderId()); ?></td>
+                        <td class="date"><?= /* @noEscape */ __($_report->getCreated()); ?></td>                        
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php else: ?>
+                <tbody>
+                <tr class="first last odd">
+                    <td colspan="8" class="last">
+                        <div>
+                            <p><?= /* @noEscape */ __('No records found') ?></p>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            <?php endif ?>
+
+        </table>
+    </div>
+</div>
+
+
+
+

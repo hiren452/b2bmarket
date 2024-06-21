@@ -1,0 +1,160 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
+
+?>
+<?php
+$helper = $this->helper('Ced\CsMembership\Helper\Data');
+if(!$helper->getCustomerLogin()) {
+    $membershipPlans = $helper->getMembershipPlans();
+    ?>
+
+
+<div class="ced-available-membership">
+    <div class="ced-available-membership-block-title">
+        <span class="d-block text-center"><?php /* @escapeNotVerified */ echo __($this->helper('Ced\CustomerMembership\Helper\Data')->subscriptionPageMessage()) ?></span>
+    </div>
+    <div class="block-membership">
+        <div class="box block-membership-data">
+           
+        	<div class="plan-wrap">
+            
+            <div id="pricing-table" class="clear row">
+           
+            <?php $i = 0;
+    foreach($membershipPlans->getData() as $membership): ?>
+                <?php if($membership['name'] == 'seller_free_membership') {
+                    continue;
+                } ?>
+                <?php
+                $price = $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership['price'], true, false);
+        ?>
+                
+                <div class="plan-wrap col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 duration_<?php echo $membership['duration']; ?>">
+                    <div class="plan">
+                        <div class="panel-body-inside">
+                            <h3>
+                                <?php echo __($membership['name']); ?>
+                                <span><?php echo $price; ?></span>
+                            </h3>
+                            <div class="dis-co  dis-co-text">
+                                <?php
+                        echo $membership['description'];
+        ?>
+                            </div> 
+                            <div class="dis-co">
+                                <ul>
+                                <li><?php echo $membership['product_limit'] . ' ' . __('Products'); ?></li>
+                                <li><?php echo $membership['auction_limit'] . ' ' . __('Auctions'); ?> </li>
+                                <li><?php echo '' . __('Private Auctions') . ': ';
+        if($membership['private_auction']) {
+            echo __('Yes');
+        } else {
+            echo __('No');
+        } ?>
+                                </li>
+                                <li> <?php echo '' . __('Public Auctions') . ': ';
+        if($membership['public_auction']) {
+            echo __('Yes');
+        } else {
+            echo __('No');
+        } ?>
+                                </li>
+                                <?php if(!empty($membership['auction_fee'])): ?>
+                                <li> <?php echo '' . __('Auction Set Up Fee') . ': ';
+                                    echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership['auction_fee'], true, false); ?>
+                                </li>
+                                <?php endif; ?>
+                                <li> <?php
+                                        $commissionData = $membership['commission'];
+        $commissions = !empty($commissionData) ? json_decode($commissionData) : [];
+
+        if(!empty($commissions)) {
+            echo '' . __('Auction Commission') . ': ';
+            echo '<a href="javascript:void(0);" class="see-chart-btn" data-membership_id="' . $membership['id'] . '">' . __('See Chart') . '</a>';
+        }
+        ?>
+                                 </li>
+                                </ul>
+                            </div>
+                                                       
+                            <div class="product-info-btn">
+                                <button type="button"
+                                        title="<?php echo __('Add to Cart') ?>"
+                                        class="signup"
+                                        onclick="document.location.href='<?php echo $this->getUrl('csmarketplace'); ?>'">
+                                    <span><span><?php echo __('Get started now') ?></span></span>
+                                </button>
+                            </div>                                               
+                        </div>
+                    </div>
+                </div>  
+                <?php
+
+if(!empty($commissions)) {
+    $contents = '<table width="100%" cellpadding="5" cellspacing="5" id="chart-table-' . $membership['id'] . '" style="display:none;" class="table table-striped table-bordered">';
+    $contents .= '<tr><th align="left">Sales</th><th align="left">Commission</th></tr>';
+    foreach ($commissions as $commission) {
+
+        if(isset($commission->comm_sales_from) && isset($commission->comm_sales_to)) {
+            $contents .= '<tr>';
+            $contents .= '<td align="left">' . $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($commission->comm_sales_from, true, false) . ' - ' . $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($commission->comm_sales_to, true, false) . '</td>';
+            $contents .= '<td align="left">' . $commission->comm_percentage . '%</td>';
+            $contents .= '</tr>';
+        }
+
+        if(isset($commission->comm_sales_above)) {
+            $contents .= '<tr>';
+            $contents .= '<td align="left">More than ' . $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($commission->comm_sales_above, true, false) . '</td>';
+            $contents .= '<td align="left">' . $commission->comm_sales_above_percentage . '%</td>';
+            $contents .= '</tr>';
+        }
+    }
+    $contents .= '</table>';
+
+    echo $contents;
+}
+        ?>              
+            <?php endforeach ?>
+            </div>            
+        </div> 
+
+
+        </div>
+       
+    </div>
+</div>
+
+<?php } ?>
+<script>
+   require(
+       [
+           'jquery',
+           'Magento_Ui/js/modal/modal'
+       ],
+       function (
+           $,
+           modal
+       ) {
+           var modaloption = {
+               type: 'popup',
+               modalClass: 'modal-popup',
+               responsive: true,
+               innerScroll: true,
+               clickableOverlay: true,
+               title: 'Commisssion Chart'
+           };
+           $(".see-chart-btn").on('click',function(){
+               var callfor_popup = $('#chart-table-'+$(this).data('membership_id'));
+               var callforoption = modal(modaloption, callfor_popup);
+               callfor_popup.modal('openModal');
+           });
+       }
+   );
+</script>

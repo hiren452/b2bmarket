@@ -1,0 +1,106 @@
+<?php
+$commissions = [];
+if ($block->getCommission() != false) {
+    $commissions = json_decode($block->getCommission());
+}
+?>
+<div class="form-group col-md-6 commission-box">
+<legend class="admin__legend legend">
+    <span><?= /* @noEscape */  __('Auction Commissions') ?></span>
+</legend>  
+
+    <div class="row commission-row" <?php if (!empty($commissions)): ?> style="display: none;" <?php endif; ?>>
+        <div class="field-box">
+            <label><span>Sales From: ($)</span></label>
+            <div class="field-control">
+                <input name="comm_sales_from[]" class="input-text admin__control-text" type="text" data-validate="{'validate-number':true}">                           
+            </div>
+        </div>
+        <div class="field-box">
+            <label><span>Sales To: ($)</span></label>
+            <div class="field-control">
+                <input name="comm_sales_to[]" class="input-text admin__control-text" type="text" data-validate="{'validate-number':true}">                           
+            </div>
+        </div>
+        <div class="field-box">
+            <label><span>Commission: (%)</span></label>
+            <div class="field-control">
+                <input name="comm_percentage[]" class="input-text admin__control-text" type="text" data-validate="{'validate-number':true}">                           
+            </div>
+        </div>        
+    </div>
+
+    <?php
+    $k = 0;
+foreach ($commissions as $commission):?>
+        <?php if (!isset($commission->comm_sales_from)) {
+            continue;
+        } ?>
+    <div class="row" style="margin-top: 15px;">
+        <div class="field-box">
+            <label><span>Sales From: ($)</span></label>
+            <div class="field-control">
+                <input name="comm_sales_from[]" class="input-text admin__control-text" type="text" data-validate="{'validate-number':true}" value="<?= /* @noEscape */  $commission->comm_sales_from; ?>">                           
+            </div>
+        </div>
+        <div class="field-box">
+            <label><span>Sales To: ($)</span></label>
+            <div class="field-control">
+                <input name="comm_sales_to[]" class="input-text admin__control-text" type="text" data-validate="{'validate-number':true}" value="<?= /* @noEscape */  $commission->comm_sales_to; ?>">                           
+            </div>
+        </div>
+        <div class="field-box">
+            <label><span>Commission: (%)</span></label>
+            <div class="field-control">
+                <input name="comm_percentage[]" class="input-text admin__control-text" type="text" data-validate="{'validate-number':true}" value="<?= /* @noEscape */  $commission->comm_percentage; ?>">                           
+            </div>
+        </div>
+        <?php if ($k != 0): ?>
+            <div class="remove field-box" style="text-align:right"><a href="javascript:void(0);"><?= /* @noEscape */  __('Remove') ?></a></div>        
+        <?php endif; ?>
+    </div>
+        <?php $k++;
+endforeach; ?>
+
+    <div style="clear: both;"></div>
+
+    <div class="field add_more_box"></div>
+
+    <div class="field add_more" style="margin-top: 20px;"><a href="javascript:void(0);"><?= /* @noEscape */  __('Add More') ?></a></div>
+
+    <div class="row commission-row">
+        <div class="field-box">
+            <label><span>Sales Above: ($)</span></label>
+            <div class="field-control">
+                <input name="comm_sales_above[]" class="input-text admin__control-text" type="text" value="<?php if (isset($commission->comm_sales_above)) { /* @noEscape */  echo $commission->comm_sales_above;
+                } ?>">                           
+            </div>
+        </div>        
+        <div class="field-box">
+            <label><span>Commission: (%)</span></label>
+            <div class="field-control">
+                <input name="comm_sales_above_percentage[]" class="input-text admin__control-text" type="text" value="<?php if (isset($commission->comm_sales_above_percentage)) { /* @noEscape */  echo $commission->comm_sales_above_percentage;
+                } ?>">                           
+            </div>
+        </div>
+        <div style="clear: both;"></div>        
+    </div>
+
+</div>
+<script type="text/javascript">
+    require(['jquery'], function($){
+        
+        $(document).ready(function(){    
+
+            $('.add_more').click(function() {
+            var html = '<div style="clear: both;"></div><div style="margin:15px 0;">'+ $('.commission-row').html() + ' <div class="remove field-box" style="text-align:right"><a href="javascript:void(0);"><?= /* @noEscape */  __('Remove') ?></a></div></div>';
+
+                $('.add_more_box').append(html);
+            });
+
+            $(document).on('click','.remove',function() {
+                $(this).parent().remove();
+            });
+        });
+    });
+</script>

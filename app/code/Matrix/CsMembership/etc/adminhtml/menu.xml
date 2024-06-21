@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+
+        <add
+            id="Ced_CsMembership::alacart"
+            title="Ala Cart"
+            module="Ced_CsMembership"
+            sortOrder="15"
+            parent="Ced_CsMembership::view"
+            action="csmembership/alacart/index"
+            resource="Ced_CsMembership::view"
+            dependsOnConfig="ced_csmembership/general/activation"/>
+
+        <update id="Ced_CsMembership::order_vendor" sortOrder="30"/>
+        <update id="Ced_CsMembership::order_membership" sortOrder="40"/>
+        <update id="Ced_CsMembership::rates" sortOrder="50"/>
+        <update id="Ced_CsMembership::assign" sortOrder="60"/>
+
+        <remove id="Ced_CsMembership::assign" />
+    </menu>
+    <menu/>
+</config>

@@ -1,0 +1,13 @@
+
+.form-group > .legend { border-bottom: 1px solid #cac3b4; box-sizing: border-box; float: left; margin: 0 0 18px; 
+    padding: 0; position: static; width: 100%; }
+
+.commission-box label { float: left; line-height: 3.2rem; }
+.commission-box .field-control, .commission-box span { float: left; }
+.commission-box span { margin-right: 10px; color: #303030; font-size: 14px; font-weight: 600; }
+.commission-box .field-control { margin-right: 5px; }
+.commission-box .field-control input { width: 80px; }
+.commission-box .field-box { float: left; margin-right: 10px; }
+
+/*.admin__scope-old .form-inline .fieldset > .field > .label { display: none; }*/
+.admin__field.field.field-name .admin__field-control { width: 100% !important; }

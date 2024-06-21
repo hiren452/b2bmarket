@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Ced_CsMembership::css/custom.css" />
+        <css src="Matrix_CsMembership::css/custom.css"/>
+    </head>
+    <body>
+        <referenceBlock name="content">
+            <block class="Matrix\CsMembership\Block\Plans\Listplans" name="seller_csmembership_plans" template="Matrix_CsMembership::csmembership/plans/list-seller.phtml"/>
+        </referenceBlock>
+    </body>
+</page>

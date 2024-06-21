@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ced\CsMembership\Block\Adminhtml\Membership\Edit\Tab\Form"
+                type="Matrix\CsMembership\Preference\Block\Adminhtml\Membership\Edit\Tab\CustomizedForm"/>
+
+    <preference for="Ced\CsMembership\Controller\Adminhtml\Membership\Save"
+                type="Matrix\CsMembership\Preference\Controller\Adminhtml\Membership\SaveCommission"/>
+
+    <preference for="Ced\CsMembership\Block\Adminhtml\Membership\Grid"
+                type="Matrix\CsMembership\Preference\Block\Adminhtml\Membership\CustomizedGrid"/>
+</config>

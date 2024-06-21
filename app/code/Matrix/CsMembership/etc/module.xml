@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+    <module name="Matrix_CsMembership" setup_version="1.0.0">
+        <sequence>
+            <module name="Ced_CsMembership"/>
+        </sequence>
+    </module>
+</config>

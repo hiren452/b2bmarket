@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_csmembership_membership">
+        <column xsi:type="varchar" length="40" name="auction_limit" nullable="true" comment="Auction Limit"/>
+        <column xsi:type="longtext" name="description" nullable="true" comment="Auction Limit"/>
+        <column xsi:type="longtext" name="commission" nullable="true" comment="Commission"/>
+        <column xsi:type="int" name="private_auction" nullable="true" comment="Private Auction"/>
+        <column xsi:type="int" name="public_auction" nullable="true" comment="Public Auction"/>
+        <column xsi:type="decimal" name="auction_fee" nullable="true" scale="2" precision="10" comment="Auction Fee"/>
+
+    </table>
+    <table name="ced_csmembership_subscription">
+        <column xsi:type="varchar" length="40" name="auction_limit" nullable="true" comment="Auction Limit"/>
+        <column xsi:type="longtext" name="commission" nullable="true" comment="Commission"/>
+        <column xsi:type="int" name="private_auction" nullable="true" comment="Private Auction"/>
+        <column xsi:type="int" name="public_auction" nullable="true" comment="Public Auction"/>
+        <column xsi:type="decimal" name="auction_fee" nullable="true" scale="2" precision="10" comment="Auction Fee"/>
+    </table>
+
+    <table name="ced_csmembership_alacart" engine="innodb" resource="default" comment="CsMembership Alacart">
+        <column xsi:type="int" name="id" padding="10" identity="true" comment="Id"/>
+        <column xsi:type="int" name="subscription_id" padding="10" comment="Subscription Id"/>
+        <column xsi:type="int" name="vendor_id" padding="10" comment="Vendor Id"/>
+        <column xsi:type="varchar" name="order_id" nullable="true" length="100" comment="Order Id"/>
+        <column xsi:type="int" name="v_product_id" padding="10" comment="V Product Id"/>
+        <column xsi:type="varchar" name="product_qty" length="40" nullable="true" default="" comment="Product Qty"/>
+        <column xsi:type="varchar" name="auction_qty" length="40" nullable="true" default="" comment="Auction Qty"/>
+        <column xsi:type="datetime" name="created" nullable="true" comment="Temp Start Date"/>
+        <column xsi:type="varchar" name="rfq_qty" length="40" nullable="true" comment="Rfq Quantity"/>
+        <column xsi:type="varchar" name="non_catalog_rfq_qty" length="40" nullable="true" comment="Non Catalog Rfq Quantity"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+
+    <table name="ced_csmembership_alacart_price" engine="innodb" resource="default" comment="CsMembership Alacart Price">
+        <column xsi:type="int" name="id" padding="10" identity="true" comment="Id"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="40" default="" comment="Name"/>
+        <column xsi:type="boolean" name="status" nullable="false" comment="Status"/>
+        <column xsi:type="longtext" name="commission" nullable="true" comment="Commission"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+
+</schema>

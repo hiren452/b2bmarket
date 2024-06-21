@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+       <update handle="styles"/>
+    <update handle="csmarketplace_vendor"/>
+    <head>
+        <css src="Matrix_CsMembership::css/custom.css"/>
+    </head>
+    <body>
+        <referenceBlock name="vendor.dashboard.wrapper">
+               <block class="Ced\CsMembership\Block\Plans\Listblock" name="csmembership_alacart" template="Matrix_CsMembership::csmembership/plans/alacart.phtml" />
+
+               <block class="Matrix\CsMembership\Block\AlaCart\Transaction"
+                      name="csmembership_list_transaction"
+                      template="Matrix_CsMembership::csmembership/plans/alacart_transaction.phtml" />
+        </referenceBlock>
+    </body>
+</page>

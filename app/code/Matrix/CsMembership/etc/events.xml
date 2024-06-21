@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="alacart_sales_order_place_after" instance="Matrix\CsMembership\Observer\AlaCartProductOrder" />
+    </event>
+    <event name="ced_csmarketplace_vendor_authenticate_after">
+        <observer name="vendor_authenticate_after" disabled="true"/>
+        <observer name="vendor_authenticate_after_matrix" instance="Matrix\CsMembership\Observer\VendorAuthenticateAfter"/>
+    </event>
+</config>
