@@ -1,0 +1,661 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMultistepregistration
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Matrix\CsMultistepreg\Block\Multistep\Steps $block
+ */
+?>
+<?php
+$helper = $block->helper('Ced\CsMarketplace\Helper\Tool\Image');
+$logo = $helper->getStoreConfig("ced_loginsignup/header/logo", $block->getCurrentStoreId()) ? "ced/csmarketplace/" . $helper->getStoreConfig("ced_loginsignup/header/logo", $block->getCurrentStoreId()) : '';
+$logoImage = $helper->getResizeImage($logo, 'logo', 335, 106);
+$footerContent = $helper->getStoreConfig("ced_csmarketplace/general/footer_content", $block->getCurrentStoreId());
+$isfooterEnable = $helper->getStoreConfig("ced_csmarketplace/general/enable_footer", $block->getCurrentStoreId());
+$_selectRegion = $escaper->escapeHtml(__('Please select a region, state or province.'));
+$regionIdTag = "";
+?>
+<div class="ced_vendor_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-left">
+                    <div class="v_header_logo">
+                        <?php if ($logo):?>
+                            <a href="<?= /* @noEscape */  $block->getBaseUrl(); ?>" target="_blank">
+                                <img src="<?= /* @noEscape */  $logoImage ?>" alt="vendor panel logo">
+                            </a>
+                        <?php else:?>
+                            <a href="<?= /* @noEscape */  $block->getBaseUrl(); ?>" target="_blank">
+                                <img src="<?= /* @noEscape */  $block->getViewFileUrl('images/demo.png'); ?>" alt="vendor panel logo">
+                            </a>
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+$vendorId = $block->request->get('id');
+$collection = $block->getcollection();
+
+$counter = 0;
+$count = 0;
+$vmodel = $block->vendorData();
+$bar = 10;
+
+if (!empty($collection)) {
+    $count=$collection->count();
+}
+$stepsData = [];
+$stepsCount = 0;
+if ($count > 0) { ?>
+<div class="container">
+    <div class="multistep-wrapper">
+        <div id="myProgress" class="multistep-progress-bar">
+            <?php foreach ($collection as $steps) {?>
+                <?php
+                $attribute_coll = $block->getStepattributes($steps->getStepNumber());
+                $attribute_count = $attribute_coll->count();
+                if ($attribute_count==0) {
+                    continue;
+                }
+                $stepsData[] = ['stepId'=> $steps->getId(), 'stepNumber'=> $steps->getStepNumber(), 'stepAttributes'=>$attribute_coll];
+                $stepsCount++;
+                ?>
+                <li id="bar_<?= /* @noEscape */  $bar?>" class="waiting">
+                    <div class="li-inner">
+                    <span tittle="<?= /* @noEscape */  __($steps->getStepLabel())?>">
+
+                    </span>
+                    </div>
+                    <strong><?= /* @noEscape */  __($steps->getStepLabel())?></strong>
+                </li>
+                <!-- <div id="bar_<?php //echo $bar?>" class="waiting">
+                    <strong><?php //echo __($steps->getStepLabel())?></strong>
+                </div> -->
+                <?php $bar++;
+            }?>
+        </div>
+
+        <div class="custom-reg-wrapper">
+            <div class="custom-left-wrap">
+                <h3 class="from-head"><?= /* @noEscape */  __('Multi Step Registration'); ?></h3>
+            </div>
+            <div class="custom-right-wrap">
+                <div class="register-panel panel panel-default form-section">
+                    <div id="show_required"></div>
+                        <form action="<?= /* @noEscape */  $block->getUrl('csmultistep/multistep/save');?>" method="post" id="vendor-validate" enctype="multipart/form-data">
+                            <input name='form_key' type='hidden' value= "<?= /* @noEscape */  $block->getBlockHtml('form_key')?>"/>
+                            <input name="vendor_id" type="hidden" value="<?= /* @noEscape */  $vendorId ?>"/>
+                            <input name="vendor[multistep_done]" type="hidden" value="<?= /* @noEscape */  true ?>"/>
+                            <fieldset>
+                                <div class="panel panel-default">
+                                    <?php
+                                    $stepCount = 1;
+    foreach ($stepsData as $stepData) {
+
+        /*foreach ($collection as $steps) {*/
+        //$attribute_coll = $this->getStepattributes($steps->getStepNumber());
+        $attribute_coll = $stepData['stepAttributes'];
+        $attribute_count = 2;//$attribute_coll->count();
+
+        ?>
+                                        <div id="step_<?= /* @noEscape */  $stepCount?>" class="step" style='display: none'>
+
+                                            <?php
+            if ($attribute_count >= 1) {
+                if (!$attribute_coll) {
+                    continue;
+                }
+                foreach ($attribute_coll as $attr) {
+                    $inputType = $attr->getFrontend()->getInputType();
+                    $required_attr = $attr->getIsRequired();
+                    $attribute_class = $attr->getFrontendClass();
+                    $imgflag = false;
+
+                    if ($inputType == 'image' || $inputType == 'file') {
+                        $imgflag = true;
+                        $inputType = 'file';
+                    }
+                    ?>
+                                                    <div class="input-box <?= /* @noEscape */  $attr->getAttributeCode()?>">
+                                                        <label class="<?php if ($required_attr) {
+                                                        }?>"><?= /* @noEscape */  $attr->getFrontend()->getLabel()?><span><?php if ($required_attr) {
+                                                            echo "*";
+                                                        }?></span></label>
+                                                        <?php if ($inputType == 'select') {
+                                                            $requiredEntry = '';
+                                                            if ($attr->getAttributeCode()=="region_id") {
+                                                                if ($required_attr) {
+                                                                    $requiredEntry = "required-entry" . $stepCount . " required-entry" . $attribute_class;
+                                                                }
+                                                                $regionIdTag = "<select id='" . $attr->getAttributeCode() .
+                                                                    "' name='vendor[" . $attr->getAttributeCode() . "]' " .
+                                                                    "class='validate-select " . $requiredEntry . "' ></select>";
+                                                            }
+
+                                                            ?>
+                                                            <?php if ($required_attr):?>
+                                                                <span id="required-<?= /* @noEscape */ $attr->getAttributeCode()?>">*</span>
+                                                            <?php endif; ?>
+                                                            <select id="<?= /* @noEscape */  $attr->getAttributeCode()?>"  name="vendor[<?= /* @noEscape */  $attr->getAttributeCode()?>]" class="validate-select <?php if ($required_attr) { /* @noEscape */ echo "required-entry" . $stepCount;
+                                                                /* @noEscape */ echo " required-entry";
+                                                            }?> <?= /* @noEscape */  $attribute_class;?>">
+                                                                <?php if ($attr->getAttributeCode() == 'industry'): ?>
+                                                                    <?php
+                                                                    $customHelper = $block->helper('B2bmarkets\Custom\Helper\Data');
+                                                                    $industries   = $customHelper->getIndustries();
+                                                                    ?>
+                                                                    <option value=""> <?= /* @noEscape */  __('Select Industry'); ?></option>
+                                                                    <?php foreach ($industries as $industry_id => $industry_name) { ?>
+                                                                        <option value="<?= /* @noEscape */  $industry_id ?>"> <?= /* @noEscape */  $industry_name ?></option>
+                                                                    <?php } ?>
+
+                                                                <?php elseif ($attr->getAttributeCode() == 'country_id'): ?>
+                                                                    <?php
+                                                                    $customHelper = $block->helper('B2bmarkets\Custom\Helper\Data');
+                                                                    $defaultCountry = $customHelper->getDefaultCountry();
+                                                                    $countries    = $customHelper->getAvailableCountries();
+                                                                    foreach ($countries as $key => $value) {
+                                                                        $selected = $defaultCountry === $key ? "selected" : "";
+                                                                        /* @noEscape */ echo '<option
+                                                                        value="' . $key . '" ' . $selected . '>' . $value . '</option>';
+                                                                    }
+                                                                    ?>
+                                                                <?php else: ?>
+                                                                    <option value=""> <?= /* @noEscape */  "Select " . $attr->getFrontend()->getLabel()?></option>
+                                                                    <?php
+                                                                    $c = 1;
+                                                                    foreach ($attr->getSource()->getAllOptions(true, true) as $key => $opt) {
+                                                                        if ($key == 0) {
+                                                                            continue;
+                                                                        }
+                                                                        $attr_option = '';
+                                                                        if (is_array($opt)) {
+                                                                            $attr_option_value = $opt['value'];
+                                                                            $attr_option_label = $opt['label'];
+                                                                        } else {
+                                                                            $attr_option_value = $key;
+                                                                            $attr_option_label = $opt->getText();
+                                                                        }
+                                                                        ?>
+                                                                        <option value="<?= /* @noEscape */  $attr_option_value;?>"><?= /* @noEscape */  _($attr_option_label)?></option>
+                                                                        <?php $c++;
+                                                                    } ?>
+
+                                                                <?php endif; ?>
+                                                            </select>
+                                                            <label class="addafter">
+                                                            <span class="note afterelment" id="select-state"><?= /* @noEscape */  __('Select ' . $attr->getFrontend()->getLabel()); ?>
+                                                            </span>
+                                                            </label>
+                                                        <?php  } elseif ($inputType == 'boolean') {
+
+                                                            ?>
+                                                            <select id="<?= /* @noEscape */  $attr->getAttributeCode()?>"  name="vendor[<?= /* @noEscape */  $attr->getAttributeCode()?>]" class="validate-select <?php if ($required_attr) { /* @noEscape */ echo "required-entry" . $stepCount;
+                                                                /* @noEscape */ echo " required-entry";
+                                                            }?> <?= /* @noEscape */  $attribute_class;?>">
+
+                                                                <option value="1"  <?php if (isset($vmodel[$attr->getAttributeCode()]) && 1 == $vmodel[$attr->getAttributeCode()]) {
+                                                                    echo 'selected';
+                                                                }?>><?= /* @noEscape */  _('Yes')?></option>
+                                                                <option value="0"  <?php if (isset($vmodel[$attr->getAttributeCode()]) && 0 == $vmodel[$attr->getAttributeCode()]) {
+                                                                    echo 'selected';
+                                                                }?>><?= /* @noEscape */  _('No')?></option>
+                                                            </select>
+                                                            <label class="addafter">
+                                                            <span class="note afterelment"><?= /* @noEscape */  __('Select ' . $attr->getFrontend()->getLabel()); ?>
+                                                            </span>
+                                                            </label>
+                                                        <?php  } elseif ($inputType == 'multiselect') {
+                                                            ?>
+                                                            <select id="<?= /* @noEscape */  $attr->getAttributeCode()?>" name="vendor[<?= /* @noEscape */  $attr->getAttributeCode()?>][]" class="select multiselect <?php if ($required_attr) { /* @noEscape */ echo "required-entry" . $stepCount;
+                                                                /* @noEscape */ echo " required-entry";
+                                                            }?> <?= /* @noEscape */  $attribute_class; ?>" multiple="multiple">
+                                                                <?php foreach ($attr->getSource()->getAllOptions(true, true) as $key => $opt) {
+                                                                    if ($key == 0) {
+                                                                        continue;
+                                                                    }
+                                                                    ?>
+                                                                    ?>
+                                                                    <option value="<?= /* @noEscape */  $opt['value'];?>" <?php if (isset($vmodel[$attr->getAttributeCode()]) && $opt['value'] == $vmodel[$attr->getAttributeCode()]) {
+                                                                        echo 'selected';
+                                                                    }?>><?= /* @noEscape */  _($opt['label'])?></option>
+                                                                <?php }?>
+                                                            </select>
+                                                            <label class="addafter">
+                                                            <span class="note afterelment"><?= /* @noEscape */  __('Select ' . $attr->getFrontend()->getLabel()); ?>
+                                                            </span>
+                                                            </label>
+                                                        <?php  } elseif ($inputType == 'date') {
+                                                            ?>
+                                                            <input type="text"  name="vendor[<?= /* @noEscape */  $attr->getAttributeCode()?>]" id="<?= /* @noEscape */  $attr->getAttributeCode()?>"
+                                                                   value="<?php if (isset($vmodel[$attr->getAttributeCode()])) { /* @noEscape */ echo $vmodel[$attr->getAttributeCode()];
+                                                                   }?>"
+                                                                   title="<?= /* @noEscape */  $attr->getFrontend()->getLabel() ?>" placeholder="<?= /* @noEscape */  $attr->getFrontend()->getLabel() ?>" class="<?php if ($required_attr) { /* @noEscape */ echo "required-entry" . $stepCount;
+                                                                       /* @noEscape */ echo " required-entry";
+                                                                   }?> <?= /* @noEscape */  $attribute_class?> calendarInput"
+                                                            >
+
+                                                            <label class="addafter">
+                                                            <span class="note afterelment"><?= /* @noEscape */  __('Select ' . $attr->getFrontend()->getLabel()); ?>
+                                                            </span>
+                                                            </label>
+                                                            <?php
+                                                        } elseif ($inputType == 'textarea') { ?>
+                                                            <textarea mage-validate = '{""}' placeholder="<?= /* @noEscape */  $attr->getFrontend()->getLabel() ?>" name="vendor[<?= /* @noEscape */  $attr->getAttributeCode()?>]" id="<?= /* @noEscape */  $attr->getAttributeCode()?>"
+                                                                      title="<?= /* @noEscape */  $attr->getFrontend()->getLabel() ?>"
+                                                            <?php if ($attr->getAttributeCode() == 'email' || $attr->getAttributeCode() == 'shop_url') { /* @noEscape */ echo 'readonly';
+                                                            }?>
+                                                            class="<?php if ($required_attr) { /* @noEscape */ echo "required-entry" . $stepCount;
+                                                                /* @noEscape */ echo "  required-entry";
+                                                            }?> <?= /* @noEscape */  $attribute_class?> "
+                                                            ><?php if (isset($vmodel[$attr->getAttributeCode()])) { /* @noEscape */ echo $vmodel[$attr->getAttributeCode()];
+                                                            }?></textarea>
+                                                        <?php } else {?>
+                                                            <?php if ($imgflag) { ?>
+                                                                <div class="img-div">
+                                                            <?php } ?>
+                                                            <div>
+                                                                <?php //if(($attr->getAttributeCode() == 'registration_document_upload' ) && (isset($vmodel['registration_document_upload'])) || ($attr->getAttributeCode() == 'company_website' )):?>
+                                                                <?php if (($attr->getAttributeCode() == 'registration_document_upload') && (isset($vmodel['registration_document_upload'])) || ($attr->getAttributeCode() == 'company_code') || ($attr->getAttributeCode() == 'resale_number') || ($attr->getAttributeCode() == 'dun_bradstreet') || ($attr->getAttributeCode() == 'registration_document_upload')): ?>
+                                                                    <span></span>
+                                                                <?php else: ?>
+                                                                    <span id="required-<?= /* @noEscape */ $attr->getAttributeCode();?>">*</span>
+                                                                <?php endif; ?>
+                                                                <input
+                                                                       placeholder="<?= /* @noEscape */  $attr->getFrontend()->getLabel() ?>"
+                                                                       type="<?= /* @noEscape */  $inputType?>"
+                                                                       <?= /* @noEscape */  $inputType === "file" ?
+                                                                           "accept = '.txt, .pdf' data-validate = '{multistepregvalidationrule:true}'" : ""
+                                                            ?>
+                                                                       name="vendor[<?= /* @noEscape */  $attr->getAttributeCode()?>]"
+                                                                       id="<?= /* @noEscape */  $attr->getAttributeCode()?>"
+                                                                       value="<?php if (isset($vmodel[$attr->getAttributeCode()])) { /* @noEscape */ echo $vmodel[$attr->getAttributeCode()];
+                                                                       }?>"
+                                                                <?php if (($attr->getAttributeCode() == 'shop_url') && (isset($vmodel['onboarding_completed'])) && ($vmodel['onboarding_completed']) != 0): ?>
+                                                                    disabled = 'disabled'
+                                                                <?php endif; ?>
+                                                                           title="<?= /* @noEscape */  $attr->getFrontend()->getLabel() ?>"
+                                                                <?php //if(($attr->getAttributeCode() == 'registration_document_upload' ) && (isset($vmodel['registration_document_upload'])) || ($attr->getAttributeCode() == 'company_website' )):?>
+                                                                <?php if (($attr->getAttributeCode() == 'registration_document_upload') && (isset($vmodel['registration_document_upload'])) || ($attr->getAttributeCode() == 'company_code') || ($attr->getAttributeCode() == 'resale_number') || ($attr->getAttributeCode() == 'dun_bradstreet') || ($attr->getAttributeCode() == 'registration_document_upload')): ?>
+                                                                    class=""
+                                                                <?php else: ?>
+                                                                    class="required-entry <?= /* @noEscape */  $required_attr ? 'required-entry' . $stepCount : '' ?>"
+                                                                <?php endif; ?>
+                                                                        <?php if ($attr->getAttributeCode() == 'email') { /* @noEscape */ echo 'readonly';
+                                                                        }?>
+                                                                           class="<?php if ($required_attr) { /* @noEscape */ echo "required-entry" . $stepCount;
+                                                                               /* @noEscape */ echo "  required-entry";
+                                                                           }?> <?= /* @noEscape */  $attribute_class?> "
+                                                                    />
+                                                                <?php if ($attr->getAttributeCode()=='dun_bradstreet'): ?>
+                                                                    <button><a href="https://www.dnb.com/duns-number/lookup.html" target="_blank">D-U-N-S lookup</a></button>
+                                                                <?php endif;?>
+                                                                <?php if (!empty($attr->getDescription())): ?>
+                                                                    <a href="javascript:void(0);" title="<?= /* @noEscape */  $attr->getDescription(); ?>" style="font-size: 16px;">?</a>
+                                                                <?php endif; ?>
+                                                            </div>
+
+                                                            <?php if ($attr->getAttributeCode() == 'shop_url'): ?>
+                                                                <span class="note"><small style="font-size: 10px;"><?= /* @noEscape */  __('Please enter your shop URL key. The Key can be part or all of your company name. For example "myshopurl".'); ?></small></span>
+
+                                                                <div generated="true" class="mage-error shop_url_msg"></div>
+
+                                                                <div class="show_shop_url"><?= /* @noEscape */  $block->getUrl() ?>myshopurl</div>
+                                                            <?php endif; ?>
+
+                                                            <?php if ($imgflag) { ?>
+                                                                <label for="<?= /* @noEscape */  $attr->getAttributeCode()?>" class="browse_type_label">
+                                                                    <?php //echo __('No file selected.');?>
+                                                                </label>
+                                                                <label class="addafter">
+                                                                    <?php if ($attr->getAttributeCode()=="registration_document_upload"):?>
+                                                                        <span class="note afterelment"><?= /* @noEscape */  __("Registration document upload types are .txt and .pdf"); ?>
+                                                                    <?php else:?>
+                                                                <span class="note afterelment"><?= /* @noEscape */  __('Select ' . $attr->getFrontend()->getLabel()); ?>
+                                                                    <?php endif;?>
+                                                                </span>
+                                                                </label>
+                                                                </div>
+                                                            <?php } ?>
+
+                                                        <?php }?>
+
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="reg-btn">
+                                                    <button type="button" title="Log Out" class="uptransform button btn btn-success" onclick=" location.href = '<?= /* @noEscape */  $block->getUrl('csmarketplace/account/logout/', ['_secure'=>true]);?>'">Log Out</button>
+
+                                                    <input type="button" <?php if ($stepCount == 1) {
+                                                        echo 'disabled';
+                                                    }?>  id="<?= /* @noEscape */  $stepCount?>" class="uptransform button btn btn-success back" value="<?= /* @noEscape */  __('Back') ?>"/>
+
+                                                    <?php
+                                                    if ($stepCount == $stepsCount) {
+                                                        ?>
+                                                        <input type="submit" value = 'submit' id="step<?= /* @noEscape */  $stepData['stepId']?>_next" class="uptransform button btn btn-success btnSubmit_form" value="<?= /* @noEscape */  __('Submit') ?>"/>
+                                                        <?php
+                                                    } else {
+                                                        ?>
+                                                        <input type="button" id="<?= /* @noEscape */  $stepCount?>" class="uptransform button btn btn-success next btnSubmit_form" value="<?= /* @noEscape */  __('Next') ?>"/>
+                                                        <?php
+                                                    }
+                ?>
+                                                </div>
+                                            <?php     } else {
+                                                ?>
+                                                <div class="reg-btn">
+                                                    <button type="button" title="Log Out" class="uptransform button btn btn-success" onclick=" location.href = '<?= /* @noEscape */  $block->getUrl('csmarketplace/account/logout/', ['_secure'=>true]);?>'">Log Out</button>
+                                                    <input type="button" <?php if ($stepCount == 1) {
+                                                        echo 'disabled';
+                                                    }?>  id="<?= /* @noEscape */  $stepCount?>" class="uptransform button btn btn-success back" value="<?= /* @noEscape */  __('Back') ?>"/>
+
+                                                    <input type="button" id="<?= /* @noEscape */  $stepCount?>" class="uptransform button btn btn-success next btnSubmit_form" value="<?= /* @noEscape */  __('Next') ?>"/>
+                                                </div>
+                                                <?php
+                                            }
+        ?>
+                                        </div>
+                                        <?php $stepCount++;
+    }?>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } else { ?>
+    <script type="text/javascript">location.href = '<?= /* @noEscape */  $block->getBaseUrl() . 'marketplace/vendor/index';  ?>';</script>
+<?php }?>
+<script>
+    var validationPassed = true;
+</script>
+<script type="text/javascript">
+    require(['jquery'], function($){
+        var $ = jQuery.noConflict();
+        var valid = true;
+        if(jQuery('#step_1').length){
+            var bar = 10;
+            jQuery('#step_1').show();
+            jQuery('#bar_10').removeClass('waiting');
+            jQuery('#bar_10').addClass('active');
+        }
+
+        jQuery('.next').click(function() {
+            valid = true;
+            var id = parseInt(jQuery(this).attr('id'));
+            jQuery(".error").remove();
+            jQuery('.required-entry'+id).each(function () {
+                jQuery(this).removeClass('validation-failed');
+                if(!jQuery.trim(jQuery(this).val())) {
+                    jQuery(this).addClass('validation-failed');
+                    jQuery('<div class="validation-advice error" id="advice-required-entry-pass">This is a required field.</div>').
+                    insertAfter(this);
+                    valid = false;
+                }
+            });
+
+
+            var inputs = jQuery("#step_"+id+" :input");
+            inputs.each(function(){
+                if(jQuery(this).hasClass('validate-number')){
+                    var val = jQuery(this).val();
+                    var regexp = /^\d+\.\d{0,2}$/;
+                    if(!regexp.test(val)){
+                        if(!/^\d*$/.test(val)){
+                            jQuery(this).addClass('validation-failed');
+                            jQuery('<div class="validation-advice error" id="advice-required-entry-pass">Enter A Valid Number.</div>').
+                            insertAfter(this);
+                            valid = false;
+                        }
+                    }
+                }else if(jQuery(this).hasClass('validate-digits')){
+                    jQuery(this).removeClass('validation-failed');
+                    var val = jQuery(this).val();
+                    if(!/^\d*$/.test(val)){
+                        jQuery(this).addClass('validation-failed');
+                        jQuery('<div class="validation-advice error" id="advice-required-entry-pass">Enter Valid digits.</div>').
+                        insertAfter(this);
+                        valid = false;
+                    }
+                }else if(jQuery(this).hasClass('validate-email')){
+                    jQuery(this).removeClass('validation-failed');
+                    //var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    var re = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    var val = jQuery(this).val();
+
+                    if(val != '' || val != null || val.length != 0){
+                    }else{
+                        if(!re.test(val)){
+                            jQuery(this).addClass('validation-failed');
+                            jQuery('<div class="validation-advice error" id="advice-required-entry-pass">Please Enter Valid Email.</div>').
+                            insertAfter(this);
+                            valid = false;
+                        }
+                    }
+
+                }else if(jQuery(this).hasClass('validate-url')){
+                    jQuery(this).removeClass('validation-failed');
+                    var regexUrl = '/^(http|https|ftp):\/\/(([A-Z0-9]([A-Z0-9_-]*[A-Z0-9]|))(\.[A-Z0-9]([A-Z0-9_-]*[A-Z0-9]|))*)(:(\d+))?(\/[A-Z0-9~](([A-Z0-9_~-]|\.)*[A-Z0-9~]|))*\/?$/i';
+
+                    var val = jQuery(this).val();
+                    if(!regexUrl.test(val)){
+                        jQuery(this).addClass('validation-failed');
+                        jQuery('<div class="validation-advice error" id="advice-required-entry-pass">Please Enter Valid Url.</div>').
+                        insertAfter(this);
+                        valid = false;
+                    }
+                }else if(jQuery(this).hasClass('validate-alpha')){
+                    jQuery(this).removeClass('validation-failed');
+                    var regexAlpha = /^[a-zA-Z]+$/;
+                    var val = jQuery(this).val();
+                    if(!regexAlpha.test(val)){
+                        jQuery(this).addClass('validation-failed');
+                        jQuery('<div class="validation-advice error" id="advice-required-entry-pass">Please Enter Valid Alphabets.</div>').
+                        insertAfter(this);
+                        valid = false;
+                    }
+                }else if(jQuery(this).hasClass('validate-alphanum')){
+                    jQuery(this).removeClass('validation-failed');
+                    var regexAlphanum = /^[a-zA-Z0-9]+$/;
+                    var val = jQuery(this).val();
+                    if(!regexAlphanum.test(val)){
+                        jQuery(this).addClass('validation-failed');
+                        jQuery('<div class="validation-advice error" id="advice-required-entry-pass">Please Enter Valid Alphabets And Numbers.</div>').
+                        insertAfter(this);
+                        valid = false;
+                    }
+                }
+            });
+
+
+            if(valid) {
+                var current = parseInt(jQuery(this).attr('id'));
+                var next = current + 1;
+                var bar_current = bar;
+                var bar_next = bar_current + 1;
+                bar = bar_next;
+
+                jQuery('#step_'+next).show();
+                jQuery('#step_'+current).hide();
+                jQuery('#bar_'+bar_current).removeClass('active');
+                jQuery('#bar_'+bar_next).removeClass('waiting');
+                jQuery('#bar_'+bar_current).addClass('done');
+                jQuery('#bar_'+bar_next).addClass('active');
+            }
+        });
+
+        jQuery('.back').click(function() {
+            var current = parseInt(jQuery(this).attr('id'));
+            var prev = current - 1;
+            bar_current = bar;
+            bar_prev = bar_current - 1;
+            bar = bar_prev;
+            jQuery('#step_'+prev).show();
+            jQuery('#step_'+current).hide();
+            jQuery('#bar_'+bar_current).removeClass('active');
+            jQuery('#bar_'+bar_prev).removeClass('done');
+            jQuery('#bar_'+bar_current).addClass('waiting');
+            jQuery('#bar_'+bar_prev).addClass('active');
+        });
+
+        $('#vendor-validate').on('submit', function(e) {
+            is_error = false
+            $('#letters-spaces-validate-id').remove();
+            let cityElement = $( "#city" );
+            var regexAlphanum = /^[a-z][a-z\s]*$/i;
+            var val = cityElement.val();
+            if(val!=="" && !regexAlphanum.test(val)){
+                $('<div class="validation-advice error" id="letters-spaces-validate-id">Only letters and space are  allowed.</div>').
+                insertAfter(cityElement);
+                is_error = true;
+            }
+            if(is_error){
+                return false;
+            }
+        });
+
+
+    });
+
+</script>
+<script>
+    require([
+        "jquery",
+        "mage/calendar"
+    ], function($){
+        $(".calendarInput").calendar({
+            buttonText:"<?= /* @noEscape */  __('Select Date') ?>",
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    require([
+        'jquery',
+        'mage/mage'
+    ], function($){
+        $(document).ready(function(){
+            $("input[name='vendor[registration_document_upload]']").on('change', function () {
+                $("input[name='vendor[registration_document_upload]']").valid();
+            });
+            $('.input-box .img-div input').change(function(e){
+                var fileName = e.target.files[0].name;
+                $($($(this).closest('.img-div')).find('.browse_type_label')).text('');
+            });
+            $('#country_id').change(function(e){
+                if($('#country_id').val() != 'US'){
+                    $('#resale_number').next().hide("a");
+                    $('#resale_number-error').hide();
+                    $('#required-resale_number').hide();
+                    $('#required-company_code').hide();
+                    $('#resale_number').attr('disabled','disabled').hide();
+                    $('#company_code').next().hide("a");
+                    $('#company_code').attr('disabled','disabled').hide();
+                }
+                else {
+                    $('#resale_number').removeAttr('disabled').show();
+                    $('#resale_number-error').show();
+                    $('#required-resale_number').show();
+                    $('#resale_number').next().show("a");
+                    $('#company_code').removeAttr('disabled').show();
+                    $('#company_code').next().show("a");
+                    $('#required-company_code').show();
+                }
+            });
+        });
+    });
+</script>
+<script type="text/x-magento-init">
+    {
+        "#vendor-validate": {
+            "validation": {}
+        },
+        "#country_id": {
+            "customRegionUpdater": {
+                "selectTag": "<?= /* @noEscape */  $regionIdTag;?>",
+                "selectCaption": "<?= /* @noEscape */  $_selectRegion;?>",
+                "optionalRegionAllowed": <?= /* @noEscape */  ($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
+                "regionListId": "#region_id",
+                "regionInputId": "#region",
+                "postcodeId": "#zip_code",
+                "form": "#vendor-validate",
+                "regionJson": <?= /* @noEscape */   $block->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                "defaultRegion": "<?= /* @noEscape */  isset($vmodel['region_id']) ? $vmodel['region_id'] : null; ?>",
+                "countriesWithOptionalZip": <?= /* @noEscape */   $block->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            }
+        }
+    }
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "#vendor-validate": {
+            "validation": {}
+        }
+    }
+</script>
+<?php if ($isfooterEnable):?>
+    <?php //echo $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setTemplate("Ced_CsMarketplace::customer/form/footer.phtml")->toHtml()?>
+<?php endif;?>
+<script>
+    require([
+        "jquery"
+    ],function($){
+        $(document).on('keyup','#shop_url', function(){
+            $('input[type="submit"]').attr('disabled', true);
+
+            var shop_url   = $(this).val();
+
+            if( shop_url.length < 3 ){
+                $('.shop_url_msg').show().html('<?= /* @noEscape */  __('Minimum 3 characters required') ?>');
+                return false;
+            }else{
+                $('.shop_url_msg').hide();
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "<?= /* @noEscape */   $block->getUrl('matrixstep/multistep/checkshopurl'); ?>",
+                data: { shop_url: shop_url },
+                dataType: "json"
+            })
+                .done(function( response ) {
+                    if( response.success == 0 ){
+                        $('.shop_url_msg').show().html(response.msg);
+                        $('.show_shop_url').html('<?= /* @noEscape */  $block->getUrl() ?>'+response.shop_url);
+                    }else if( response.success == 1 ){
+                        $('#shop_url').val(response.shop_url);
+                        $('.show_shop_url').html('<?= /* @noEscape */  $block->getUrl() ?>'+response.shop_url);
+                        $('input[type="submit"]').attr('disabled', false);
+                    }
+                });
+        });
+    });
+</script>
+<script type="text/x-magento-init">
+        {
+            "*": {
+                "Matrix_CsMultistepreg/js/formOperations": {},
+                "multistepregvalidationrule": {}
+            }
+        }
+</script>

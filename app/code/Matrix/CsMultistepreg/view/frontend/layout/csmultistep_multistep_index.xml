@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- /**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMultistepregistration
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="vendor-empty"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+    <head>
+        <css src="css/seller_new.css" />
+        <css src="Ced_CsMarketplace::bower_components/font-awesome/css/font-awesome.min.css"/>
+        <css src="Matrix_CsMarketplace::css/seller-newreg.css"/>
+        <css src="Matrix_CsMultistepreg::css/custom.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="multisteps.footer"
+                   template="Ced_CsMarketplace::customer/form/footer.phtml"/>
+        </referenceContainer>
+        <move element="multisteps.footer" destination="columns" after="main"/>
+    </body>
+</page>

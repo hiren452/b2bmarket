@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Ced\CsMultistepreg\Model\Rewrite\CsMarketplace\Vendor\Attribute"
+                type="Matrix\CsMultistepreg\Model\Rewrite\CsMarketplace\Vendor\Attribute" />
+    <preference for="Ced\CsMultistepreg\Block\Multistep\Steps"
+                type="Matrix\CsMultistepreg\Block\Multistep\Steps" />
+    <preference for="Ced\CsMultistepreg\Controller\Multistep\Save"
+                type="Matrix\CsMultistepreg\Controller\Multistep\Save"/>
+</config>
