@@ -1,0 +1,296 @@
+<?php
+$store = $block->_storeManager->getStore();
+?>
+<div class="vendor-dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="">
+                <div style="clear:both"></div>
+                <div class="panel-body">
+                    <div style="font-weight: bold; font-size: 14px; margin:5px 0 0 5px">
+                        Back to <a href="<?= /* @noEscape */ $block->getUrl('subscription/membership/index');
+?>"><?= /* @noEscape */ __('Plans'); ?></a>
+                    </div>
+                    <?php $memberships = $block->getLoadedMembershipCollection(); ?>
+                    <?php if (!$memberships->count()): ?>
+                        <p class="note-msg"><?= /* @noEscape */ __('There are no Membership plan available.') ?></p>
+                    <?php else: ?>
+
+                        <div class="category-products">                        
+                        <?php $assigned_membership = $block->getAssignedMembershipCollection(); ?>
+                        <?php $running_membership  = $block->getRunningMembership(); ?>
+                            <div class="plan-wrap">                                
+                                <div class="cpr-toggle">
+                                    <div class="cpr-toggle-button yearly active">Annually</div> 
+                                    <div class="cpr-toggle-button monthly">Monthly</div>
+                                    <div class="switch"></div>
+                                </div>
+                                <div id="pricing-table" class="clear row">
+                                <?php // Grid Mode?>
+                                <?php $_collectionSize = $memberships->count() ?>
+                                <?php $_columnCount = $block->getColumnCount(); ?>
+                                
+                                <?php $i = 0;
+                        foreach ($memberships as $membership): ?>
+                                    <?php
+
+                            if (!empty($running_membership) && $membership->getPrice() <= $running_membership[0]['price']) {
+                                continue;
+                            }
+                            $i++;
+                            ?>
+                                    <?php
+                            if ($membership->getDuration() == 12) {
+                                $price = $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getPrice()/12, true, false);
+                            } else {
+                                $price = $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getPrice(), true, false);
+                            }
+                            ?>
+                                    
+                                    <div class="plan-wrap col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 duration_<?= /* @noEscape */ $membership->getDuration(); ?>">
+                                        <div class="plan">
+                                            <div class="panel-body-inside">
+                                                <h3>
+                                                    <?= /* @noEscape */ __($membership->getName()); ?>
+                                                    <span><?= /* @noEscape */ $price; ?><small>/mo</small></span>
+                                                </h3>
+                                                
+                                                <div class="dis-co dis-co-text">
+                                                    <?= /* @noEscape */  $membership->getDescription();
+                            ?>
+                                                </div>
+                                                
+                                                <div class="dis-co">
+                                                    <ul>
+                                                        <li>
+                                                    <?= /* @noEscape */  $membership->getData('product_limit') . ' ' . __('Products');
+                            ?></li>
+                                                        <li>
+                                                    <?= /* @noEscape */  $membership->getData('auction_limit') . ' ' . __('Auctions');
+                            ?>
+                                                        </li>
+                                                        <li>
+                                                    <?= /* @noEscape */  '' . __('Private Auctions') . ': ';
+                            if ($membership->getData('private_auction')) {
+                                /* @noEscape */ echo __('Yes');
+                            } else { /* @noEscape */ echo __('No');
+                            }
+                            ?>
+                                                        </li>
+                                                        <li>
+                                                    <?= /* @noEscape */  '' . __('Public Auctions') . ': ';
+                            if ($membership->getData('public_auction')) {
+                                /* @noEscape */ echo __('Yes');
+                            } else { /* @noEscape */ echo __('No');
+                            }
+                            ?>
+                                                        </li>
+                                                    
+                                                    <?php if (!empty($membership->getData('auction_fee'))): ?>
+                                                    <li>
+                                                        <?= /* @noEscape */  '' . __('Auction Set Up Fee') . ': ';
+                                                        /* @noEscape */ echo $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getData('auction_fee'), true, false);
+                                                        ?>
+                                                    </li>                                                    
+                                                    <?php endif; ?>
+                                                    <li>
+                                                    <?php
+                                                    if ($block->displayChart()) {
+                                                        if ($membership->getData('commission') !== null) {
+                                                            $commissions = json_decode($membership->getData('commission'));
+                                                            if (!empty($commissions)) {
+                                                                /* @noEscape */ echo '' . __('Auction Commission') . ': ';
+                                                                /* @noEscape */ echo '<a href="javascript:void(0);" class="see-chart-btn" data-membership_id="' . $membership->getId() . '">' . __('See Chart') . '</a>';
+                                                            }
+                                                        }
+                                                    }
+
+                            ?>
+                                                    </li>
+                                                    </ul>
+
+                                                </div>
+                                                
+                                                <div class="product-info-btn">
+                                                    <?php if (!in_array($membership->getId(), $running_membership)) { ?>
+                                                        <?php if ($membership->getQty() > '0') { ?>
+                                                            
+                                                            
+                            
+                            <button type="button"
+                                                                        title="<?= /* @noEscape */ __('Add to Cart') ?>"
+                                                                        class="signup"
+                                                                        onclick="document.location.href='<?= /* @noEscape */ $block->getUrl('csmembership/membership/addtocart/add/', ['_secure' => true, 'form_key'=>$block->getFormKey() ,'id' => $membership->getId()]);
+                                                            ?>'">
+                                                                    <span><span><?= /* @noEscape */ __('Upgrade') ?></span></span>
+                                                                </button>
+                                                                
+                                                                
+                                                                  <form method="post" action="<?= /* @noEscape */ /* @noEscape */ $block->getUrl('csmembership/membership/addToCart');
+                                                            ?>" class="membership-addtocart">
+                                                                <input type="hidden" name="id" value="<?= /* @noEscape */ /* @noEscape */ $membership->getData('product_id'); ?>">
+                                                                <input type="hidden" name="form_key" value="4SSI7GxSw7da7u6r">
+                                                                <input type="submit" name="submit" class="btn btn-warning" value="<?= /* @noEscape */ /* @noEscape */ __('Add to Cart') ?>">
+                                                            </form>
+                                                            
+                                                            
+                                                        <?php } else { ?>
+                                                            <span style="color:red;"><?= /* @noEscape */ __('Subscribed to Maximum Limit') ?></span>
+                                                        <?php } ?>
+                                                    <?php } else { ?>
+                                                            <button type="button"
+                                                                    title="<?= /* @noEscape */ __('Already Subscribed') ?>"
+                                                                    class="signup signup-already" disabled="disabled">
+                                                                <span><span><?= /* @noEscape */ __('Already Subscribed') ?></span></span>
+                                                            </button>
+                                                    <?php } ?>
+                                                </div>                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+
+                                    if (!empty($commissions)) {
+                                        $contents = '<table width="100%" cellpadding="5" cellspacing="5" id="chart-table-' . $membership->getId() . '" style="display:none;" class="table table-striped table-bordered">';
+                                        $contents .= '<tr><th align="left">Sales</th><th align="left">Commission</th></tr>';
+                                        foreach ($commissions as $commission) {
+
+                                            if (isset($commission->comm_sales_from) && isset($commission->comm_sales_to)) {
+                                                $contents .= '<tr>';
+                                                $contents .= '<td align="left">' . $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($commission->comm_sales_from, true, false) . ' - ' . $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($commission->comm_sales_to, true, false) . '</td>';
+                                                $contents .= '<td align="left">' . $commission->comm_percentage . '%</td>';
+                                                $contents .= '</tr>';
+                                            }
+
+                                            if (isset($commission->comm_sales_above)) {
+                                                $contents .= '<tr>';
+                                                $contents .= '<td align="left">More than ' . $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($commission->comm_sales_above, true, false) . '</td>';
+                                                $contents .= '<td align="left">' . $commission->comm_sales_above_percentage . '%</td>';
+                                                $contents .= '</tr>';
+                                            }
+                                        }
+                                        $contents .= '</table>';
+
+                                        /* @noEscape */ echo $contents;
+                                    }
+                            ?>
+                                <?php endforeach ?>
+                                </div>
+                                
+                            </div>
+                    <?php endif; ?>
+                    <?php if ($i == 0): ?>
+                        <p class="note-msg"><?= /* @noEscape */ __('You have subscribed to the best plan.') ?></p>           
+                    <?php endif; ?>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['jquery'], function($){
+        
+        $(document).ready(function(){   
+            $(document).on('click','.monthly', function(){
+                $('.duration_1').css("display", "inline-block");
+                $('.duration_12').css("display", "none");
+                $('.monthly').addClass('active');
+                $('.yearly').removeClass('active');
+            });            
+            $(document).on('click','.yearly', function(){
+                $('.duration_12').css("display", "inline-block");
+                $('.duration_1').css("display", "none");
+                $('.yearly').addClass('active');
+                $('.monthly').removeClass('active');
+            });
+        });
+    });
+</script>
+<script>
+   require(
+       [
+           'jquery',
+           'Magento_Ui/js/modal/modal'
+       ],
+       function (
+           $,
+           modal
+       ) {
+           var modaloption = {
+               type: 'popup',
+               modalClass: 'modal-popup',
+               responsive: true,
+               innerScroll: true,
+               clickableOverlay: true,
+               title: 'Commisssion Chart'
+           };
+           $(".see-chart-btn").on('click',function(){ 
+               var callfor_popup = $('#chart-table-'+$(this).data('membership_id'));
+               var callforoption = modal(modaloption, callfor_popup);
+               callfor_popup.modal('openModal');
+           });
+       }
+   );
+</script>
+<script type="text/javascript">
+require([
+  'jquery'
+], function ($) {
+    
+     $('.membership-addtocart').submit(function(e) {
+                 e.preventDefault();
+            var form = $(this);
+           debugger;
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(res) {
+                    debugger;
+                   window.location.href = "<?= /* @noEscape */ $block->getUrl('checkout/cart'); ?>";
+                },
+                error: function() {
+                    alert('Something went Wrong');
+                }
+            });
+        });
+        
+        
+equalheight = function(container){
+  var currentTallest = 0,
+       currentRowStart = 0,
+       rowDivs = new Array(),
+       $el,
+       topPosition = 0;
+   $(container).each(function() {
+  
+     $el = $(this);
+     $($el).height('auto')
+     topPostion = $el.position().top;
+  
+     if (currentRowStart != topPostion) {
+       for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+         rowDivs[currentDiv].height(currentTallest);
+       }
+       rowDivs.length = 0; // empty the array
+       currentRowStart = topPostion;
+       currentTallest = $el.height();
+       rowDivs.push($el);
+     } else {
+       rowDivs.push($el);
+       currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+    }
+     for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+       rowDivs[currentDiv].height(currentTallest);
+     }
+   });
+  }
+  //$(window).load(function() {
+  $(window).on('load', function() {
+    equalheight('#pricing-table .plan');
+  });
+  $(window).resize(function(){
+    equalheight('#pricing-table .plan');
+  });
+});
+</script>

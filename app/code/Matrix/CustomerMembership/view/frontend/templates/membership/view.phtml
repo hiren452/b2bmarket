@@ -1,0 +1,151 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
+?>
+<div class="dashboard-custom-container">
+<div class="membership-info">
+    <div class="block-content">
+        <div class="box box-information">
+          <?php
+          $membership_id = 0;
+if(count($block->getSubscribedMembership()->getData())>0) {
+    ?>
+          	 <div class="table-wrapper membership-history">
+        <table class="data table table-membership-history" id="my-membership-history">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Purchase Request') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col planname"><?php /* @escapeNotVerified */ echo __('Plan Name') ?></th>
+                    <th scope="col" class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                    <th scope="col" class="col duration"><?php /* @escapeNotVerified */ echo __('RFQ Limit') ?></th>
+                    <th scope="col" class="col duration"><?php /* @escapeNotVerified */ echo __('Non Catalog RFQ Limit') ?></th>
+                    <th scope="col" class="col duration"><?php /* @escapeNotVerified */ echo __('Duration') ?></th>
+                   <!--   <th scope="col" class="col category"><?php /* @escapeNotVerified */ //echo __('Category')?></th>-->
+                    <th scope="col" class="col expiration"><?php /* @escapeNotVerified */ echo __('Expired On') ?></th>
+                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($block->getSubscribedMembership() as $_membershipplan): ?>
+                    <?php $membership_id = $_membershipplan->getData('membership_id'); ?>
+                    <tr>
+                        <td  class="col planname"><?php /* @escapeNotVerified */ echo $_membershipplan->getPlanName(); ?></td>
+                        <td  class="col price"><?php /* @escapeNotVerified */ echo $_membershipplan->getPackagePrice() ?></td>
+                        <td  class="col price"><?php /* @escapeNotVerified */ echo $_membershipplan->getRfqLimit() ?></td>
+                        <td  class="col price"><?php /* @escapeNotVerified */ echo $_membershipplan->getNoncatrfqLimit() ?></td>
+                       <!--   <td  class="col category"><?php /* @escapeNotVerified */ //echo $_request['category']?></td>-->
+                        <td  class="col duration"><?php /* @escapeNotVerified */ echo $_membershipplan->getDuration();
+                    echo __(' Day(s)')?></td>
+                       
+                         <td  class="col expiration"><?php /* @escapeNotVerified */ echo $this->formatDate(
+                             $_membershipplan->getEndDate(),
+                             \IntlDateFormatter::MEDIUM,
+                             false
+                         ) ?></td>
+                          <td  class="col status"><?php /* @escapeNotVerified */ echo $_membershipplan->getStatus() ?></td>
+                        
+                        <?php //endforeach;?>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php echo $block->getPagerHtml(); ?>
+    </div>
+          <?php } else {
+              ?>
+          	  <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You Have Not Subscribed For Any Membership'); ?></span></div>
+            <?php } ?>
+        </div>
+      
+    </div>
+</div>
+
+<div class="ced-available-membership">
+    <div class="ced-available-membership-block-title">
+        <strong><?php /* @escapeNotVerified */ echo __('Available Membership') ?></strong>
+    </div>
+    <div class="block-membership">
+        
+        <div class="plan-wrap">
+            <div> Upgrade your memberhsip plan. Click <a href="<?php echo $this->getUrl('membership/membership/upgrade');?>">here</a>
+            </div>
+            <div id="pricing-table" class="clear row">
+           
+            <?php $i = 0;
+foreach($block->getMembershipPlan() as $membership): ?>
+                <?php if($membership->getPlanName() == 'seller_free_membership') {
+                    continue;
+                } ?>
+                
+                <?php
+                    if(!empty($membership_id) && $membership_id != $membership->getId()) {
+                        continue;
+                    }
+    ?>
+
+                <?php
+    $price = $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getPackagePrice(), true, false);
+    ?>
+                
+                <div class="plan-wrap col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 duration_<?php echo $membership->getDuration(); ?>">
+                    <div class="plan">
+                        <div class="panel-body-inside">
+                            <h3>
+                                <?php echo __($membership->getPlanName()); ?>
+                                <span><?php echo $price; ?></span>
+                            </h3>
+                            <div class="dis-co">
+                                <ul>
+                                    <li>
+                                <?php
+                    echo $membership->getData('rfq_limit') . ' ' . __('RFQs');
+    ?></li>
+                                <li>
+                                <?php
+    echo $membership->getData('noncatrfq_limit') . ' ' . __('Non Catalog RFQs');
+    ?></li>
+                                <li>
+                                <?php
+    echo '' . __('Non Catalog RFQ Fee') . ': ';
+    echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getData('noncatrfq_fee'), true, false);
+    ?>
+                                </li>
+                                </ul>
+                            </div>
+                            <div class="dis-co">
+                                <?php
+    echo $membership->getDescription();
+    ?>
+                            </div>                            
+                            <div class="product-info-btn">
+                                <?php if($membership_id == $membership->getId()) { ?>
+                                    <button type="button"
+                                                title="<?php echo __('Already Subscribed') ?>"
+                                                class="signup signup-already" disabled="disabled">
+                                            <span><span><?php echo __('Already Subscribed') ?></span></span>
+                                    </button>                                    
+                                <?php } else { ?>
+                                    <button type="button"
+                                            title="<?php echo __('Add to Cart') ?>"
+                                            class="signup"
+                                            onclick="document.location.href='<?php echo $this->getUrl('membership/membership/subscribe', ['product_id'=>$membership->getProductId(),'price'=>$membership->getPackagePrice()])?>'">
+                                        <span><span><?php echo __('Get started now') ?></span></span>
+                                    </button>    
+                                <?php } ?>
+                            </div>                                               
+                        </div>
+                    </div>
+                </div>                
+            <?php endforeach ?>
+            </div>            
+        </div>      
+       
+    </div>
+</div>
+</div>

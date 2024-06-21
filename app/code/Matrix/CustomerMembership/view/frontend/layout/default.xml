@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+    <body>
+        <referenceBlock name="top.links">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="cmember-plan"
+                   ifconfig="ced_csmarketplace/general/ced_customermembership">
+                <arguments>
+                    <argument name="label" xsi:type="string">Buyer Plans</argument>
+                    <argument name="path" xsi:type="string">membership/membership/newplan</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="header.links">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="cmember"
+                   ifconfig="ced_csmarketplace/general/ced_customermembership">
+                <arguments>
+                    <argument name="label" xsi:type="string">Buyer Plans</argument>
+                    <argument name="path" xsi:type="string">membership/membership/newplan</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="seller-plan">
+                <arguments>
+                    <argument name="label" xsi:type="string">Seller Plans</argument>
+                    <argument name="path" xsi:type="string">csmembership/membership/seller</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

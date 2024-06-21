@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Ced\CustomerMembership\Controller\Membership\Subscribe"
+                type="Matrix\CustomerMembership\Preference\CustomisedSubscribe"/>
+
+    <type name="Ced\CustomerMembership\Controller\Membership\NewPlan">
+        <plugin name="vendor_redirect_for_newplan"
+                type="Matrix\CustomerMembership\Plugin\Controller\Membership\NewPlan"/>
+    </type>
+    <type name="Ced\CustomerMembership\Controller\Membership\View">
+        <plugin name="vendor_redirect_for_membership_view"
+                type="Matrix\CustomerMembership\Plugin\Controller\Membership\View"/>
+    </type>
+</config>

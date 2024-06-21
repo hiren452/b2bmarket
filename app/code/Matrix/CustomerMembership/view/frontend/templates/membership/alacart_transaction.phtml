@@ -1,0 +1,44 @@
+<?php $collection = $block->getCollection(); ?>
+
+<?= /* @noEscape */ $block->getPagerHtml();
+?>
+<table class="table table-bordered table-hover table-striped" id="my-orders-table">
+    <thead>
+    <tr>
+        <th class="head"><?= /* @noEscape */ __('RFQ Qty') ?></th>
+        <th class="head"><?= /* @noEscape */ __('Non Catalog RFQ Qty') ?></th>
+        <th class="head"><?= /* @noEscape */ __('Membership Id') ?></th>
+        <th class="head"><?= /* @noEscape */ __('Order Id') ?></th>
+        <th class="head"><?= /* @noEscape */ __('Created') ?></th>
+    </tr>
+    </thead>
+
+    <?php if (count($collection) > 0): ?>
+        <tbody>
+        <?php $_odd = ''; ?>
+        <?php foreach ($collection as $_report):
+
+            ?>
+            <tr>
+                <td class="number"><?= /* @noEscape */ __($_report->getRfqQty()); ?></td>
+                <td class="number"><?= /* @noEscape */ __($_report->getNonCatalogRfqQty()); ?></td>
+                <td class="number"><?= /* @noEscape */ __($_report->getMembershipId()); ?></td>
+                <td class="date"><?= /* @noEscape */ __($_report->getOrderId()); ?></td>
+                <td class="date"><?= /* @noEscape */ __($_report->getCreated()); ?></td>                        
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    <?php else: ?>
+        <tbody>
+        <tr class="first last odd">
+            <td colspan="8" class="last">
+                <div>
+                    <p><?= /* @noEscape */ __('No records found') ?></p>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    <?php endif ?>
+
+</table>
+

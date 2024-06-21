@@ -1,0 +1,99 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
+
+?>
+<?php
+$helper = $this->helper('Ced\CustomerMembership\Helper\Data');
+
+if($helper->getCustomerisLogin()) {
+    $label="Subscribe";
+} else {
+    $label="Sign Up";
+}
+
+?>
+
+<div class="ced-available-membership">
+    <div class="ced-available-membership-block-title">
+        <span class="d-block text-center"><?php /* @escapeNotVerified */ echo __($this->helper('Ced\CustomerMembership\Helper\Data')->subscriptionPageMessage()) ?></span>
+    </div>
+    <div class="block-membership">
+        <div class="box block-membership-data">
+           
+        	<div class="plan-wrap">
+            
+            <div id="pricing-table" class="clear row">
+           
+            <?php $i = 0;
+foreach($block->getMembershipPlan() as $membership): ?>
+                <?php if($membership->getPlanName() == 'seller_free_membership') {
+                    continue;
+                } ?>
+                <?php
+                $price = $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getPackagePrice(), true, false);
+    ?>
+                
+                <div class="plan-wrap col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 duration_<?php echo $membership->getDuration(); ?>">
+                    <div class="plan">
+                        <div class="panel-body-inside">
+                            <h3>
+                                <?php echo __($membership->getPlanName()); ?>
+                                <span><?php echo $price; ?></span>
+                            </h3>
+                            <div class="dis-co">
+                                <ul>
+                                    <li>
+                                <?php
+                    echo $membership->getData('rfq_limit') . ' ' . __('RFQs');
+    ?></li>
+                                <li>
+                                <?php
+    echo $membership->getData('noncatrfq_limit') . ' ' . __('Non Catalog RFQs');
+    ?></li>
+                                <li>
+                                <?php
+    echo '' . __('Non Catalog RFQ Fee') . ': ';
+    echo $this->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getData('noncatrfq_fee'), true, false);
+    ?>
+                                </li>
+                                </ul>
+                            </div>
+                            <div class="dis-co  dis-co-text">
+                                <?php
+    echo $membership->getDescription();
+    ?>
+                            </div>                            
+                            <div class="product-info-btn">
+                                <button type="button"
+                                        title="<?php echo __('Add to Cart') ?>"
+                                        class="signup"
+                                        onclick="document.location.href='<?php echo $this->getUrl('membership/membership/view'); ?>'">
+                                    <span><span><?php echo __('Get started now') ?></span></span>
+                                </button>
+                            </div>                                               
+                        </div>
+                    </div>
+                </div>                
+            <?php endforeach ?>
+            </div>            
+        </div> 
+
+
+        </div>
+       
+    </div>
+</div>
+<script type="text/javascript">
+require(['jquery'], function($){
+    $(document).ready(function(){
+        $('.monthly').trigger('click');
+    });
+});
+</script>

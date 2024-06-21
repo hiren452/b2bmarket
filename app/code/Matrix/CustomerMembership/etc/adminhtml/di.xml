@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ced\CustomerMembership\Block\Adminhtml\Membership\Edit\Tab\Package"
+                type="Matrix\CustomerMembership\Preference\Block\Adminhtml\Membership\Edit\Tab\CustomizedPackage"/>
+    <type name="Ced\CustomerMembership\Controller\Adminhtml\Cmembership\MassDelete">
+        <plugin name="ignore_seller_free_membership_for_delete"
+                type="Matrix\CustomerMembership\Plugin\Controller\Adminhtml\Cmembership\MassDelete"/>
+    </type>
+
+    <type name="Ced\CustomerMembership\Model\System\Config\Source\Months">
+        <plugin name="additional_month"
+                type="Matrix\CustomerMembership\Plugin\Model\System\Config\Source\Months"/>
+    </type>
+
+    <preference for="Ced\CustomerMembership\Block\Adminhtml\Membership\Edit"
+                type="Matrix\CustomerMembership\Preference\Block\Adminhtml\Membership\CustomizedEdit"/>
+</config>

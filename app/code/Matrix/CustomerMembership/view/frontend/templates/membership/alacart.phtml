@@ -1,0 +1,44 @@
+<div class="dashboard-custom-container">
+            <form class="form" action="<?= /* @noEscape */  $block->getUrl("membership/membership/pay/") ?>" method="post" id="form-validate" enctype="multipart/form-data" data-mage-init='{"validation":{}}'>
+                <fieldset class="fieldset" data-hasrequired="<?= /* @noEscape */  __('* Required Fields') ?>">
+                    <legend class="legend"><span><?= $escaper->escapeHtml(__('Ala Cart')) ?></span></legend><br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="field required">
+                                <label class="label required" for="rfq_qty">
+                                  <span><?= $escaper->escapeHtml(__('RFQ Quantity')) ?></span>
+                                </label>
+                                <div class="control">
+                                   <input type="text" name="rfq_qty" id="rfq_qty" value="" title="" class="input-text required-entry validate-number validate-greater-than-zero" data-validate="{required:true}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="field required">
+                                <label class="label" for="rfq_qty">
+                                    <span><?= $escaper->escapeHtml(__('Non Catalog RFQ Quantity')) ?></span>
+                                </label>
+                                <div class="control">
+                                    <input type="text" name="non_catalog_rfq_qty" id="non_catalog_rfq_qty" value="" title="" class="input-text required-entry validate-number validate-greater-than-zero" data-validate="{required:true}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="actions-toolbar mt-20">
+                                <div class="primary">
+                                    <button type="submit" class="action save primary" title="<?= $escaper->escapeHtmlAttr(__('Submit')) ?>"><span><?= $escaper->escapeHtml(__('Submit')) ?></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+</div>
+<div class="dashboard-custom-container mt-45">
+        <div class="row">
+            <div class="col-md-12">
+            <div class="block-title"><strong>alacart list</strong></div></div>
+            <div class="col-md-12"><?= $block->getChildHtml('alacart_list_transaction'); ?></div>
+        </div>
+</div>

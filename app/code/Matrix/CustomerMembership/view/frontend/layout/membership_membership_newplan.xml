@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Ced_CustomerMembership::css/membership.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <referenceBlock name="new-membership-view" template="Matrix_CustomerMembership::membership/newplan.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

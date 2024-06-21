@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <event name="controller_action_predispatch_requesttoquote_quotes_save">
+        <observer name="customer_membership_predispatch_requesttoquote_quotes_save" instance="Matrix\CustomerMembership\Observer\CheckRfqLimit" />
+    </event>
+</config>

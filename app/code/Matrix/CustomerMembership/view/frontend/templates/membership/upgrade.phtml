@@ -1,0 +1,94 @@
+<div class="dashboard-custom-container">
+<?php
+$membership_id = 0;
+if (count($block->getSubscribedMembership()->getData())>0) {
+    foreach ($block->getSubscribedMembership() as $_membershipplan):
+        $membership_id = $_membershipplan->getData('membership_id');
+        $current_price = $_membershipplan->getPackagePrice();
+    endforeach;
+}
+?>
+
+<div class="ced-available-membership">
+    <div class="ced-available-membership-block-title">
+        <strong><?= /* @noEscape */ __('Upgrade Membership') ?></strong>
+    </div>
+    <div class="block-membership">
+        
+        <div class="plan-wrap">
+            
+            <div id="pricing-table" class="clear row">
+           
+            <?php $i = 0;
+foreach ($block->getMembershipPlan() as $membership): ?>
+                <?php if ($membership->getPlanName() == 'seller_free_membership') {
+                    continue;
+                } ?>
+                
+                <?php
+                    //echo $current_price .' = '. $membership->getPackagePrice();
+
+                if (!empty($membership_id) && $membership->getPackagePrice() <= $current_price) {
+                    continue;
+                }
+    $i++;
+    ?>
+
+                <?php
+    $price = $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getPackagePrice(), true, false);
+    ?>
+                
+                <div class="plan-wrap col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 duration_<?= /* @noEscape */ $membership->getDuration(); ?>">
+                    <div class="plan">
+                        <div class="panel-body-inside">
+                            <h3>
+                                <?= /* @noEscape */ __($membership->getPlanName()); ?>
+                                <span><?= /* @noEscape */ $price; ?></span>
+                            </h3>
+                            <div class="dis-co">
+                                <ul>
+                                    <li>
+                                <?= /* @noEscape */  $membership->getData('rfq_limit') . ' ' . __('RFQs');
+    ?></li>
+                                <li>
+                                <?= /* @noEscape */  $membership->getData('noncatrfq_limit') . ' ' . __('Non Catalog RFQs');
+    ?></li>
+                                <li>
+                                <?= /* @noEscape */  '' . __('Non Catalog RFQ Fee') . ': ';
+    /* @noEscape */ echo $block->helper('Magento\Framework\Pricing\Helper\Data')->currency($membership->getData('noncatrfq_fee'), true, false);
+    ?>
+                                </ul>
+                            </div>
+                            <div class="dis-co dis-co-text">
+                                <?= /* @noEscape */  $membership->getDescription();
+    ?>
+                            </div>                            
+                            <div class="product-info-btn">
+                                <?php if ($membership_id == $membership->getId()) { ?>
+                                    <button type="button"
+                                                title="<?= /* @noEscape */ __('Already Subscribed') ?>"
+                                                class="signup signup-already" disabled="disabled">
+                                            <span><span><?= /* @noEscape */ __('Already Subscribed') ?></span></span>
+                                    </button>                                    
+                                <?php } else { ?>
+                                    <button type="button"
+                                            title="<?= /* @noEscape */ __('Upgrade') ?>"
+                                            class="signup"
+                                            onclick="document.location.href='<?= /* @noEscape */ $block->getUrl('membership/membership/subscribe', ['product_id'=>$membership->getProductId(),'price'=>$membership->getPackagePrice()])?>'">
+                                        <span><span><?= /* @noEscape */ __('Upgrade') ?></span></span>
+                                    </button>    
+                                <?php } ?>
+                            </div>                                               
+                        </div>
+                    </div>
+                </div>                
+            <?php endforeach ?>
+            <?php if ($i == 0): ?>
+                <p class="note-msg"><?= /* @noEscape */ __('You have subscribed to the best plan.') ?></p>                
+            <?php endif; ?>
+            </div>            
+        </div>      
+       
+    </div>
+</div>
+</div>

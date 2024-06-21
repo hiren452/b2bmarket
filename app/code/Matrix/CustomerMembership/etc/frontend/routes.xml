@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="matrix_customer_membership" frontName="matrix_customer_membership">
+            <module name="Matrix_CustomerMembership"/>
+        </route>
+        <!-- START: new configuration -->
+        <route id="membership">
+            <module name="Matrix_CustomerMembership" after="Ced_CustomerMembership"/>
+        </route>
+        <!-- END:   new configuration -->
+    </router>
+</config>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<update handle="customer_account"/>
+    <head>
+        <!--  <css src="Ced_CsMessaging::dist/css/csmessaging.css" /> -->
+    </head>
+    <body>
+     <attribute name="class" value="account"/>
+    <referenceContainer name="sidebar.main">
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="membership.upgrade.plan" after="membership.plan" cacheable ="false" ifconfig="ced_csmarketplace/general/ced_customermembership">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Upgarde Plan</argument>
+                    <argument name="path" xsi:type="string">membership/membership/upgrade</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="membership.alacart.plan" after="membership.upgrade.plan" cacheable ="false" ifconfig="ced_csmarketplace/general/ced_customermembership">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Ala Cart</argument>
+                    <argument name="path" xsi:type="string">membership/membership/alacart</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+     </referenceContainer>
+   </body>
+</page>
