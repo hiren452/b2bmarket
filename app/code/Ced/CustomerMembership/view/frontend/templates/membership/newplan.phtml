@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
+
+?>
+<?php
+$customerSession = $this->helper('Ced\CustomerMembership\Helper\Data')->getCustomerisLogin();
+if($customerSession) {
+    $label="Subscribe";
+} else {
+    $label="Sign Up";
+}
+
+?>
+
+<div class="ced-available-membership">
+    <div class="ced-available-membership-block-title">
+        <span><?php /* @escapeNotVerified */ echo __($this->helper('Ced\CustomerMembership\Helper\Data')->subscriptionPageMessage()) ?><span>
+    </div>
+    <div class="block-membership">
+        <div class="box block-membership-data">
+           <?php if(count($block->getMembershipPlan()->getData())>0) {
+               foreach($block->getMembershipPlan() as $_membership) {
+                   ?>
+          <div class="block-membership-data-content">
+				<div class="membership-package-info">
+					<div class="membership-package-name"><?php echo $_membership->getPlanName()?></div>
+					<div class="ced-membership-wrapper">
+					<p class="membership-package-price">
+						<span class="price"><?php echo $block->getCurrencyCode(); ?><?php echo $_membership->getPackagePrice()?></span>					</p>
+					<p>
+						<label><?php echo __('Duration')?></label>
+						<strong><?php echo $_membership->getDuration();
+                   echo __(' Day(s) from date of purchase')?></strong>
+					</p>
+					<div class="membership-package-description"><?php echo $_membership->getDescription()?></div>
+					<div class="ced-membership-data-url">
+					</div>
+					 <div class="hidden-lg hidden-md hidden-sm hidden-xs col-xs-12">&nbsp;</div>
+                            <div class="action col-sm-6 col-xs-6 col-tn-12">
+								<a href="<?php echo $this->getUrl('membership/membership/subscribe', ['product_id'=>$_membership->getProductId(),'price'=>$_membership->getPackagePrice()])?>"><?php echo __($label)?></a>
+							</div>
+                 </div>
+															
+				</div>
+          </div>
+				<?php }
+               }?>
+        </div>
+       
+    </div>
+</div>

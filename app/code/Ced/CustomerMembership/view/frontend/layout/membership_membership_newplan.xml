@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+        <head>
+            <css src="Ced_CustomerMembership::css/membership.css" />
+      </head>
+    <body>
+        <referenceBlock name="sale.reorder.sidebar" remove="true"/>
+        <referenceBlock name="wishlist_sidebar" remove="true"/>
+        <referenceBlock name="catalog.compare.sidebar" remove="true" />
+        <referenceContainer name="content">
+            <block class="Ced\CustomerMembership\Block\Membership\NewPlan" name="new-membership-view" template="Ced_CustomerMembership::membership/newplan.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

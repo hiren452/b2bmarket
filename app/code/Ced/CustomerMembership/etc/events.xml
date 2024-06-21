@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+     <event name="ced_customermembership_productcreate">
+            <observer name="ced_customermembership_productcreate" instance="Ced\CustomerMembership\Observer\VproductCreate" />
+     </event>
+       <!-- <event name="sales_quote_collect_totals_after">
+        <observer name="set_customermembership_discount" instance="Ced\CustomerMembership\Observer\ApplyDiscount"/>
+    </event>-->
+     
+      <event name="checkout_onepage_controller_success_action">
+            <observer name="checkout_onepage_controller_success_action" instance="Ced\CustomerMembership\Observer\SetSubscription" />
+     </event>
+<!--     <event name="payment_method_is_active">
+        <observer name="ced_membership_add_money" instance="Ced\CustomerMembership\Observer\Filterpaymentmethod" />
+    </event>-->
+    
+       <!--   <event name="catalog_product_is_salable_after">
+        <observer name="membership_is_salable" instance="Ced\CustomerMembership\Observer\VproductHide"/>
+    </event> -->
+     
+</config>

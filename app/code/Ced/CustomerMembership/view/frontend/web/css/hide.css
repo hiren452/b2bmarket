@@ -1,0 +1,10 @@
+/* product related chnages*/
+.stock.available {
+    display: none;
+}
+.stock.unavailable {
+    display: none;
+}
+.product-item-actions .actions-primary{
+    display: none !important;
+}

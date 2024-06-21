@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+     <add id="Ced_CustomerMembership::view" title="Customer Membership" module="Ced_CustomerMembership" sortOrder="20" resource="Ced_CustomerMembershi::view" dependsOnConfig="ced_membership/general/ced_customermembership"/>
+        <add id="Ced_CustomerMembership::customermembership" title="Membership Plan" module="Ced_CustomerMembership" sortOrder="10" parent="Ced_CustomerMembership::view" action="cmembership/cmembership" resource="Ced_CustomerMembership::customermembership"/>
+        <add id="Ced_CustomerMembership::customersubscription" title="Customer Subscribed Membership" module="Ced_CustomerMembership" sortOrder="20" parent="Ced_CustomerMembership::view" action="cmembership/csubscription" resource="Ced_CustomerMembership::customersubscription"/>
+        <!-- <add id="Ced_CustomerMembership::customermembership" title="Cutomer Membership" module="Ced_CustomerMembership" sortOrder="16" action ="cmembership/cmembership" resource="Ced_CustomerMembership::customermembership"/>
+         <add id="Ced_CustomerMembership::customersubscription" title="Cutomer Subscription" module="Ced_CustomerMembership" sortOrder="16" action ="cmembership/csubscription" resource="Ced_CustomerMembership::customersubscription"/> -->
+    </menu>
+</config>

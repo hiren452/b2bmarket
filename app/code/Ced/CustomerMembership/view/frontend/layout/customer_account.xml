@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<update handle="customer_account"/>  
+    <head>
+        <!--  <css src="Ced_CsMessaging::dist/css/csmessaging.css" /> -->
+    </head>
+    <body>
+     <attribute name="class" value="account"/>
+    <referenceContainer name="sidebar.main">
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="membership.plan" after="customer-account-navigation-address-link" cacheable ="false" ifconfig="ced_membership/general/ced_customermembership">
+                    <arguments>
+                        <argument name="label" xsi:type="string" translate="true">Membership Plan</argument>
+                        <argument name="path" xsi:type="string">membership/membership/view</argument>
+                    </arguments>
+              </block>
+          </referenceBlock>
+     </referenceContainer>
+   </body>
+</page>
+                    

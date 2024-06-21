@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_customermembership" resource="default" engine="innodb" comment="Membership Plan">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" comment="Id"/>
+        <column xsi:type="int" name="product_id" nullable="false" length="11" comment="Product Id"/>
+        <column xsi:type="text" name="plan_name" nullable="false" length="255" comment="Plan Name"/>
+        <column xsi:type="int" name="package_price" nullable="false" unsigned="true" length="11" comment="Package Price"/>
+        <column xsi:type="int" name="package_specialprice" nullable="false" unsigned="true" length="11" comment="Package Special Price"/>
+        <column xsi:type="int" name="order_discount" nullable="false" unsigned="true" length="11" comment="Order Discount"/>
+        <column xsi:type="text" name="discount_type" nullable="false" length="1000" comment="Discount Type"/>
+        <column xsi:type="int" name="duration" nullable="false" length="11" comment="Duration"/>
+        <column xsi:type="text" name="status" nullable="false" length="50" comment="Status"/>
+        <column xsi:type="text" name="description" nullable="false" length="2000" comment="Description"/>
+        <column xsi:type="int" name="website" nullable="false" length="11" comment="Website"/>
+        <column xsi:type="text" name="customergroups" nullable="false" length="255" comment="Customer Groups"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+
+    <table name="ced_customermembership_subscription" resource="default" engine="innodb" comment="Membership Subscription">
+        <column xsi:type="int" name="id" nullable="false" identity="true" unsigned="true" comment="Id"/>
+        <column xsi:type="int" name="membership_id" nullable="false" length="11" comment="Membership Id"/>
+        <column xsi:type="text" name="plan_name" nullable="false" length="255" comment="Plan Name"/>
+        <column xsi:type="int" name="customer_id" nullable="false" unsigned="true" length="11" comment="Customer Id"/>
+        <column xsi:type="text" name="order_id" nullable="false" length="255" comment="Order Id"/>
+        <column xsi:type="text" name="payment_name" nullable="false" length="255" comment="Payment Name"/>
+        <column xsi:type="int" name="package_price" nullable="false" length="11" comment="Package Price"/>
+        <column xsi:type="text" name="package_specialprice" nullable="false" length="1000" comment="Package Special Price"/>
+        <column xsi:type="int" name="duration" nullable="false" length="11" comment="Duration"/>
+        <column xsi:type="text" name="status" nullable="false" length="50" comment="Status"/>
+        <column xsi:type="text" name="description" nullable="false" length="2000" comment="Description"/>
+        <column xsi:type="int" name="website" nullable="false" length="11" comment="Website"/>
+        <column xsi:type="text" name="start_date" nullable="false" length="2000" comment="Start Date"/>
+        <column xsi:type="text" name="end_date" nullable="false" length="2000" comment="End Date"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>

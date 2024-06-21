@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Ced\CustomerMembership\Model\ResourceModel\Membership\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ced_customermembership</argument>
+            <argument name="resourceModel" xsi:type="string">Ced\CustomerMembership\Model\ResourceModel\Membership</argument>
+        </arguments>
+    </virtualType>
+ 
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="cmembership_data_data_source" xsi:type="string">Ced\CustomerMembership\Model\ResourceModel\Membership\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    
+    
+    <virtualType name="Ced\CustomerMembership\Model\ResourceModel\Subscription\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ced_customermembership_subscription</argument>
+            <argument name="resourceModel" xsi:type="string">Ced\CustomerMembership\Model\ResourceModel\Subscription</argument>
+        </arguments>
+    </virtualType>
+ 
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="csubscription_data_data_source" xsi:type="string">Ced\CustomerMembership\Model\ResourceModel\Subscription\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="cmembership_specialprice" type="Ced\CustomerMembership\Plugin\SpecialPrice" />
+    </type>
+    
+    <preference for="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider" type="Ced\CustomerMembership\Ui\DataProvider\Product\ProductDataProvider" />
+ <!-- <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
+        <plugin name="vproductHidesdfg" type="Ced\CustomerMembership\Model\Plugin\VproductHide" disabled="false"/>
+    </type>  -->
+</config>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+  *
+  * NOTICE OF LICENSE
+  *
+  * This source file is subject to the Academic Free License (AFL 3.0)
+  * You can check the licence at this URL: http://cedcommerce.com/license-agreement.txt
+  * It is also available through the world-wide-web at this URL:
+  * http://opensource.org/licenses/afl-3.0.php
+  *
+  * @category    Ced
+  * @package     Ced_CustomerMembership
+  * @author      CedCommerce Core Team <connect@cedcommerce.com >
+  * @copyright   Copyright CEDCOMMERCE (http://cedcommerce.com/)
+  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Config/etc/system_file.xsd">
+    <system>
+        <tab id="membership" sortOrder="1">
+            <label>Customer Membership</label>
+        </tab>
+        <section id="ced_membership"  translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+            <tab>membership</tab>
+            <label>Customer Membership</label>
+            <resource>Ced_CustomerMembership::ced_membership</resource>
+            <group id="cmembership"  showInDefault="1">
+                <label>Customer Membership </label>
+                <field id="ced_customermembership" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Customer Membership </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>ced_membership/general/ced_customermembership</config_path>
+                </field>
+                <field id="cmembership_title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Membership page title</label>
+                </field>
+                <field id="cmembership_description" translate="label" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Membership page description</label>
+                </field>
+            </group>
+        </section> 
+    </system>
+</config>

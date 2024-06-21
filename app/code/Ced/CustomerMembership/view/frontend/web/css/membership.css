@@ -1,0 +1,108 @@
+.membership-info {
+	margin-bottom: 30px;
+}
+#my-membership-history thead tr th {
+	background: #eeeeee none repeat scroll 0 0;
+}
+/*.box.block-membership-data {
+	margin: 0 -15px;
+	}*/
+	.block-membership-data-content {
+		width: 25% !important;
+		float: left;
+	}
+	.membership-package-info {
+		border: 1px solid #ddd;
+		margin: 0 5px 15px;
+	}
+	.membership-package-name {
+		background: transparent;
+		padding: 20px 10px;
+		text-align: center;
+		font-weight: 600;
+		text-transform: capitalize;
+		font-size: 18px;
+		color: #555555;
+		border-bottom: 2px solid #f9bc02;
+		width: 85px;
+		margin: 0 auto;
+		padding-bottom: 10px;
+	}
+	.membership-package-info .action {
+		text-align: center;
+	}
+/*.action > a {
+ 	background: #225544 none repeat scroll 0 0;
+ 	border-radius: 3px;
+ 	color: #ffff;
+ 	display: inline-block;
+ 	padding: 10px 25px;
+ 	text-align: center;
+text-decoration: none;
+}*/
+.action > a {
+	background: #fff none repeat scroll 0 0;
+	border: 2px solid #ccc;
+	border-radius: 3px;
+	color: #000;
+	display: inline-block;
+	padding: 10px 25px;
+	text-align: center;
+	text-decoration: none;
+}
+.action > a:hover {
+	background: #eee none repeat scroll 0 0;
+}
+.ced-membership-wrapper {
+	padding: 25px 15px;
+	text-align: center; 
+}
+.box.block-membership-data::after {
+	clear: both;
+	content: "";
+	display: table;
+}
+.ced-available-membership-block-title strong {
+	margin-bottom: 11px;
+	display: inline-block;
+	margin-left: 8px;
+	font-size: 17px;
+}
+.membership-package-info .action a {
+	color: #fff;
+	font-weight: 500;
+	border-radius: 2px;
+	padding: 5px;
+	width: 100px;
+	background: #f9bc02;
+	border: 0px;
+	text-transform: uppercase;
+}
+.ced-membership-wrapper .membership-package-price {
+	text-align: center;
+	font-size: 22px;
+	font-weight: 700;
+	color: #555555;
+}
+.ced-membership-wrapper strong {
+	font-weight: normal;
+	color: #555;
+}
+.ced-available-membership-block-title span {
+	margin-bottom: 15px;
+	display: block;
+	color: #555;
+	line-height: 30px;
+	font-size: 16px;
+}
+.ced-membership-wrapper p label {
+	font-weight: 600;
+}
+.ced-membership-wrapper .membership-package-description {
+	color: #555;
+}
+@media only screen and (max-width: 768px){
+	.block-membership-data-content {
+		width: 100% !important;
+	}
+}
