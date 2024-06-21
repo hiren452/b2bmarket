@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * CedCommerce
+  *
+  * NOTICE OF LICENSE
+  *
+  * This source file is subject to the End User License Agreement (EULA)
+  * that is bundled with this package in the file LICENSE.txt.
+  * It is also available through the world-wide-web at this URL:
+  * http://cedcommerce.com/license-agreement.txt
+  *
+  * @category    Ced
+  * @package     Ced_CsMembership
+  * @author       CedCommerce Core Team <connect@cedcommerce.com >
+  * @copyright   Copyright CEDCOMMERCE (http://cedcommerce.com/)
+  * @license      http://cedcommerce.com/license-agreement.txt
+  */
+ -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <menu>
+        <add id="Ced_CsMembership::view" title = "Vendor Membership" module="Ced_CsMembership" sortOrder="10" parent="Ced_CsMarketplace::csmarketplace" resource="Ced_CsMembership::view"  dependsOnConfig="ced_csmembership/general/activation"/>
+
+        <add id="Ced_CsMembership::plans" title="Membership Plans" module="Ced_CsMembership" sortOrder="10" parent="Ced_CsMembership::view" action="csmembership/membership/index" resource="Ced_CsMembership::view" dependsOnConfig="ced_csmembership/general/activation"/>
+
+        <add id="Ced_CsMembership::order_vendor" title="Membership Subscriptions By Vendor" module="Ced_CsMembership" sortOrder="10" parent="Ced_CsMembership::view" action="csmembership/membership/orderbyvendor" resource="Ced_CsMembership::view" dependsOnConfig="ced_csmembership/general/activation"/>
+        
+        <add id="Ced_CsMembership::order_membership" title="Membership Subscriptions By Membership" module="Ced_CsMembership" sortOrder="10" parent="Ced_CsMembership::view" action="csmembership/membership/orderbymembership" resource="Ced_CsMembership::view" dependsOnConfig="ced_csmembership/general/activation"/>
+
+        <add id="Ced_CsMembership::rates" title="Membership Basic Settings" module="Ced_CsMembership" sortOrder="10" parent="Ced_CsMembership::view" action="adminhtml/system_config/edit/section/ced_csmarketplace" resource="Ced_CsMembership::view" dependsOnConfig="ced_csmembership/general/activation"/>
+
+        <add id="Ced_CsMembership::assign" title="Assign Membership Plans" module="Ced_CsMembership" sortOrder="10" parent="Ced_CsMembership::view" action="csmembership/assign/index" resource="Ced_CsMembership::view" dependsOnConfig="ced_csmembership/general/activation"/>
+    </menu>
+</config>

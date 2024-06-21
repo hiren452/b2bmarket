@@ -1,0 +1,193 @@
+<?php
+
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMembership
+ * @author         CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+?>
+<?php
+$helper = $block->marketplaceHelper;
+$category_ids = $block->getCategoryIds();
+?>
+        <div class="form-group col-md-6">
+            <legend class="admin__legend legend">
+                <span><?= /* @noEscape */ __('Product Categories') ?></span>
+            </legend>
+            <div class="field category">
+                <input class="category_ids test" name="category_ids" id="product_categories" type="hidden" value="<?= /* @noEscape */ $block->getIdsString() ?>"/>
+                <div class="tree-holder">
+                    <div id="tree-div" class="tree-wrapper">
+                    <?php $groups=[];
+$allowed_categories=[];
+$category_mode=0;
+$category_mode = $block->marketplaceHelper->getStoreConfig('ced_vproducts/general/category_mode', 0);
+if ($category_mode) {
+    $allowed_categories = explode(',', $block->marketplaceHelper->getStoreConfig('ced_vproducts/general/category', 0));
+}
+
+$category_helper = $block->vproductsCategory;
+
+$category_model =  $block->catalogCategory->setStoreId($block->getRequest()->getParam('store', 0));
+
+if ($block->marketplaceHelper->isSharingEnabled()) {
+    $groups = $block->groupFactory->create()->getCollection()->addFieldToFilter('group_id', ['neq'=>0])->setOrder('website_id', 'ASC');
+} else {
+    $vendor = $block->_vendorFactory->create()->load($block->marketplaceSession->getVendorId());
+    if ($vendor && $vendor->getId()) {
+        $websiteId = $block->storeManager->getWebsite()->getId();
+    }
+    $websiteId = 1;
+    $groups = $block->groupFactory->create()->getCollection()->addFieldToFilter('website_id', $websiteId)->setOrder('group_id', 'ASC');
+}
+
+$rootCategories=[];
+$groupNames=[];
+if ($block->getRequest()->getParam('store')) {
+    $groups->addFieldToFilter('default_store_id', $block->getRequest()->getParam('store'));
+}
+
+$groups->getData();
+foreach ($groups as $group) {
+    if (isset($groupNames[$group->getRootCategoryId()])) {
+        $groupNames[$group->getRootCategoryId()][]=$group->getName();
+    } else {
+        $groupNames=[];
+        $groupNames[$group->getRootCategoryId()][]=$group->getName();
+    }
+    $rootCategories[$group->getRootCategoryId()]=$groupNames;
+}
+$categories_loop = 0;
+?>
+                    <?= /* @noEscape */ '<ul class="root-category root-category-wrapper" style="margin-left: 0px;><div class="root-node">'; ?>
+                    <?php foreach ($rootCategories as $rootCategory => $cat_group) {
+                        if (is_array($cat_group[$rootCategory])) {
+                            $groupname=implode(',', $cat_group[$rootCategory]);
+                        }
+                        $activeCategories=$category_model->getResource()
+                            ->getChildrenCategories($category_model->load($rootCategory));
+                        if ($category_mode) {
+                            $storeflag=false;
+                            foreach ($activeCategories as $row) {
+                                if (in_array($row->getEntityId(), $allowed_categories)) {
+                                    $storeflag=true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            $storeflag=true;
+                        }
+
+                        $_categories = $category_helper->getStoreCategories($rootCategory);
+                        foreach ($_categories as $_category) {
+                            if ($category_mode && !in_array($_category['entity_id'], $allowed_categories)) {
+                                continue;
+                            }
+                            if ($category_mode) {
+                                $childrens=count(array_intersect($category_model->getResource()->getAllChildren($category_model->load($_category['entity_id'])), $allowed_categories))-1;
+                            } else {
+                                $childrens=count($category_model->getResource()->getAllChildren($category_model->load($_category['entity_id'])))-1;
+                            }
+                            $_category=$category_model->load($_category['entity_id']);
+                            if ($childrens > 0) { ?>
+                                <li class="tree-node">
+                                    <div class="tree-node-el ced-folder tree-node-collapsed">
+                                        <span class="tree-node-indent"></span>
+                                        <img class="tree-ec-icon tree-elbow-plus" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                                        <img unselectable="on" class="tree-node-icon" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                                        <input class="elements" type="checkbox" name="category[]" <?= /* @noEscape */ in_array($_category['entity_id'], $category_ids) ? 'checked' : '' ?> value='<?= /* @noEscape */ $_category['entity_id'] ?>'/>
+                                        <span class="elements cat_name"><?= /* @noEscape */ $_category->getName() . " (" . $block->membershipVproducts->getProductCount($_category['entity_id']) . ")" ?></span>
+                                    </div>
+                                    <ul class="root-category root-category-wrapper" style="display:none;margin-left: 0px;"></ul>
+                                </li>
+                                    
+                            <?php } else { ?>
+                                <li class="tree-node">
+                                    <div class="tree-node-el ced-folder tree-node-leaf">
+                                        <span class="tree-node-indent"></span>
+                                        <img class="tree-ec-icon tree-elbow-end" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                                        <img unselectable="on" class="tree-node-icon" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                                        <input class="elements" type="checkbox" name="category[]" <?= /* @noEscape */ in_array($_category['entity_id'], $category_ids) ? 'checked' : '' ?> value='<?= /* @noEscape */ $_category['entity_id'] ?>'/>
+                                        <span class="elements cat_name"><?= /* @noEscape */ $_category->getName() . " (" . $block->membershipVproducts->getProductCount($_category['entity_id']) . ")" ?></span>
+                                    </div>
+                                </li>
+                            <?php }
+                            }
+                    } ?>
+                    <?= /* @noEscape */ '</div></ul>'; ?>
+                    </div>                             
+                </div>
+            </div>
+        </div>
+<script>
+require([
+    'jquery',
+    'mage/mage'
+], function($){
+    var categoryids=<?= /* @noEscape */ json_encode($category_ids)?>;
+    jQuery(document).ready(function(){
+        jQuery(".category_ids").val(categoryids);
+    });
+    jQuery("#tree-div").on('click', "li img.tree-ec-icon ", function(){
+        var current = jQuery(this);
+        if(jQuery(this).hasClass('tree-elbow-plus')) {
+            jQuery(this).parent().removeClass('tree-node-collapsed');
+            jQuery(this).parent().addClass('tree-node-loading');
+            jQuery.ajax({
+                url      :   "<?= /* @noEscape */ $block->getUrl('csmembership/membership/categorytree/', ['store'=>$block->getRequest()->getParam('store', 0)]);?>",
+                type     :   "POST",
+                data     :   {categoryId:jQuery(this).parent().children("input").val(), category_ids:categoryids},
+                dataType:   "html",
+                success :   function(content){
+                    
+                    current.parent().siblings("ul.root-category-wrapper").html(content);
+                    current.parent().siblings("ul.root-category-wrapper").slideDown(300);
+                    current.parent().removeClass('tree-node-loading');
+                    current.parent().addClass('tree-node-expanded');
+                    current.removeClass('tree-elbow-plus');
+                    current.addClass('tree-elbow-minus');
+                }
+            });
+        } else if(jQuery(this).hasClass('tree-elbow-minus')) {
+            
+            current.parent().removeClass('tree-node-expanded');
+            current.parent().addClass('tree-node-collapsed');
+            current.removeClass('tree-elbow-minus');
+            current.addClass('tree-elbow-plus');
+            current.parent().siblings("ul.root-category-wrapper").slideUp(300);    
+            
+        }    
+    });
+    jQuery(document).ready(function(){
+            jQuery(document).on('change','.tree-node .elements' ,function() {
+                            if(jQuery(this).is(':checked')==true){
+                                    var ids = document.getElementById('product_categories').value.split(',');
+                                    ids.push(jQuery(this).val());
+                                    document.getElementById('product_categories').value = ids.join(',');
+                            }
+                            else{
+                                 var ids = document.getElementById('product_categories').value.split(',');
+                                    // bug #7654 fixed
+                                    while (-1 != ids.indexOf(jQuery(this).val())) {
+                                        ids.splice(ids.indexOf(jQuery(this).val()), 1);
+                                    }
+                                    document.getElementById('product_categories').value = ids.join(',');
+                            } 
+                            getTotal();
+                        });
+
+    });
+
+});
+</script>

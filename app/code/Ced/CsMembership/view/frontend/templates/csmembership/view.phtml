@@ -1,0 +1,185 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMembership
+ * @author       CedCommerce Core Team <connect@cedcommerce.com >
+ * @copyright   Copyright CEDCOMMERCE (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+?>
+<?php
+
+/**
+ * @var \Ced\CsMembership\Block\View $block
+ */
+
+$viewModel = $block->getData('viewModel');
+
+$helper = $viewModel->getCsMembershipHelper();
+$store = $block->getStoreManager()->getStore();
+$Collection = $block->getMembershipDetails();
+$check_assignedMembership = $block->checkAssignedMembership();
+$imageHelper = $viewModel->getCatalogImageHelper();
+
+?>
+<div class="row">
+    <div class="col-md-12" style="margin-top:10px;">
+        <div class="panel panel-default">
+            <div class="panel-heading col-md-12 uptransform"
+                 style="line-height:31px;font-weight:bold;padding:4px 15px;font-size:17px;">
+                <i class="fa fa-user fa-fw"></i><?= /* @noEscape */ __('Membership Details') ?>
+            </div>
+            <div class="panel panel-body">
+                <div class="col-md-12" style="margin-top:10px;">
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top:10px;">
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <?= /* @noEscape */ __('Membership') ?>
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <?php
+                                        $phtml = '';
+$ihtml = '';
+$imgUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $Collection->getData('image');
+if (strlen($Collection->getData('image')) == 0) {
+    $imgUrl = $imageHelper->getDefaultPlaceholderUrl('image');
+}
+$phtml .= '<img style="display: inline;" width="73%" class="small-image-preview v-middle" alt="Profile Picture" title="Profile Picture" id="image" src="' . $imgUrl . '" />';
+?>
+                                        <div class="col-1 addresses-primary">
+                                            <?= /* @noEscape */ $phtml; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <?= /* @noEscape */ __('Allowed Category'); ?>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-2 addresses-primary">
+                                            <?= /* @noEscape */ $block->getAllowedCatagories(); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top:10px;">
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <?= /* @noEscape */ __('Allowed No of Products '); ?>
+                                    </div>
+                                    <div class="panel-body">
+                                        <?= /* @noEscape */ __($Collection->getProductLimit() . '</br>'); ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <?= /* @noEscape */ __('Duration of Package '); ?>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-2 addresses-primary">
+                                            <?= /* @noEscape */ __($Collection->getDuration() . '  Month(s)'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top:10px;">
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <?= /* @noEscape */ __('Price(s)  '); ?>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="product-shop">
+                                            <div class="price-box">
+                                                <?php if ($Collection->getSpecialPrice() != '0') { ?>
+                                                    <div class="product-info">
+                                                        <span class="regular-price"
+                                                              style="text-decoration: line-through;"><?= /* @noEscape */ __('Price : '); ?></span><span
+                                                                class="regular-price"
+                                                                style="text-decoration: line-through;"><?= /* @noEscape */ $helper->formatToBaseCurrency($Collection->getPrice(), $Collection->getStoreId()) ?></span>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div class="product-info">
+                                                        <span class="regular-price"><?= /* @noEscape */ __('Price : '); ?></span><span
+                                                                class="regular-price"><?= /* @noEscape */ $helper->formatToBaseCurrency($Collection->getPrice(), $Collection->getStoreId()) ?></span>
+                                                    </div>
+                                                <?php } ?>
+                                                <?php if ($Collection->getSpecialPrice() != '0') { ?>
+                                                    <div class="product-info">
+                                                        <span class="special-price"
+                                                              style="font-size: 10px; font-weight: bold !important; color: #eb0404 !important;"><?= /* @noEscape */ __('Special Price : '); ?></span><span
+                                                                class="regular-price"><?= /* @noEscape */ $helper->formatToBaseCurrency($Collection->getSpecialPrice(), $Collection->getStoreId()) ?></span>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <?= /* @noEscape */ __('Subscribe This One'); ?>
+                                    </div>
+                                    <div class="panel-body">
+                                        <?php if (empty($check_assignedMembership)) { ?>
+                                            <?php if ($Collection->getQty()) { ?>
+                                                <button type="button" title="<?= /* @noEscape */ __('Add to Cart') ?>"
+                                                        class="btn btn-warning"
+                                                        onclick="window.location.href='<?= /* @noEscape */ $block->getUrl('csmembership/membership/addToCart', ['_secure' => true, 'id' => $block->getRequest()->getParam('id')]);
+                                                ?>'"><span><?= /* @noEscape */ __('Add to Cart') ?></span></button>
+                                            <?php } else {
+                                                ?>
+                                                <span style="color:red;"><?= /* @noEscape */ __('Subscribed to Maximum Limit') ?></span>
+                                            <?php } ?>
+
+                                        <?php } else { ?>
+                                            <button type="button" title="<?= /* @noEscape */ __('Already Subscribed') ?>"
+                                                    class="btn btn-warning" disabled="disabled">
+                                                <span><?= /* @noEscape */ __('Already Subscribed') ?></span></button>
+
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-danger" onclick="window.location.href='<?= /* @noEscape */ $escaper->escapeUrl($block->getBackUrl()) ?>';" type="button">
+            <?= /* @noEscape */ __('Back') ?>
+        </button>
+    </div>
+</div>
+
+

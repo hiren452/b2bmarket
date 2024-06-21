@@ -1,0 +1,19 @@
+{
+  "name": "ced/module-csmembership",
+  "description": "Enable vendor to Choose memberships and Admin can create new memberships",
+  "require": {
+   "php": "~7.3.0|~7.4.0",
+   "magento/magento-composer-installer": "*"
+  },
+  "type": "magento2-module",
+  "version": "1.0.6",
+  "license": [
+   "EULA"
+  ],
+  "autoload": {
+   "files": [ "registration.php" ],
+   "psr-4": {
+    "Ced\\CsMembership\\": ""
+   }
+  }
+ }

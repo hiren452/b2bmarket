@@ -1,0 +1,66 @@
+<script type="text/javascript">
+require([
+    'jquery',
+    'mage/backend/validation',
+    "prototype"
+], function($){
+    function getTotal() {
+        var product_limit = parseInt($("[name='product_limit']").val());
+        var category_ids = $("[name='product_categories']").val();
+        var price = $("[name='price']").val();
+        var special_price = $("[name='special_price']").val();
+        var duration = parseInt($("[name='duration']").val());
+        var reloadurl = "<?= /* @noEscape */ $block->getUrl('csmembership/membership/getTotal', ['_current ' => true]) ?>";
+        if (product_limit) {
+            new Ajax.Request(reloadurl, {
+                method: 'get',
+                parameters: {
+                    product_limit: product_limit,
+                    category_ids: category_ids,
+                    price: price,
+                    special_price: special_price,
+                    duration: duration
+                },
+                onComplete: function(stateform) {
+                    var response = stateform.responseText;
+                    var result = isNumber(response);
+                    if (result)
+                    $("[name='price']").val(response);
+                }
+            });
+        }
+    }
+
+    function isNumber(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    $('body').on('change', "[name='price']", function(){
+        return getTotal();
+    });
+
+    $('body').on('change', "[name='special_price']", function(){
+        return getTotal();
+    });
+
+    $('body').on('change', "[name='duration']", function(){
+        return getTotal();
+    });
+
+    $('body').on('change', "[name='status']", function(){
+        return getTotal();
+    });
+
+    $('body').on('change', "[name='website']", function(){
+        return getTotal();
+    });
+
+    $('body').on('change', "[name='product_limit']", function(){
+        return getTotal();
+    });
+
+    $('body').on('change', "[name='qty']", function(){
+        return getTotal();
+    });
+});
+</script>

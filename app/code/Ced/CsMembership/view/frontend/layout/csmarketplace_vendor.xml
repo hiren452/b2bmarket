@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * CedCommerce
+  *
+  * NOTICE OF LICENSE
+  *
+  * This source file is subject to the End User License Agreement (EULA)
+  * that is bundled with this package in the file LICENSE.txt.
+  * It is also available through the world-wide-web at this URL:
+  * http://cedcommerce.com/license-agreement.txt
+  *
+  * @category    Ced
+  * @package     Ced_CsMembership
+  * @author       CedCommerce Core Team <connect@cedcommerce.com >
+  * @copyright   Copyright CEDCOMMERCE (http://cedcommerce.com/)
+  * @license      http://cedcommerce.com/license-agreement.txt
+  */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="vendorpanel" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="csmarketplace_vendor_navigation">
+                 <block class="Ced\CsMarketplace\Block\Link\Current" name="vendor_membership_addon" after="vendor_orders" ifconfig="ced_csmembership/general/activation">
+                   <arguments>
+                   <argument name="name" xsi:type="string">csmembership</argument>
+                   <argument name="label" xsi:type="string">Membership Plans</argument>
+                   <argument name="path" xsi:type="string">#</argument>
+                   <argument name="font_awesome" xsi:type="string">fa fa-child fa-fw</argument>
+                   </arguments>
+                   
+                   <block class="Ced\CsMarketplace\Block\Links" name="vendor_membership_addon_container" as="vendor_membership_addon_container" ifconfig="ced_csmembership/general/activation">
+                            <arguments>
+                                <argument name="css_class" xsi:type="string">nav nav-second-level collapse</argument>
+                            </arguments>
+                            <block class="Ced\CsMarketplace\Block\Link\Current" name="membership-plans">
+                                <arguments>
+                                    <argument name="name" xsi:type="string">membership-plans</argument>
+                                    <argument name="label" xsi:type="string">Membership Plan</argument>
+                                    <argument name="path" xsi:type="string">csmembership/membership/index</argument>
+                                    <argument name="font_awesome" xsi:type="string">fa fa-child fa-fw</argument>
+                                    <argument name="sort_order" xsi:type="string">10</argument>
+                                </arguments>
+                            </block>
+                            <block class="Ced\CsMarketplace\Block\Link\Current" name="plan-history" ifconfig="ced_csmembership/general/activation">
+                                <arguments>
+                                    <argument name="name" xsi:type="string">plan-history</argument>
+                                    <argument name="label" xsi:type="string">Plans History</argument>
+                                    <argument name="path" xsi:type="string">csmembership/membership/history</argument>
+                                    <argument name="font_awesome" xsi:type="string">fa fa-child fa-fw</argument>
+                                    <argument name="sort_order" xsi:type="string">20</argument>
+                                </arguments>
+                            </block>
+                        </block>
+              </block>
+        </referenceBlock>
+  </body>
+ </page>
+   

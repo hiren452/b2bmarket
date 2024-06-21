@@ -1,0 +1,254 @@
+<?php
+
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMembership
+ * @author       CedCommerce Core Team <connect@cedcommerce.com >
+ * @copyright   Copyright CEDCOMMERCE (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+?>
+<?php
+$viewModel = $block->getData('viewModel');
+$helper = $viewModel->getCsMembershipHelper();
+$store = $block->getStoreManager()->getStore();
+$imageHelper = $viewModel->getCatalogImageHelper();
+?>
+<div class="vendor-dashboard">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <?= /* @noEscape */ $block->getChildhtml('csmembership_list_transaction'); ?>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading col-md-12 uptransform" style="line-height:31px;font-weight:bold;padding:4px 15px;font-size:17px;">
+                    <?= /* @noEscape */ __('Vendor Membership Plans'); ?>
+                </div>
+                <div style="clear:both"></div>
+                <div class="panel-body">
+                    <?php
+                    $memberships = $block->getLoadedMembershipCollection();
+?>
+
+                    <?php if (!$memberships->count()): ?>
+                        <p class="note-msg"><?= /* @noEscape */ __('There are no Membership plan available.') ?></p>
+                    <?php else: ?>
+
+                        <div class="order-items order-details">
+                            <div class="category-products">
+                                <div class="page_limiter">
+                                    <?= /* @noEscape */ $block->getToolbarHtml(); ?>
+                                </div>
+                                <?php $assigned_membership = $block->getAssignedMembershipCollection(); ?>
+                                <?php // List mode
+            ?>
+                                <?php if ($block->getMode() != 'grid'): ?>
+                                    <?php $_iterator = 0; ?>
+                                    <?php // product image have same vendor settings
+                $width = (int)$block->getScopeConfig()->getValue('ced_csmarketplace/vshops/list_image_width', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+                                    $height = (int)$block->getScopeConfig()->getValue('ced_csmarketplace/vshops/list_image_height', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+                                    $width = $width ? $width : 135;
+                                    $height = $height ? $height : 135;
+                                    ?>
+
+                                    <?php foreach ($memberships as $membership): ?>
+                                        <div class="membership-card-list">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <a href="<?= /* @noEscape */ $block->getUrl('csmembership/membership/view', ['_secure' => true, 'id' => $membership->getId()]) ?>" title="<?= /* @noEscape */ $membership->getName(); ?>" class="product-image vendor-logo-image">
+                                                            <img src="<?php if ($membership->getData('image') != "") {
+                                                                $imgUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $membership->getData('image');
+                                                                ?> <?= /* @noEscape */ $imgUrl; ?><?php
+                                                            } else {
+                                                                ?> <?= /* @noEscape */ $imageHelper->getDefaultPlaceholderUrl('image'); ?><?php
+                                                            } ?>" alt="<?= /* @noEscape */ $membership->getName() ?>" height="<?= /* @noEscape */ $height; ?>" width="<?= /* @noEscape */ $width; ?>" /></a>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="product-shop">
+                                                            <div class="f-fix">
+                                                                <div class="product-primary ">
+                                                                    <p> <?php $membershipNameStripped = $membership->getName(); ?>
+                                                                        <a href="<?= /* @noEscape */ $block->getUrl('csmembership/membership/view', ['_secure' => true, 'id' => $membership->getId()]);
+                                        ?>" title="<?= /* @noEscape */ $membershipNameStripped; ?>"><?= /* @noEscape */ __($membership->getName()); ?></a>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-shop">
+                                                            <div class="price-box">
+                                                                <?php if ($membership->getSpecialPrice() != '0') { ?>
+                                                                    <div class="product-info">
+                                                                        <span class="regular-price" style="text-decoration: line-through;"><?= /* @noEscape */ $helper->formatToBaseCurrency($membership->getPrice(), $membership->getStoreId()); ?></span>
+                                                                    </div>
+                                                                <?php } else { ?>
+                                                                    <div class="product-info">
+                                                                        <span class="regular-price"><?= /* @noEscape */ $helper->formatToBaseCurrency($membership->getPrice(), $membership->getStoreId()); ?></span>
+                                                                    </div>
+                                                                <?php } ?>
+                                                                <?php if ($membership->getSpecialPrice() != '0') { ?>
+                                                                    <div class="product-info">
+                                                                        <span class="special-price" style="font-size: 10px; font-weight: bold !important; color: #eb0404 !important;"><?= /* @noEscape */ __('Special Price : '); ?></span><span class="regular-price"><?= /* @noEscape */ $helper->formatToBaseCurrency($membership->getSpecialPrice(), $membership->getStoreId()); ?></span>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-info">
+
+                                                            <?php if (!in_array($membership->getId(), $assigned_membership)) { ?>
+                                                                <?php if ($membership->getQty() > '0') { ?>
+                                                                    <p>
+                                                                        <button type="button" title="<?= /* @noEscape */ __('Add to Cart') ?>" class="btn btn-warning" onclick="document.location.href='<?= /* @noEscape */ $block->getUrl('csmembership/membership/addToCart', ['_secure' => true, 'id' => $membership->getId()]);
+                                                                    ?>'">
+                                                                            <span><span><?= /* @noEscape */ __('Add to Cart') ?></span></span>
+                                                                        </button>
+                                                                    </p>
+                                                                <?php } else { ?>
+                                                                    <span style="color:red;"><?= /* @noEscape */ __('Subscribed to Maximum Limit') ?></span>
+                                                                <?php } ?>
+                                                            <?php } else { ?>
+                                                                <p>
+                                                                    <button type="button" title="<?= /* @noEscape */ __('Already Subscribed') ?>" class="btn btn-warning" disabled="disabled">
+                                                                        <span><span><?= /* @noEscape */ __('Already Subscribed') ?></span></span>
+                                                                    </button>
+                                                                </p>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="order-items order-details">
+                            <?php // Grid Mode
+                            ?>
+                            <?php $_collectionSize = $memberships->count() ?>
+                            <?php $_columnCount = $block->getColumnCount(); ?>
+                            <?php
+                                    $width = 180;
+                        $height = 180;
+                        ?>
+                            <?php $i = 0;
+                        foreach ($memberships as $membership): ?>
+
+                                <?php if (($i++ % $_columnCount) == 0): ?>
+                                    <div class="row">
+                                    <?php endif ?>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="panel-body">
+                                            <div class="panel-body-inside">
+                                                <div class="product-image">
+                                                    <p>
+                                                        <a href="<?= /* @noEscape */ $block->getUrl('csmembership/membership/view', ['_secure' => true, 'id' => $membership->getId()]);
+                            ?>" title="<?= /* @noEscape */ $membership->getName(); ?>" class="product-image vendor-logo-image"><img src="<?php if ($membership->getData('image') != "") {
+                                $imgUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $membership->getData('image');
+                                ?> <?= /* @noEscape */ $imgUrl; ?><?php
+                            } else {
+                                ?> <?= /* @noEscape */ $imageHelper->getDefaultPlaceholderUrl('image'); ?><?php
+                            } ?>" alt="<?= /* @noEscape */ __($membership->getName()) ?>" height="<?= /* @noEscape */ $height; ?>" width="<?= /* @noEscape */ $width; ?>" />
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <div class="product-name">
+                                                    <p>
+                                                        <a href="<?= /* @noEscape */ $block->getUrl('csmembership/membership/view', ['_secure' => true, 'id' => $membership->getId()]); ?>" title="<?= /* @noEscape */ $membership['name'] ?>">
+                                                            <?= /* @noEscape */ __($membership->getName()); ?>
+
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <div class="product-shop">
+                                                    <div class="price-box">
+                                                        <?php if ($membership->getSpecialPrice() != '0') { ?>
+                                                            <div class="product-info">
+                                                                <span class="regular-price" style="text-decoration: line-through;">
+                                                                    <?= /* @noEscape */ $helper->formatToBaseCurrency($membership->getPrice(), $membership->getStoreId()); ?>
+                                                                </span>
+                                                            </div>
+                                                        <?php } else { ?>
+                                                            <div class="product-info">
+                                                                <span class="regular-price">
+                                                                    <?= /* @noEscape */ $helper->formatToBaseCurrency($membership->getPrice(), $membership->getStoreId()); ?>
+                                                                </span>
+                                                            </div>
+                                                        <?php } ?>
+                                                        <?php if ($membership->getSpecialPrice() != '0') { ?>
+                                                            <div class="product-info">
+                                                                <span class="special-price" style="font-size: 10px; font-weight: bold !important; color: #eb0404 !important;"><?= /* @noEscape */ __('Special Price : '); ?></span><span class="regular-price"><?= /* @noEscape */ $helper->formatToBaseCurrency($membership->getSpecialPrice(), $membership->getStoreId()); ?></span>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                                <div class="product-info">
+                                                    <?php if (!in_array($membership->getId(), $assigned_membership)) { ?>
+                                                        <?php if ($membership->getQty() > '0') { ?>
+                                                            <p>
+                                                            <form method="post" action="<?= /* @noEscape */ $block->getUrl('csmembership/membership/addToCart', ['_secure' => true, 'id' => $membership->getId()]);
+                                                            ?>" class="membership-addtocart">
+                                                                <input type="hidden" name="id" value="<?= /* @noEscape */ $membership->getId() ?>">
+                                                                <input type="hidden" name="form_key" value="4SSI7GxSw7da7u6r">
+                                                                <input type="submit" name="submit" class="btn btn-warning" value="<?= /* @noEscape */ __('Add to Cart') ?>">
+                                                            </form>
+                                                            </p>
+                                                        <?php } else { ?>
+                                                            <span style="color:red;"><?= /* @noEscape */ __('Subscribed to Maximum Limit') ?></span>
+                                                        <?php } ?>
+                                                    <?php } else { ?>
+                                                        <p>
+                                                            <button type="button" title="<?= /* @noEscape */ __('Already Subscribed') ?>" class="btn btn-warning" disabled="disabled">
+                                                                <span><span><?= /* @noEscape */ __('Already Subscribed') ?></span></span>
+                                                            </button>
+                                                        </p>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php if ($i % $_columnCount == 0 || $i == $_collectionSize): ?>
+                                    </div>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </div>
+
+                    <?php endif ?>
+                <?php endif; ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require(['jquery'], function($) {
+        $('.membership-addtocart').submit(function(e) {
+            var form = $(this);
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(res) {
+                    window.location.href = "<?= /* @noEscape */ $block->getUrl('checkout/cart'); ?>";
+                },
+                error: function() {
+                    alert('Something went Wrong');
+                }
+            });
+        });
+    });
+</script>

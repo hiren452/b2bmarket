@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMembership
+ * @author         CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\App\Config" type="Ced\CsMembership\App\Config"/>
+    <type name="Ced\CsMarketplace\Helper\Data">
+        <plugin name="ced_csmembership_increase_limit" type="Ced\CsMembership\Plugin\Helper\IncreaseLimit" sortOrder="10" disabled="false" />
+    </type>
+    <preference for="Ced\CsProduct\Ui\DataProvider\Product\Form\Modifier\Categories" type="Ced\CsMembership\Ui\DataProvider\Product\Form\Modifier\Categories"/>
+    <!-- <preference for="Ced\CsMarketplace\Helper\Data" type="Ced\CsMembership\Helper\Marketplace" /> -->
+</config>

@@ -1,0 +1,49 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMembership
+ * @author      CedCommerce Core Team <connect@cedcommerce.com>
+ * @copyright   Copyright CedCommerce (http://cedcommerce.com/)
+ * @license      http://cedcommerce.com/license-agreement.txt
+ */
+
+?>
+
+<!-- <div class="reports-content">
+    <?= /* @noEscape */ $block->getChildHtml('grid.filter.form') ?>
+</div> -->
+
+<?= /* @noEscape */ $block->getGridHtml() ?>
+
+<script>
+require([
+    'jquery',
+    'mage/backend/validation',
+    "prototype"
+], function(jQuery){
+
+//<![CDATA[
+    jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
+    function filterFormSubmit() {
+        var filters = $$('#filter_form input', '#filter_form select');
+        var elements = [];
+        for(var i in filters){
+            if(filters[i].value && filters[i].value.length && !filters[i].disabled) elements.push(filters[i]);
+        }
+        if (jQuery('#filter_form').valid()) {
+            setLocation('<?= /* @noEscape */ $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
+        }
+    }
+//]]>
+    window.filterFormSubmit = filterFormSubmit;
+});
+</script>

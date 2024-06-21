@@ -1,0 +1,88 @@
+<?php
+/**
+ * CedCommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User License Agreement (EULA)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://cedcommerce.com/license-agreement.txt
+ *
+ * @category    Ced
+ * @package     Ced_CsMembership
+ * @author       CedCommerce Core Team <connect@cedcommerce.com >
+ * @copyright   Copyright CEDCOMMERCE (https://cedcommerce.com/)
+ * @license      https://cedcommerce.com/license-agreement.txt
+ */
+?>
+<?php $helper = $block->helper('Ced\CsMembership\Helper\Data') ?>
+<?php $collection = $block->getCollection();
+?>
+<div class="panel-heading col-md-12 uptransform"
+     style="line-height:31px;font-weight:bold;padding:4px 15px;font-size:17px;">
+    <?= /* @noEscape */ __('Vendor Running Plans'); ?>
+</div>
+<div style="clear:both"></div>
+<div class="panel-body">
+    <div class="order-items order-details table-responsive">
+        <?= /* @noEscape */ $block->getPagerHtml(); ?>
+        <table class="table table-bordered table-hover table-striped" id="my-orders-table">
+            <col width="1"/>
+            <col width="1"/>
+            <col width="1"/>
+            <col width="1"/>
+            <col width="1"/>
+            <col width="1"/>
+            <col width="1"/>
+            <col width="1"/>
+            <thead>
+            <tr>
+                <th class="head"><?= /* @noEscape */ __('ID') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Name') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Status') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Start Date') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Expire Date') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Order Id') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Payment Method') ?></th>
+                <th class="head"><?= /* @noEscape */ __('Transaction Id') ?></th>
+            </tr>
+            </thead>
+
+            <?php if (count($collection) > 0): ?>
+                <tbody>
+                <?php $_odd = ''; ?>
+                <?php foreach ($collection as $_report):
+
+                    ?>
+                    <tr>
+                        <td class="number"><?= /* @noEscape */ __($_report->getSubscriptionId()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getName()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getStatus()); ?></td>
+                        <td class="date"><?= /* @noEscape */ __($_report->getStartDate()); ?></td>
+                        <td class="date"><?= /* @noEscape */ __($_report->getEndDate()); ?></td>
+                        <td class="status"><?= /* @noEscape */ __($_report->getOrderId()); ?></td>
+                        <td class="status"><?= /* @noEscape */ __($_report->getPaymentName()); ?></td>
+                        <td class="number"><?= /* @noEscape */ __($_report->getTransactionId()); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php else: ?>
+                <tbody>
+                <tr class="first last odd">
+                    <td colspan="8" class="last">
+                        <div>
+                            <p><?= /* @noEscape */ __('No Membership Subscription records found') ?></p>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            <?php endif ?>
+
+        </table>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ced_csmembership_membership" resource="default" engine="innodb" comment="CsMembership Membership">
+        <column xsi:type="smallint" name="id" unsigned="true" nullable="false" identity="true"
+                comment="ID"/>
+        <column xsi:type="int" name="qty" unsigned="true" nullable="false" comment="Quantity"/>
+        <column xsi:type="text" name="name" nullable="false" comment="Name"/>
+        <column xsi:type="varchar" name="image" nullable="false"   length="100" comment="Image"/>
+        <column xsi:type="varchar" name="sort_order" nullable="true" default="0" length="20" comment="Sort Order"/>
+        <column xsi:type="int" name="status" unsigned="true" nullable="true" comment="Status"/>
+        <column xsi:type="text" name="category_ids" nullable="true"   comment="Category Ids"/>
+        <column xsi:type="varchar" name="product_limit" nullable="true"   length="100" comment="Product Limit"/>
+        <column xsi:type="decimal" name="price" nullable="false" scale="2" precision="10" comment="Price"/>
+        <column xsi:type="decimal" name="special_price" nullable="false" scale="2" precision="10" comment="Special Price"/>
+        <column xsi:type="int" name="duration"  unsigned="true" nullable="false" comment="Duration"/>
+        <column xsi:type="int" name="product_id"  unsigned="true" nullable="false" comment="Product id"/>
+        <column xsi:type="int" name="website_id"  unsigned="true" nullable="false" comment="Website id for product to show"/>
+        <column xsi:type="int" name="store_id" unsigned="true" nullable="false" comment="Store id for product to show"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="ced_csmembership_subscription" resource="default" engine="innodb" comment="CsMembership Subscription">
+        <column xsi:type="smallint" name="id" unsigned="true" nullable="false" identity="true"
+                comment="ID"/>
+        <column xsi:type="int" name="vendor_id" nullable="true" comment="Vendor Id"/>
+        <column xsi:type="int" name="store"  unsigned="true" nullable="false" comment="Store"/>
+        <column xsi:type="varchar" name="status"   nullable="true" length="10" comment="Status"/>
+        <column xsi:type="int" name="subscription_id"  unsigned="true" nullable="false" comment="Subscription id"/>
+        <column xsi:type="date" name="start_date" nullable="false" comment="Start Date"/>
+        <column xsi:type="date" name="end_date" nullable="false" comment="End Date"/>
+        <column xsi:type="varchar" name="order_id" length="50" nullable="false" comment="Order Id"/>
+        <column xsi:type="varchar" name="payment_name" length="50" nullable="false" comment="Payment Name"/>
+        <column xsi:type="varchar" name="customer_email" length="50" nullable="false" comment="Customer Email"/>
+        <column xsi:type="varchar" name="transaction_id" length="50" nullable="false" comment="Transaction Id"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="100"   comment="Name"/>
+        <column xsi:type="text" name="category_ids" nullable="true"   comment="Category Ids"/>
+        <column xsi:type="varchar" name="product_limit" nullable="true"   length="100" comment="Product Limit"/>
+        <column xsi:type="decimal" name="price" nullable="false" scale="2" precision="10" comment="Price"/>
+        <column xsi:type="decimal" name="special_price" nullable="false" scale="2" precision="10" comment="Special Price"/>
+        <column xsi:type="int" name="duration"  unsigned="true" nullable="false" comment="Duration"/>
+        <column xsi:type="int" name="website_id" unsigned="true" nullable="false" comment="Website id for product to show"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>
