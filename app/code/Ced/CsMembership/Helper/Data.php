@@ -701,4 +701,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $currencyCode = $this->storeManager->getStore($storeId)->getBaseCurrencyCode();
         return $this->_priceCurrency->format($amount, false, 2, null, $currencyCode);
     }
+    public function getCustomerLogin()
+    {
+      return  $this->_customerSession->isLoggedIn();
+    }
 }
