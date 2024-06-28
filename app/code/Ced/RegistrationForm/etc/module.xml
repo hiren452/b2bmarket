@@ -18,4 +18,4 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Ced_RegistrationForm" setup_version="0.0.2" active="true" release_version="0.0.3">
     </module>
-</config>
+</config> 

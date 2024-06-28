@@ -27,4 +27,4 @@
             <block class="Ced\RegistrationForm\Block\AdditionalInfo" name="custoadditional_info_customer" template="Ced_RegistrationForm::additional.phtml"  ifconfig="regform/active/enable"/>
         </referenceContainer>
     </body>
-</page>
+</page> 

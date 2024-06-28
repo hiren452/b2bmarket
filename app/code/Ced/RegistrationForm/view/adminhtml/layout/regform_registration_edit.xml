@@ -28,4 +28,4 @@
             <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Ced_RegistrationForm::js.phtml"/>
         </referenceContainer>-->
     </body>
-</page>
+</page> 

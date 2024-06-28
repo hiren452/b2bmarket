@@ -22,4 +22,4 @@
             <block class="Ced\RegistrationForm\Block\Additional" name="additional_info_customer" template="Ced_RegistrationForm::additionalInfo.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
-</page>
+</page> 

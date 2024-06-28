@@ -21,4 +21,4 @@
             <module name="Ced_RegistrationForm" before="Magento_Adminhtml" />
         </route>
     </router>
-</config>
+</config> 

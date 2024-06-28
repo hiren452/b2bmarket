@@ -21,4 +21,4 @@
         <add id="Ced_RegistrationForm::manage_grid" title="Manage Registration Form" module="Ced_RegistrationForm" sortOrder="10" parent="Ced_RegistrationForm::grid" resource="Ced_RegistrationForm::manage_gird" />
         <add id="Ced_RegistrationForm::view_grid" title="Add Attributes" module="Ced_RegistrationForm" sortOrder="20" parent="Ced_RegistrationForm::manage_grid" action="regform/registration/attribute"  resource="Ced_RegistrationForm::view_gird"/>
     </menu>
-</config>
+</config> 

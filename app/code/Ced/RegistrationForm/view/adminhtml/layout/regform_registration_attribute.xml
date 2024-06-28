@@ -22,4 +22,4 @@
             <block class="Ced\RegistrationForm\Block\Adminhtml\Attribute" name="ced_attgrid_listing" cacheable="false"/>
         </referenceContainer>
     </body>
-</page>
+</page> 

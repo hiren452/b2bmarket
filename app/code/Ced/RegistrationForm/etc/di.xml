@@ -41,4 +41,4 @@
     <type name="Magento\Customer\Model\Customer\DataProvider">
         <plugin name="custmerDocumentsAttribute" type="Ced\RegistrationForm\Plugin\CustomerDocuments" sortOrder="1"/>
     </type>
-</config>
+</config> 
